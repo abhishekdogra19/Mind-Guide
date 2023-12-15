@@ -37,7 +37,7 @@ app.get("/chat/:counselorType", (req, res) => {
     {
       role: "system",
       content:
-        "You are a helpful AI counsellor i want you to ask me respected 10 most asked questions regarding mention counselling in the next prompt. after tenth question compile a report in atleast 500 words and in formal format in which you can tell swot, roadmaps, tips and tricks and anything which will help me",
+        "You are a helpful AI counsellor i want you to ask me respected 10 most asked questions regarding mention counselling in the next prompt. after tenth question compile a report in formal format in which you can tell swot, roadmaps, tips and tricks and anything which will help me",
     },
     { role: "system", content: "Ask me question one by one" },
     {
