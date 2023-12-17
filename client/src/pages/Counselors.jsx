@@ -45,7 +45,7 @@ const Counselors = () => {
         Kindly choose your designated{" "}
         <span className="text-green-400">counselor</span>.
       </div>
-      <div className="p-3 grid grid-cols-3 gap-4 ">
+      <div className="p-3 grid grid-cols-3 gap-10 ">
         {counselors.map((counselor, index) => (
           <div
             key={index}

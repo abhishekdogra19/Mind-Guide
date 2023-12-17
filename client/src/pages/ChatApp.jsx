@@ -19,6 +19,9 @@ const ChatApp = () => {
   const { type } = useParams();
   const startListening = () => {
     if (!listening) {
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+      }
       SpeechRecognition.startListening({ continuous: true, language: "en-IN" });
       setListening(true);
     } else {
@@ -32,6 +35,11 @@ const ChatApp = () => {
   if (!browserSupportsSpeechRecognition) {
     return null;
   }
+
+  useEffect(() => {
+    setInputText(transcript);
+  }, [transcript]);
+
   const generateText = async () => {
     if (inputText.trim() === "") {
       return;
@@ -167,7 +175,7 @@ const ChatApp = () => {
             type="text"
             className="h-10  bg-cyan-50 p-2 flex-1"
             placeholder="Type hello..."
-            value={transcript || inputText}
+            value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             ref={inputElement}
             disabled={loading}

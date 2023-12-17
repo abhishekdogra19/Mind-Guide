@@ -73,7 +73,7 @@ const Login = () => {
   };
   return (
     <div className="w-ful flex items-center    h-[70vh]">
-      <div className="flex  flex-col gap-6 card card px-14 py-20 w-full">
+      <div className="flex  flex-col gap-6  px-14 py-20 w-full">
         <div className="w-full flex items-center justify-center gap-10">
           <div
             onClick={handleGoogleLogin}
