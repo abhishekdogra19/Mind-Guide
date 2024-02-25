@@ -9,6 +9,7 @@ import SpeechRecognition, {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import { motion, useAnimation } from "framer-motion";
+import AssistantAvatar from "../components/AssistantAvatar";
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
@@ -65,8 +66,15 @@ const ChatApp = () => {
         };
 
         setMessages([...messages, userMessage, botMessage]);
+
         try {
           const utterance = new SpeechSynthesisUtterance(response.data);
+
+          utterance.onend = () => {
+            // Stop the animation when speech ends
+            microphoneAnimationControls.stop();
+          };
+
           window.speechSynthesis.speak(utterance);
         } catch (error) {
           console.error("Error in Speech Synthesis:", error);
@@ -78,6 +86,7 @@ const ChatApp = () => {
       console.error("Error occur while making the request to the server", err);
     }
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -98,6 +107,7 @@ const ChatApp = () => {
     setRenderContent(
       messages.map((message, index) => {
         const isUserMessage = message.role === "user";
+        const isNewMessage = index === messages.length - 1;
 
         return (
           <div
@@ -105,7 +115,7 @@ const ChatApp = () => {
             style={{
               width: "100%",
               display: "flex",
-              visibility: message.role === "system" ? "hidden" : "",
+              visibility: message.role === "system" ? "hidden" : "block",
               position: message.role === "system" ? "absolute" : "",
               justifyContent: isUserMessage ? "flex-end" : "flex-start",
               marginTop: "8px",
@@ -119,10 +129,13 @@ const ChatApp = () => {
                 maxWidth: "70%",
                 minWidth: "10%",
                 wordWrap: "break-word",
-                whiteSpace: "pre-line", // Preserves newline characters
+                whiteSpace: "pre-line",
               }}
             >
-              {message.content}
+              <span>
+                {isNewMessage && !isUserMessage && <AssistantAvatar />}
+                {message.content}
+              </span>
             </div>
           </div>
         );
@@ -142,7 +155,6 @@ const ChatApp = () => {
       microphoneAnimationControls.stop();
     }
   }, [listening, microphoneAnimationControls]);
-
   return (
     <div className="h-[90vh] bg-slate-500 flex flex-col relative w-full ">
       {loading && (
