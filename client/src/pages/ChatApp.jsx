@@ -121,22 +121,26 @@ const ChatApp = () => {
               marginTop: "8px",
             }}
           >
-            <div
-              className={isUserMessage ? "userMsg" : "botMsg"}
-              style={{
-                padding: "10px",
-                margin: "8px",
-                maxWidth: "70%",
-                minWidth: "10%",
-                wordWrap: "break-word",
-                whiteSpace: "pre-line",
-              }}
+            <span
+              className={`flex items-center w-full ${
+                isUserMessage ? "justify-end" : "justify-start"
+              } `}
             >
-              <span>
-                {isNewMessage && !isUserMessage && <AssistantAvatar />}
+              {isNewMessage && !isUserMessage && <AssistantAvatar />}
+              <div
+                className={isUserMessage ? "userMsg" : "botMsg"}
+                style={{
+                  padding: "10px",
+                  margin: "8px",
+                  maxWidth: "50%",
+                  minWidth: "5%",
+                  wordWrap: "break-word",
+                  whiteSpace: "pre-line",
+                }}
+              >
                 {message.content}
-              </span>
-            </div>
+              </div>
+            </span>
           </div>
         );
       })

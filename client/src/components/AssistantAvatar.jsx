@@ -46,7 +46,7 @@ const AssistantAvatar = () => {
     };
   }, [mouthMovements]);
 
-  return <Avatar options={options} hash={hash} size="100px" />;
+  return <Avatar options={options} hash={hash} size="200px" />;
 };
 
 export default AssistantAvatar;
