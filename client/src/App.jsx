@@ -6,6 +6,8 @@ import ChatApp from "./pages/ChatApp";
 import Tools from "./pages/Tools";
 import Counselors from "./pages/Counselors";
 import ScrollToTop from "./components/ScrollToTop";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
   return (
@@ -18,7 +20,9 @@ function App() {
           {/* Add a dynamic route to capture the counselor type */}
           <Route path="counselors/chat/:type" element={<ChatApp />} />
           <Route path="tools" element={<Tools />} />
-          <Route path="login" element={<Login />} />
+          {/* <Route path="login" element={<Login />} /> */}
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
         </Route>
       </Routes>
     </Router>
