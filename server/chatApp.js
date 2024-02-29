@@ -2,7 +2,9 @@ const express = require("express");
 const OpenAIApi = require("openai");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-
+const connectDB = require("./config/connectDB");
+const userRouter = require("./routes/User");
+const { errorHandler, notFound } = require("./middleware/errorMiddleWare");
 require("dotenv").config();
 
 const app = express();
@@ -30,7 +32,8 @@ async function getChatGPTResponse(messages) {
 }
 
 let messages = [];
-
+app.use(express.json());
+app.use("/api/v1/user", userRouter);
 app.get("/chat/:counselorType", (req, res) => {
   const counselorType = req.params.counselorType;
   messages = [
@@ -65,7 +68,15 @@ app.post("/chat", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+app.use(notFound);
+app.use(errorHandler);
+const start = async () => {
+  try {
+    await connectDB();
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  } catch (error) {}
+};
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+start();
