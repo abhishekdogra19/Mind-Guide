@@ -1,7 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
 import ChatApp from "./pages/ChatApp";
 import Tools from "./pages/Tools";
 import Counselors from "./pages/Counselors";
@@ -20,7 +19,6 @@ function App() {
           {/* Add a dynamic route to capture the counselor type */}
           <Route path="counselors/chat/:type" element={<ChatApp />} />
           <Route path="tools" element={<Tools />} />
-          {/* <Route path="login" element={<Login />} /> */}
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
         </Route>
