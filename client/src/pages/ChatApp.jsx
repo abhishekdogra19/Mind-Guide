@@ -69,12 +69,7 @@ const ChatApp = () => {
 
         try {
           const utterance = new SpeechSynthesisUtterance(response.data);
-
-          utterance.onend = () => {
-            // Stop the animation when speech ends
-            microphoneAnimationControls.stop();
-          };
-
+          utterance.rate = 1;
           window.speechSynthesis.speak(utterance);
         } catch (error) {
           console.error("Error in Speech Synthesis:", error);

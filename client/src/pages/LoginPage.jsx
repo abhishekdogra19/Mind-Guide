@@ -1,26 +1,51 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { addUser } from "../redux/mindGuideSlice";
 const LoginPage = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const userInfo = useSelector((state) => state.mindGuide.userInfo);
+  const dispatch = useDispatch();
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Login submitted:", formData);
+    if (!email || !password) return;
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "/api/v1/user/login",
+        { email, password },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response.data);
+      dispatch(addUser(response.data));
+      toast.success("Login Successfully");
+    } catch (err) {
+      toast.error("Invalid credentials");
+    }
+    setLoading(false);
   };
-
+  useEffect(() => {
+    console.log("USer Change..");
+    const fetchUserProfile = async () => {
+      const response = await axios.get("/api/v1/user/getUserProfile");
+      dispatch(addUser(response.data));
+    };
+    fetchUserProfile();
+  }, [dispatch]);
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
+    }
+  }, [navigate, userInfo]);
   return (
     <div className="flex h-full items-center justify-center">
       <form
@@ -41,8 +66,9 @@ const LoginPage = () => {
             type="email"
             id="email"
             name="email"
-            value={formData.email}
-            onChange={handleChange}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
             className="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Email"
           />
@@ -60,8 +86,9 @@ const LoginPage = () => {
             type="password"
             id="password"
             name="password"
-            value={formData.password}
-            onChange={handleChange}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
             className="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Password"
           />
@@ -71,16 +98,17 @@ const LoginPage = () => {
         <div className="flex items-center justify-center">
           <button
             type="submit"
+            disabled={loading}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            Login
+            {loading ? "Loading..." : "Login"}
           </button>
         </div>
 
         {/* Link to Register Page */}
         <div className="mt-4 text-center">
           <p>
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link to="/register" className="text-blue-500 hover:underline">
               Register here
             </Link>
