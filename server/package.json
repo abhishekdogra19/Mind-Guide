@@ -6,6 +6,7 @@
     "axios": "^1.6.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "docx": "^8.2.4",
     "dotenv": "^16.3.1",

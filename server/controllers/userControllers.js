@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../model/User");
+const jwt = require("jsonwebtoken");
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, pic } = req.body;
   if (!name || !email || !password) {
@@ -41,12 +42,30 @@ const authUser = asyncHandler(async (req, res) => {
   if (!isPasswordMatch) {
     throw new Error("Invalid Credentials");
   }
+  const token = user.createJWT();
+
+  res.cookie("token", token, {
+    expires: new Date(Date.now() + 604800000),
+  });
   return res
     .status(200)
     .json({ _id: user._id, name: user.name, email: user.email, pic: user.pic });
 });
-
+const getUserProfile = asyncHandler(async (req, res) => {
+  const { token } = req.cookies;
+  if (token) {
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    return res.json(user);
+  }
+  return res.status(200).json(null);
+});
+const handleLogout = asyncHandler(async (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({ message: "Logged out successfully" });
+});
 module.exports = {
   registerUser,
   authUser,
+  getUserProfile,
+  handleLogout,
 };
