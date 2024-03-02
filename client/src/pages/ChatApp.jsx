@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import { motion, useAnimation } from "framer-motion";
 import AssistantAvatar from "../components/AssistantAvatar";
+import ScrollableFeed from "react-scrollable-feed";
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
@@ -179,12 +180,12 @@ const ChatApp = () => {
       )}
       <div className="h-screen">
         <div className="chatAppBG h-[85vh] overflow-y-scroll flex-1  flex flex-col example pb-6">
-          {renderContent}
+          <ScrollableFeed>{renderContent}</ScrollableFeed>
         </div>
         <div className="bg-slate-600  flex items-center w-full z-0">
           <input
             type="text"
-            className="h-10  bg-cyan-50 p-2 flex-1"
+            className="h-10  bg-cyan-50 px-4 py-2 flex-1"
             placeholder="Type hello..."
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
@@ -198,25 +199,40 @@ const ChatApp = () => {
               }
             }}
           />
-          <button
-            className="text-white py-2 px-4"
-            onClick={() => {
-              setInputText(transcript);
-              resetTranscript();
-              generateText();
-            }}
-          >
-            Send
-          </button>
-          <div className="p-4 rounded-full left-[50%] -translate-x-[50%] bg-white absolute  bottom-10 active:scale-75 duration-300">
-            <motion.div
-              animate={microphoneAnimationControls}
-              onClick={startListening}
-              className="text-4xl"
+          <span className="flex items-center gap-1 px-2">
+            <div className="flex px-2 items-center justify-center   active:scale-75 duration-300">
+              <motion.div
+                animate={microphoneAnimationControls}
+                onClick={startListening}
+                className="text-xl text-white"
+              >
+                <FontAwesomeIcon icon={faMicrophone} />
+              </motion.div>
+            </div>
+            <button
+              className="text-white py-2 px-4"
+              onClick={() => {
+                setInputText(transcript);
+                resetTranscript();
+                generateText();
+              }}
             >
-              <FontAwesomeIcon icon={faMicrophone} />
-            </motion.div>
-          </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+                />
+              </svg>
+            </button>
+          </span>
         </div>
       </div>
     </div>

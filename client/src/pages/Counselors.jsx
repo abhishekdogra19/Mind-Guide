@@ -51,16 +51,16 @@ const Counselors = () => {
             key={index}
             className="text-white bg-slate-700 h-96 p-2 rounded-xl relative hover:scale-110 hover:flex-1  duration-300"
           >
-            <img
-              src={counselor.image}
-              alt=""
-              className="h-2/3 w-full object-cover"
-            />
-            <h2 className="text-3xl text-center mt-10 hover:text-red-500">
-              <Link to={`/counselors/chat/${counselor.type.toLowerCase()}`}>
+            <Link to={`/counselors/chat/${counselor.type.toLowerCase()}`}>
+              <img
+                src={counselor.image}
+                alt=""
+                className="h-2/3 w-full object-cover"
+              />
+              <h2 className="text-3xl text-center mt-10 hover:text-red-500">
                 {counselor.type}
-              </Link>
-            </h2>
+              </h2>
+            </Link>
           </div>
         ))}
       </div>
