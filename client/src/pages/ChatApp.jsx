@@ -56,7 +56,7 @@ const ChatApp = () => {
       if (window.speechSynthesis.speaking) {
         window.speechSynthesis.cancel();
       }
-      const response = await axios.post("http://localhost:3001/chat", {
+      const response = await axios.post("http://localhost:3001/api/v1/chat", {
         messages: [...messages, userMessage],
       });
       setLoading(false);
@@ -83,10 +83,31 @@ const ChatApp = () => {
     }
   };
 
+  const HandleReportGenerate = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/api/v1/chat/report",
+        {
+          chat: messages,
+        }
+      );
+      if (response.status === 200) {
+        console.log(response.data);
+        // setMessages([response.data]);
+      } else {
+        console.error("Error in fetching initial messages");
+      }
+    } catch (err) {
+      console.error("Error in fetching initial messages", err);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/chat/${type}`);
+        const response = await axios.get(
+          `http://localhost:3001/api/v1/chat/${type}`
+        );
         if (response.status === 200) {
           setMessages(response.data);
         } else {
@@ -231,6 +252,12 @@ const ChatApp = () => {
                   d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
                 />
               </svg>
+            </button>
+            <button
+              className="bg-red-500 text-white py-2 px-4"
+              onClick={HandleReportGenerate}
+            >
+              End Session
             </button>
           </span>
         </div>
