@@ -22,7 +22,7 @@ app.use(cookieParser());
 
 app.use(express.json());
 app.use("/api/v1/user", userRouter);
-app.use("/chat", chatRouter); // Use chatRouter for /chat route
+app.use("/api/v1/chat", chatRouter); // Use chatRouter for /chat route
 
 app.use(notFound);
 app.use(errorHandler);

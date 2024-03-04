@@ -26,7 +26,7 @@ const getChat = (req, res) => {
   messages = [
     {
       role: "system",
-      content: `You are a helpful AI counsellor. Please ask me the 10 most respected questions related to counseling. After the tenth question, compile a formal report, including SWOT analysis, roadmap, tips, and tricks to help me.`,
+      content: `You are a helpful AI counsellor. Please ask me the most relevant questions related to counseling. Ask questions one by one followed by response by the user then continue.`,
     },
     { role: "system", content: "Ask me questions one by one." },
     {
@@ -54,7 +54,30 @@ const handleSendChat = asyncHandler(async (req, res) => {
   }
 });
 
+const handleCreateReport = asyncHandler(async (req, res) => {
+  const { chat, userName } = req.body;
+  console.log(chat);
+  if (!chat || chat.length == 0) {
+    res.status(400);
+    throw new Error("Failed to create the report!!");
+  }
+  try {
+    const gptReportPrompt = [
+      ...chat,
+      {
+        role: "system",
+        content: `I want you to create a report from the above chat conversation for the user. compile a formal report, including SWOT analysis, roadmap, tips, and tricks to help user. To help user to understand more about him/her.`,
+      },
+    ];
+    const report = await getChatGPTResponse(gptReportPrompt);
+    return res.status(200).json(report);
+  } catch (error) {
+    res.status(500);
+    throw new Error("Internal Server Error");
+  }
+});
 module.exports = {
   getChat,
   handleSendChat,
+  handleCreateReport,
 };
