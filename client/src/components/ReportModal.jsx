@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { useSelector } from "react-redux";
@@ -21,10 +20,17 @@ const ReportModal = ({ report }) => {
         classNames={{ modal: "custom-modal" }}
       >
         <div className="modal-content">
-          <h2 className="greeting">
-            Greetings {userInfo?.name}, Here is your report.
+          <h2>
+            Greetings{" "}
+            <span className="capitalize underline font-extrabold">
+              {userInfo?.name}
+            </span>
+            , Here is your <span className="text-green-600">report</span>.
           </h2>
           <ReactMarkdown>{report}</ReactMarkdown>
+          <button className="px-4 py-2 text-white bg-green-700 rounded-lg">
+            Download Report
+          </button>
         </div>
       </Modal>
     </div>
