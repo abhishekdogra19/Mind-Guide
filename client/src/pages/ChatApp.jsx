@@ -11,6 +11,7 @@ import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import { motion, useAnimation } from "framer-motion";
 import AssistantAvatar from "../components/AssistantAvatar";
 import ScrollableFeed from "react-scrollable-feed";
+import ReportModal from "../components/ReportModal";
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
@@ -19,6 +20,7 @@ const ChatApp = () => {
   const [loading, setLoading] = useState(false);
   const [listening, setListening] = useState(false);
   const { type } = useParams();
+  const [report, setReport] = useState();
   const startListening = () => {
     if (!listening) {
       if (window.speechSynthesis.speaking) {
@@ -93,7 +95,7 @@ const ChatApp = () => {
       );
       if (response.status === 200) {
         console.log(response.data);
-        // setMessages([response.data]);
+        setReport(response.data);
       } else {
         console.error("Error in fetching initial messages");
       }
@@ -200,6 +202,7 @@ const ChatApp = () => {
         </div>
       )}
       <div className="h-screen">
+        {report && <ReportModal report={report} />}
         <div className="chatAppBG h-[85vh] overflow-y-scroll flex-1  flex flex-col example pb-6">
           <ScrollableFeed>{renderContent}</ScrollableFeed>
         </div>
