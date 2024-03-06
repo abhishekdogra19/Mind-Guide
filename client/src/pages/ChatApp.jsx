@@ -12,6 +12,8 @@ import { motion, useAnimation } from "framer-motion";
 import AssistantAvatar from "../components/AssistantAvatar";
 import ScrollableFeed from "react-scrollable-feed";
 import ReportModal from "../components/ReportModal";
+import ReactMarkdown from "react-markdown";
+
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
@@ -157,7 +159,7 @@ const ChatApp = () => {
                   whiteSpace: "pre-line",
                 }}
               >
-                {message.content}
+                <ReactMarkdown>{message.content}</ReactMarkdown>
               </div>
             </span>
           </div>
