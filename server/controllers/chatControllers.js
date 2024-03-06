@@ -66,7 +66,7 @@ const handleCreateReport = asyncHandler(async (req, res) => {
       ...chat,
       {
         role: "system",
-        content: `I am ${userName} I want you to create a report from the above chat conversation for the user. compile a formal report with proper space and headings, including SWOT analysis, roadmap, tips, and tricks to help user. To help user to understand more about him/her.`,
+        content: `I am ${userName} I want you to create a report from the above chat conversation for the user. compile a formal report with proper space and headings, including SWOT analysis, roadmap, tips, recommendation with proper roadmap, videos, books, blogs,news anything  and tricks to help user. To help user to understand more about him/her.`,
       },
     ];
     const report = await getChatGPTResponse(gptReportPrompt);
