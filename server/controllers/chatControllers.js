@@ -76,8 +76,31 @@ const handleCreateReport = asyncHandler(async (req, res) => {
     throw new Error("Internal Server Error");
   }
 });
+
+const handleCreateRoadmap = asyncHandler(async (req, res) => {
+  const { chat } = req.body;
+  if (!chat || chat.length == 0) {
+    res.status(400);
+    throw new Error("Failed to create the report!!");
+  }
+  try {
+    const gptReportPrompt = [
+      ...chat,
+      {
+        role: "system",
+        content: `I want you to create a plantUML code to generate roadmap in regarding to above conversation`,
+      },
+    ];
+    const response = await getChatGPTResponse(gptReportPrompt);
+    return res.status(200).json(response);
+  } catch (error) {
+    res.status(500);
+    throw new Error("Internal Server Error");
+  }
+});
 module.exports = {
   getChat,
   handleSendChat,
   handleCreateReport,
+  handleCreateRoadmap,
 };
