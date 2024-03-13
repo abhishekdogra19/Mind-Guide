@@ -4,7 +4,7 @@ import { Modal } from "react-responsive-modal";
 import { useSelector } from "react-redux";
 import ReactMarkdown from "react-markdown";
 import html2pdf from "html2pdf.js";
-
+import { Link } from "react-router-dom";
 const ReportModal = ({ report }) => {
   const [open, setOpen] = useState(false);
   const contentRef = useRef(null);
@@ -81,6 +81,7 @@ const ReportModal = ({ report }) => {
             >
               Download Report
             </button>
+            <Link to={"/roadmap"}>Roadmap</Link>
           </div>
         </div>
       </Modal>

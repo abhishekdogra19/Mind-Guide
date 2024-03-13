@@ -19,6 +19,7 @@
     "browserify-fs": "^1.0.0",
     "framer-motion": "^10.16.16",
     "html2pdf.js": "^0.10.1",
+    "plantuml-encoder": "^1.4.0",
     "react": "^18.2.0",
     "react-avataaars": "^0.2.3",
     "react-dom": "^18.2.0",
