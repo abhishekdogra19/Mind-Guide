@@ -12,6 +12,7 @@ import { ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import ProtectRoute from "./components/ProtectRoute";
 import AccountPage from "./pages/AccountPage";
+import Roadmap from "./pages/Roadmap";
 
 axios.defaults.baseURL = "http://localhost:3001";
 axios.defaults.withCredentials = true;
@@ -35,6 +36,7 @@ function App() {
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
           </Route>
+          <Route path="roadmap" element={<Roadmap />} />
         </Routes>
       </Router>
       <ToastContainer />
