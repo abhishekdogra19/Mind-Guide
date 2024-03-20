@@ -78,24 +78,80 @@ const handleCreateReport = asyncHandler(async (req, res) => {
 });
 
 const handleCreateRoadmap = asyncHandler(async (req, res) => {
-  const { chat } = req.body;
-  if (!chat || chat.length == 0) {
-    res.status(400);
-    throw new Error("Failed to create the report!!");
-  }
+  const { roadmap } = req.body;
+  let roadmapPrompt = [];
   try {
-    const gptReportPrompt = [
-      ...chat,
+    roadmapPrompt = [
+      ...messages,
       {
         role: "system",
-        content: `I want you to create a plantUML code to generate roadmap in regarding to above conversation`,
+        content: `Pretend you are an expert helpful AI  career counsellor.`,
+      },
+      {
+        role: "system",
+        content: ` i am providing a document  ${roadmap} containing goals and recommendation .Create a list of all goals and timeline in reference to that goal and recommendations for that goal.
+        should contains all goals from the roadmap.
+        Do not include any explanations  following this format without deviation.
+        [{
+          "Goal": "goal to be done",
+          "timeline": "timeline based on that goal",
+          "recommendations": [{
+            "title": "title of the recommendation course",
+            "link" : "link of the recommended course"
+          }],
+          "isCompleted":false in boolean
+        }]`,
       },
     ];
-    const response = await getChatGPTResponse(gptReportPrompt);
-    return res.status(200).json(response);
-  } catch (error) {
-    res.status(500);
-    throw new Error("Internal Server Error");
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: roadmapPrompt,
+    });
+    console.log("roadmapGenerate: ", response.choices[0].message.content);
+    // messages = [...messages, ...response.choices[0].message.content];
+    return res.send(response.choices[0].message.content);
+  } catch (err) {
+    console.error("Error Happened ", err);
+    res.status(500).send("Internal Server Error ");
+  }
+});
+const handleRoadmapUpdation = asyncHandler(async (req, res) => {
+  console.log(messages);
+
+  const { roadmap } = req.body;
+  let updatedRoadmapPrompt = [];
+  try {
+    updatedRoadmapPrompt = [
+      ...messages,
+      {
+        role: "system",
+        content: `Pretend you are an expert helpful AI  career counsellor.`,
+      },
+      {
+        role: "user",
+        content: ` i am providing a roadmap document which i have completed  ${roadmap} containing all details of goals and recommendation,timeline and iscompleted . now i want you to provide me a new updated roadmap with next goal thing to do in reference with  the current goals . Continue the time for the task with reference to the given roadmap -Do not include any explanations  following this format without deviation.
+          [{
+            "Goal": "goal to be done",
+            "timeline": "timeline based on that goal",
+            "recommendations": [{
+              "title": "title of the recommendation course",
+              "link" : "link of the recommended course"
+            }],
+            "isCompleted":false(boolean)
+          }].`,
+      },
+    ];
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: updatedRoadmapPrompt,
+    });
+
+    console.log("HandleUpdateRoadmap ", response.choices[0].message.content);
+    // messages = [...messages, response.choices[0].message.content];
+    return res.send(response.choices[0].message.content);
+  } catch (err) {
+    console.error("Error Happened ", err);
+    res.status(500).send("Internal Server Error ");
   }
 });
 module.exports = {
@@ -103,4 +159,5 @@ module.exports = {
   handleSendChat,
   handleCreateReport,
   handleCreateRoadmap,
+  handleRoadmapUpdation,
 };
