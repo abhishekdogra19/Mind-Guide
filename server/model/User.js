@@ -21,6 +21,23 @@ const userSchema = mongoose.Schema(
       default:
         "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
+    // skills:[String]
+    roadmap: {
+      type: [
+        {
+          Goal: String,
+          Timeline: String,
+          Recommendations: [
+            {
+              title: String,
+              link: String,
+            },
+          ],
+          isCompleted: Boolean,
+        },
+      ],
+      default: [], // You may want to set a default value as an empty array
+    },
   },
   {
     timeStamps: true,

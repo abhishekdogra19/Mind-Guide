@@ -63,9 +63,36 @@ const handleLogout = asyncHandler(async (req, res) => {
   res.clearCookie("token");
   res.status(200).json({ message: "Logged out successfully" });
 });
+
+const handleGetRoadmap = asyncHandler(async (req, res) => {
+  console.log(req.user);
+  try {
+    // Assuming you're identifying the user somehow, such as through a JWT token
+    const userId = req.user._id; // Replace with actual user identifier
+
+    // Find the user by their ID
+    const user = await User.findById(userId);
+
+    // Check if the user exists and has a roadmap
+    if (user && user.roadmap && user.roadmap.length > 0) {
+      // If user has a roadmap, send it in the response
+      return res.status(200).json({ roadmap: user.roadmap });
+    } else {
+      // If user does not have a roadmap, send a message indicating so
+      return res
+        .status(404)
+        .json({ message: "No roadmap available for this user." });
+    }
+  } catch (error) {
+    // If an error occurs, send an error response
+    console.error("Error fetching roadmap:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
 module.exports = {
   registerUser,
   authUser,
   getUserProfile,
   handleLogout,
+  handleGetRoadmap,
 };

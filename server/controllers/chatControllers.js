@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const OpenAIApi = require("openai");
-
+const User = require("../model/User");
+const jwt = require("jsonwebtoken");
 const openai = new OpenAIApi({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -76,7 +77,6 @@ const handleCreateReport = asyncHandler(async (req, res) => {
     throw new Error("Internal Server Error");
   }
 });
-
 const handleCreateRoadmap = asyncHandler(async (req, res) => {
   const { roadmap } = req.body;
   let roadmapPrompt = [];
@@ -89,9 +89,9 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
       },
       {
         role: "system",
-        content: ` i am providing a document  ${roadmap} containing goals and recommendation .Create a list of all goals and timeline in reference to that goal and recommendations for that goal.
-        should contains all goals from the roadmap.
-        Do not include any explanations  following this format without deviation.
+        content: ` i am providing a document  ${roadmap} which contains the goals and recommendations entered by the user .Create a precise list of all the specific goals associated with a definitive timeline such that the output gives us a detailed step by step reccomendation of that goals and recommendations.
+        should contains all goals from the roadmap for days wise days tasks.
+        Keep in mind to not include any explanations with specific entries and follow this format without any deviation. Also dont include a weekly based planner in the timeline. make sure to use a day-wise planner.
         [{
           "Goal": "goal to be done",
           "timeline": "timeline based on that goal",
@@ -107,14 +107,33 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
       model: "gpt-3.5-turbo",
       messages: roadmapPrompt,
     });
-    console.log("roadmapGenerate: ", response.choices[0].message.content);
-    // messages = [...messages, ...response.choices[0].message.content];
+    const roadmapData = JSON.parse(response.choices[0].message.content);
+    console.log("roadmapGenerate: ", roadmapData);
+    // Decode the JWT token to get the user's I
+    console.log(req.user);
+    User.findOneAndUpdate(
+      { email: req.user.email }, // Replace with actual user email
+      { $set: { roadmap: roadmapData } }, // Update the roadmap field
+      { new: true } // To return the updated user object
+    )
+      .then((updatedUser) => {
+        if (updatedUser) {
+          console.log("User roadmap updated successfully:", updatedUser);
+        } else {
+          console.log("User not found.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating user roadmap:", error);
+      });
+
     return res.send(response.choices[0].message.content);
   } catch (err) {
     console.error("Error Happened ", err);
     res.status(500).send("Internal Server Error ");
   }
 });
+
 const handleRoadmapUpdation = asyncHandler(async (req, res) => {
   console.log(messages);
 
