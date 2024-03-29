@@ -1,14 +1,19 @@
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../redux/mindGuideSlice";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+
 const AccountPage = () => {
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
-  console.log(userInfo);
   const dispatch = useDispatch();
+
+  // If user information is not available, return null or a loading spinner
   if (!userInfo) {
-    return null;
+    return null; // You might want to display a loading spinner here
   }
+
   const handleLogout = async () => {
     try {
       await axios.post("/api/v1/user/logout");
@@ -18,17 +23,25 @@ const AccountPage = () => {
       console.error("Error in logging out", error);
     }
   };
+
   return (
-    <div className="flex items-center justify-center h-full">
-      <div className="text-center max-w-lg mx-auto flex flex-col items-center">
-        <img src={userInfo.pic} alt="" className="h-60 mb-2 rounded-lg" />
-        Logged in as {userInfo.name} ({userInfo.email}) <br />
-        <button
-          onClick={handleLogout}
-          className="bg-slate-900 px-4 py-2 text-white rounded-lg mt-2"
-        >
-          Logout
-        </button>
+    <div className="flex flex-col items-center justify-center h-full">
+      <div className="max-w-lg mx-auto text-center">
+        <img src={userInfo.pic} alt="" className="h-60 mb-4 rounded-lg" />
+        <p className="text-lg font-semibold mb-2">
+          Logged in as {userInfo.name} ({userInfo.email})
+        </p>
+        <div className="flex items-center gap-2">
+          <Link to="./roadmap" className="text-blue-600 hover:underline mb-4">
+            My Roadmap
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -34,7 +34,6 @@ const LoginPage = () => {
     setLoading(false);
   };
   useEffect(() => {
-    console.log("USer Change..");
     const fetchUserProfile = async () => {
       const response = await axios.get("/api/v1/user/getUserProfile");
       dispatch(addUser(response.data));

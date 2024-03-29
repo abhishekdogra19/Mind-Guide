@@ -19,7 +19,7 @@ axios.defaults.baseURL = "http://localhost:3001";
 axios.defaults.withCredentials = true;
 function App() {
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
-
+  console.log("userInfo ", userInfo);
   return (
     <>
       <Router>
@@ -33,11 +33,11 @@ function App() {
               <Route path="counselors/chat/:type" element={<ChatApp />} />
               <Route path="tools" element={<Tools />} />
               <Route path="account" element={<AccountPage />} />
+              <Route path="account/roadmap" element={<Roadmap />} />
             </Route>
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
           </Route>
-          <Route path="roadmap" element={<Roadmap />} />
           <Route path="visualRoadmap" element={<VisualRoadmap />} />
         </Routes>
       </Router>
