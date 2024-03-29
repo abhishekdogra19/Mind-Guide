@@ -27,7 +27,7 @@ const userSchema = mongoose.Schema(
         {
           Goal: String,
           Timeline: String,
-          Recommendations: [
+          recommendations: [
             {
               title: String,
               link: String,

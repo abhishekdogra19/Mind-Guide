@@ -79,9 +79,7 @@ const handleGetRoadmap = asyncHandler(async (req, res) => {
       return res.status(200).json({ roadmap: user.roadmap });
     } else {
       // If user does not have a roadmap, send a message indicating so
-      return res
-        .status(404)
-        .json({ message: "No roadmap available for this user." });
+      return res.status(200).json({ roadmap: [] });
     }
   } catch (error) {
     // If an error occurs, send an error response

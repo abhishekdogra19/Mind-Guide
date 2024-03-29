@@ -107,6 +107,7 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
       model: "gpt-3.5-turbo",
       messages: roadmapPrompt,
     });
+    console.log(response.choices[0].message.content);
     const roadmapData = JSON.parse(response.choices[0].message.content);
     console.log("roadmapGenerate: ", roadmapData);
     // Decode the JWT token to get the user's I
@@ -134,6 +135,25 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
   }
 });
 
+const handleTaskUpdate = asyncHandler(async (req, res) => {
+  const { roadmap } = req.body;
+  console.log(req.user.email);
+  User.findOneAndUpdate(
+    { email: req.user.email },
+    { $set: { roadmap } },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      if (updatedUser) {
+        console.log("User roadmap updated successfully.");
+      } else {
+        console.log("User not found.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error updating user roadmap:", error);
+    });
+});
 const handleRoadmapUpdation = asyncHandler(async (req, res) => {
   console.log(messages);
 
@@ -179,4 +199,7 @@ module.exports = {
   handleCreateReport,
   handleCreateRoadmap,
   handleRoadmapUpdation,
+  handleTaskUpdate,
 };
+
+// On Friay Add A frontend Funtionality in which user an create the roadmap before that it must create roadmap using the conversation.

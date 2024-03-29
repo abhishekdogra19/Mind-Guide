@@ -5,15 +5,20 @@ const {
   handleCreateReport,
   handleCreateRoadmap,
   handleRoadmapUpdation,
+  handleTaskUpdate,
 } = require("../controllers/chatControllers");
-const { protect } = require("../middleware/authMiddleware");
+const { protect, protectCookie } = require("../middleware/authMiddleware");
+const { handleGetRoadmap } = require("../controllers/userControllers");
 
 const router = express.Router();
 
 router.get("/:counselorType", getChat);
 router.post("/", handleSendChat);
 router.post("/report", handleCreateReport);
-router.post("/roadmap", protect, handleCreateRoadmap);
+router
+  .route("/roadmap")
+  .post(protect, handleCreateRoadmap)
+  .put(protectCookie, handleTaskUpdate);
 router.post("/updateroadmap", handleRoadmapUpdation);
 
 module.exports = router;
