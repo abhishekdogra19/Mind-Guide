@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import ReactMarkdown from "react-markdown";
 import html2pdf from "html2pdf.js";
 import { Link } from "react-router-dom";
+import axios from "axios";
 const ReportModal = ({ report }) => {
   const [open, setOpen] = useState(false);
   const contentRef = useRef(null);
@@ -13,22 +14,9 @@ const ReportModal = ({ report }) => {
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
 
-  // const downloadReport = () => {
-  //   const content = contentRef.current;
-
-  //   if (content) {
-  //     const pdfOptions = {
-  //       margin: 10,
-  //       filename: "report.pdf",
-  //       image: { type: "jpeg", quality: 0.98 },
-  //       html2canvas: { scale: 2 },
-  //       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-  //     };
-
-  //     html2pdf().from(content).set(pdfOptions).save();
-  //   }
-  // };
-
+  const handleRoadmaButton = async () => {
+    // await
+  };
   const downloadReport = () => {
     const content = contentRef.current;
 
@@ -81,7 +69,7 @@ const ReportModal = ({ report }) => {
             >
               Download Report
             </button>
-            <Link to={"/roadmap"}>Roadmap</Link>
+            <button onClick={handleRoadmaButton}>Create Roadmap 🚀</button>
           </div>
         </div>
       </Modal>
