@@ -28,8 +28,8 @@ const Dashboard = () => {
   const currentTab = location.pathname.split("/")[3];
   console.log(currentTab);
   return (
-    <div className="flex min-h-screen p-2 w-full">
-      <div className="flex flex-col gap-4 w-1/4 p-4">
+    <div className="flex h-screen p-2 w-full">
+      <div className="flex flex-col gap-4 w-1/4 p-4 h-screen">
         {options.map((option, i) => (
           <Link
             key={i}
@@ -47,7 +47,7 @@ const Dashboard = () => {
           </Link>
         ))}
       </div>
-      <div className="w-3/4">
+      <div className="w-3/4 overflow-x-hidden overflow-y-scroll d">
         <Outlet />
       </div>
     </div>

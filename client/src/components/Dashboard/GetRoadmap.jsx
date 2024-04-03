@@ -85,12 +85,13 @@ const GetRoadmap = () => {
   return (
     <div className="min-h-screen w-full bg-black flex flex-col items-center p-4">
       {/* Progress bar */}
-      <div className="w-full bg-gray-300 ">
+      <div className="w-full bg-gray-300 rounded-lg ">
         <div
           className="bg-green-500 text-xs leading-none py-1 text-center text-white"
           style={{
             width: `${progress}%`,
             transition: "width 0.5s ease-in-out",
+            borderRadius: "50px",
           }}
         >
           {progress}%
