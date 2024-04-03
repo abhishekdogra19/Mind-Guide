@@ -13,6 +13,7 @@ import AssistantAvatar from "../components/AssistantAvatar";
 import ScrollableFeed from "react-scrollable-feed";
 import ReportModal from "../components/ReportModal";
 import ReactMarkdown from "react-markdown";
+import { useSelector } from "react-redux";
 
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
@@ -23,6 +24,7 @@ const ChatApp = () => {
   const [listening, setListening] = useState(false);
   const { type } = useParams();
   const [report, setReport] = useState();
+  const userInfo = useSelector((state) => state.mindGuide.userInfo);
   const startListening = () => {
     if (!listening) {
       if (window.speechSynthesis.speaking) {
@@ -93,6 +95,7 @@ const ChatApp = () => {
         "http://localhost:3001/api/v1/chat/report",
         {
           chat: messages,
+          userName: userInfo?.name,
         }
       );
       if (response.status === 200) {

@@ -37,7 +37,7 @@ const Header = () => {
             </li>
           </ul>
         </nav>
-        <Link to={userInfo ? "/account" : "/login"}>
+        <Link to={userInfo ? "/account/dashboard" : "/login"}>
           <div className="flex items-center gap-2 hover:text-lime-200 hover:scale-110 duration-200">
             {userInfo ? (
               <>

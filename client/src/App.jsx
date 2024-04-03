@@ -11,9 +11,11 @@ import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import ProtectRoute from "./components/ProtectRoute";
-import AccountPage from "./pages/AccountPage";
 import VisualRoadmap from "./pages/VisualRoadmap";
-import Roadmap from "./pages/Roadmap.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import GetAllReports from "./components/Dashboard/GetAllReports.jsx";
+import GetRoadmap from "./components/Dashboard/GetRoadmap.jsx";
+import Profile from "./components/Dashboard/Profile.jsx";
 
 axios.defaults.baseURL = "http://localhost:3001";
 axios.defaults.withCredentials = true;
@@ -32,8 +34,11 @@ function App() {
               {/* Add a dynamic route to capture the counselor type */}
               <Route path="counselors/chat/:type" element={<ChatApp />} />
               <Route path="tools" element={<Tools />} />
-              <Route path="account" element={<AccountPage />} />
-              <Route path="account/roadmap" element={<Roadmap />} />
+              <Route path="account/dashboard" element={<Dashboard />}>
+                <Route path="reports" element={<GetAllReports />} />
+                <Route path="getRoadmap" element={<GetRoadmap />} />
+                <Route path="profile" element={<Profile />} />
+              </Route>
             </Route>
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
