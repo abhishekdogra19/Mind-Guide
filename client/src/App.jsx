@@ -16,6 +16,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import GetAllReports from "./components/Dashboard/GetAllReports.jsx";
 import GetRoadmap from "./components/Dashboard/GetRoadmap.jsx";
 import Profile from "./components/Dashboard/Profile.jsx";
+import HeroDashBoard from "./components/Dashboard/HeroDashBoard.jsx";
 
 axios.defaults.baseURL = "http://localhost:3001";
 axios.defaults.withCredentials = true;
@@ -35,6 +36,7 @@ function App() {
               <Route path="counselors/chat/:type" element={<ChatApp />} />
               <Route path="tools" element={<Tools />} />
               <Route path="account/dashboard" element={<Dashboard />}>
+                <Route index element={<HeroDashBoard />} />
                 <Route path="reports" element={<GetAllReports />} />
                 <Route path="getRoadmap" element={<GetRoadmap />} />
                 <Route path="profile" element={<Profile />} />
