@@ -19,7 +19,7 @@ const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
   const [renderContent, setRenderContent] = useState([]);
-  const inputElement = useRef();
+  const inputElement = useRef(null);
   const [loading, setLoading] = useState(false);
   const [listening, setListening] = useState(false);
   const { type } = useParams();
@@ -47,7 +47,9 @@ const ChatApp = () => {
   useEffect(() => {
     setInputText(transcript);
   }, [transcript]);
-
+  useEffect(() => {
+    inputElement.current.focus();
+  }, [messages]);
   const generateText = async () => {
     if (inputText.trim() === "") {
       return;
@@ -66,6 +68,7 @@ const ChatApp = () => {
         messages: [...messages, userMessage],
       });
       setLoading(false);
+
       if (response.status === 200) {
         const botMessage = {
           role: "assistant",
@@ -91,6 +94,7 @@ const ChatApp = () => {
 
   const HandleReportGenerate = async () => {
     try {
+      setLoading(true);
       const response = await axios.post(
         "http://localhost:3001/api/v1/chat/report",
         {
@@ -107,6 +111,7 @@ const ChatApp = () => {
     } catch (err) {
       console.error("Error in fetching initial messages", err);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -125,6 +130,7 @@ const ChatApp = () => {
       }
     };
     fetchData();
+    inputElement.current.focus();
   }, [type]);
 
   useEffect(() => {

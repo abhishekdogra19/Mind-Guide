@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
@@ -6,20 +6,21 @@ const GetRoadmap = () => {
   const [roadmapData, setRoadmapData] = useState([]);
   const [showRecommendationsIndex, setShowRecommendationsIndex] =
     useState(null);
-  const [loading, setLoading] = useState(true); // State to manage loading state
+  const [loading, setLoading] = useState(true);
+  const [unsavedChanges, setUnsavedChanges] = useState(false); // State to track unsaved changes
 
   useEffect(() => {
     const fetchRoadmap = async () => {
       try {
         const response = await axios.get("/api/v1/user/roadmap");
         setRoadmapData(response.data.roadmap);
-        setLoading(false); // Set loading to false after fetching data
+        setLoading(false);
       } catch (err) {
         console.log(err);
       }
     };
     fetchRoadmap();
-  }, []); // Empty dependency array to run effect only once on mount
+  }, []);
 
   const completedTasksCount = roadmapData.filter(
     (item) => item.isCompleted
@@ -33,11 +34,10 @@ const GetRoadmap = () => {
   const handleTaskClick = async (index) => {
     try {
       const updatedRoadmapData = [...roadmapData];
-      // Toggle the isCompleted value to its opposite
       updatedRoadmapData[index].isCompleted =
         !updatedRoadmapData[index].isCompleted;
       setRoadmapData(updatedRoadmapData);
-      // Send a PUT request to update the roadmap with the updated data
+      setUnsavedChanges(true); // Set unsaved changes flag
     } catch (err) {
       console.log(err);
     }
@@ -55,19 +55,17 @@ const GetRoadmap = () => {
 
   const handleSave = async () => {
     try {
-      // Send a PUT request to update the roadmap with the updated data
       await axios.put("/api/v1/chat/roadmap", { roadmap: roadmapData });
+      setUnsavedChanges(false); // Reset unsaved changes flag after successful save
     } catch (err) {
       console.log(err);
     }
   };
 
-  // If loading, display loading message
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  // If there's no roadmap data, display a message and a return button
   if (roadmapData.length === 0) {
     return (
       <div className="min-h-screen w-full bg-black flex flex-col items-center text-white p-4">
@@ -84,10 +82,9 @@ const GetRoadmap = () => {
 
   return (
     <div className="min-h-screen w-full bg-black flex flex-col items-center p-4">
-      {/* Progress bar */}
       <div className="w-full bg-gray-300 rounded-lg ">
         <div
-          className="bg-green-500 text-xs leading-none py-1 text-center text-white"
+          className="bg-green-500 text-lg font-bold leading-none  text-center text-white"
           style={{
             width: `${progress}%`,
             transition: "width 0.5s ease-in-out",
@@ -98,9 +95,7 @@ const GetRoadmap = () => {
         </div>
       </div>
 
-      {/* Container for tasks */}
       <div className="mt-8 flex flex-col items-center overflow-y-auto">
-        {/* Roadmap tasks */}
         <div className="flex flex-wrap">
           {roadmapData.map((item, index) => (
             <div
@@ -162,13 +157,15 @@ const GetRoadmap = () => {
         </div>
       </div>
 
-      {/* Save button */}
-      <button
-        className="bg-blue-500 w-full max-w-lg rounded-lg hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4"
-        onClick={handleSave}
-      >
-        Save
-      </button>
+      {/* Display save button only if there are unsaved changes */}
+      {unsavedChanges && (
+        <button
+          className="bg-blue-500 w-full max-w-lg rounded-lg hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4"
+          onClick={handleSave}
+        >
+          Save Changes
+        </button>
+      )}
     </div>
   );
 };
