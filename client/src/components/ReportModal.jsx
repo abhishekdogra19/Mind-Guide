@@ -4,7 +4,6 @@ import { Modal } from "react-responsive-modal";
 import { useSelector } from "react-redux";
 import ReactMarkdown from "react-markdown";
 import html2pdf from "html2pdf.js";
-import { Link } from "react-router-dom";
 import axios from "axios";
 const ReportModal = ({ report }) => {
   const [open, setOpen] = useState(false);
@@ -13,10 +12,26 @@ const ReportModal = ({ report }) => {
 
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
-
-  const handleRoadmaButton = async () => {
-    // await
+  const handleRoadmapCreation = async () => {
+    // const jsonData = JSON.stringify(setReport);
+    // console.log(jsonData);
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/api/v1/chat/roadmap",
+        {
+          roadmap: {},
+        }
+      );
+      if (response.status === 200) {
+        console.log(response.data);
+      } else {
+        console.error("Error in fetching initial messages");
+      }
+    } catch (error) {
+      console.error("Error in fetching roadmap", err);
+    }
   };
+
   const downloadReport = () => {
     const content = contentRef.current;
 
@@ -69,7 +84,7 @@ const ReportModal = ({ report }) => {
             >
               Download Report
             </button>
-            <button onClick={handleRoadmaButton}>Create Roadmap 🚀</button>
+            <button onClick={handleRoadmapCreation}>Create Roadmap 🚀</button>
           </div>
         </div>
       </Modal>
