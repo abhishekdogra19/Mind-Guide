@@ -17,7 +17,7 @@ router.post("/", handleSendChat);
 router.post("/report", handleCreateReport);
 router
   .route("/roadmap")
-  .post(protect, handleCreateRoadmap)
+  .post(protectCookie, handleCreateRoadmap)
   .put(protectCookie, handleTaskUpdate);
 router.post("/updateroadmap", handleRoadmapUpdation);
 

@@ -7,7 +7,6 @@ const openai = new OpenAIApi({
 });
 
 let messages = [];
-
 function updateChat(messages, role, content) {
   messages.push({ role, content });
   return messages;
@@ -70,7 +69,7 @@ const handleCreateReport = asyncHandler(async (req, res) => {
         content: `I am ${userName} I want you to create a report from the above chat conversation for the user. compile a formal report with proper space and headings, including SWOT analysis, roadmap, tips, recommendation with proper roadmap, videos, books, blogs,news anything  and tricks to help user. To help user to understand more about him/her.`,
       },
     ];
-    const report = await getChatGPTResponse(gptReportPrompt);
+    report = await getChatGPTResponse(gptReportPrompt);
     return res.status(200).json(report);
   } catch (error) {
     res.status(500);
@@ -90,23 +89,24 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
       {
         role: "system",
         content: ` i am providing a document  ${roadmap} which contains the goals and recommendations entered by the user .Create a precise list of all the specific goals associated with a definitive timeline such that the output gives us a detailed step by step reccomendation of that goals and recommendations.
-        should contains all goals from the roadmap for days wise days tasks.
-        Keep in mind to not include any explanations with specific entries and follow this format without any deviation. Also dont include a weekly based planner in the timeline. make sure to use a day-wise planner.
-        [{
-          "Goal": "goal to be done",
-          "timeline": "timeline based on that goal",
-          "recommendations": [{
-            "title": "title of the recommendation course",
-            "link" : "link of the recommended course"
-          }],
-          "isCompleted":false in boolean
-        }]`,
+          should contains all goals from the roadmap for days wise days tasks.
+          Keep in mind to not include any explanations with specific entries and follow this format without any deviation. Also dont include a weekly based planner in the timeline. make sure to use a day-wise planner.
+          [{
+            "Goal": "goal to be done",
+            "timeline": "timeline based on that goal",
+            "recommendations": [{
+              "title": "title of the recommendation course",
+              "link" : "link of the recommended course"
+            }],
+            "isCompleted":false in boolean
+          }]`,
       },
     ];
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: roadmapPrompt,
     });
+
     console.log(response.choices[0].message.content);
     const roadmapData = JSON.parse(response.choices[0].message.content);
     console.log("roadmapGenerate: ", roadmapData);
