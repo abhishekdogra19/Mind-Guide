@@ -82,7 +82,7 @@ const GetRoadmap = () => {
 
   return (
     <div className="min-h-screen w-full bg-black flex flex-col items-center p-4">
-      <div className="w-full bg-gray-300 rounded-lg ">
+      <div className="w-full bg-gray-300 rounded-lg  ">
         <div
           className="bg-green-500 text-lg font-bold leading-none  text-center text-white"
           style={{
@@ -96,7 +96,7 @@ const GetRoadmap = () => {
       </div>
 
       <div className="mt-8 flex flex-col items-center overflow-y-auto">
-        <div className="flex flex-wrap">
+        <div className="flex flex-col">
           {roadmapData.map((item, index) => (
             <div
               key={index}
@@ -105,19 +105,21 @@ const GetRoadmap = () => {
               }`}
               onClick={() => handleTaskClick(index)}
             >
-              <h2 className="font-semibold">{item.Goal}</h2>
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="font-semibold">{item.Goal}</h2>
+                <button
+                  className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDropdownClick(index);
+                  }}
+                >
+                  {showRecommendationsIndex === index
+                    ? "Hide Recommendations"
+                    : "Show Recommendations"}
+                </button>
+              </div>
               <p>{item.Description}</p>
-              <button
-                className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mt-2"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDropdownClick(index);
-                }}
-              >
-                {showRecommendationsIndex === index
-                  ? "Hide Recommendations"
-                  : "Show Recommendations"}
-              </button>
               {showRecommendationsIndex === index && (
                 <div
                   className="mt-2 text-white overflow-hidden"
