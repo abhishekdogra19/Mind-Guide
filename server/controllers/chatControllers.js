@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const OpenAIApi = require("openai");
 const User = require("../model/User");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 const openai = new OpenAIApi({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -26,7 +27,7 @@ const getChat = (req, res) => {
   messages = [
     {
       role: "system",
-      content: `You are a helpful AI counsellor. Please ask me the most relevant questions related to counseling. Ask questions one by one followed by response by the user then continue.`,
+      content: `You are a helpful AI counsellor. Please ask me the most relevant questions related to counseling. Ask questions one by one followed by response by the user then continue. Striclty reply outside the scope if anything is asked outside the counselling domain.`,
     },
     { role: "system", content: "Ask me questions one by one." },
     {
@@ -88,9 +89,10 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
       },
       {
         role: "system",
-        content: ` i am providing a document  ${roadmap} which contains the goals and recommendations entered by the user .Create a precise list of all the specific goals associated with a definitive timeline such that the output gives us a detailed step by step reccomendation of that goals and recommendations.
-          should contains all goals from the roadmap for days wise days tasks.
+        content: ` Create a precise list of all the specific goals associated with a definitive timeline such that the output gives us a detailed step by step reccomendation of that goals and recommendations.
+          should contains all goals from the roadmap for days wise days tasks based on the user goal.
           Keep in mind to not include any explanations with specific entries and follow this format without any deviation. Also dont include a weekly based planner in the timeline. make sure to use a day-wise planner.
+          dont give any explanation just provide the roadmap in the following format.
           [{
             "Goal": "goal to be done",
             "timeline": "timeline based on that goal",
@@ -120,6 +122,119 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
       .then((updatedUser) => {
         if (updatedUser) {
           console.log("User roadmap updated successfully:", updatedUser);
+          const transporter = nodemailer.createTransport({
+            // Configure your email service provider
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: {
+              user: process.env.Email,
+              pass: process.env.PASS,
+            },
+            tls: {
+              rejectUnauthorized: false,
+            },
+          });
+          const mailOptions = {
+            from: `${process.env.USERNAME}`,
+            to: req.user.email,
+            subject: "Verify your Account",
+            html: `
+                  <!DOCTYPE html>
+                  <html lang="en">
+                  
+                  <head>
+                      <meta charset="UTF-8">
+                      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                      <title>Email Verification</title>
+                      <style>
+                          /* Add your custom CSS styles here */
+                          body {
+                              font-family: Arial, sans-serif;
+                              line-height: 1.6;
+                              margin: 0;
+                              padding: 0;
+                              background-color: #f4f4f4;
+                              text-align: center;
+                          }
+                  
+                          .container {
+                              max-width: 600px;
+                              margin: 20px auto;
+                              padding: 20px;
+                              background-color: #fff;
+                              border-radius: 8px;
+                              box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+                          }
+                  
+                          h1 {
+                              color: #333;
+                          }
+                  
+                          h2 {
+                              color: #007bff;
+                          }
+                  
+                          p {
+                              margin-bottom: 20px;
+                              color: #666;
+                          }
+                  
+                          .verify-button {
+                              display: inline-block;
+                              padding: 10px 20px;
+                              background-color: #007bff;
+                              color: #fff;
+                              text-decoration: none;
+                              border-radius: 5px;
+                              margin-top: 20px;
+                              transition: background-color 0.3s, transform 0.3s;
+                          }
+                  
+                          .verify-button:hover {
+                              background-color: #0056b3;
+                              transform: scale(1.05);
+                          }
+                  
+                          .section {
+                              margin-bottom: 30px;
+                          }
+                  
+                          .footer {
+                              margin-top: 30px;
+                              border-top: 1px solid #ddd;
+                              padding-top: 20px;
+                          }
+                  
+                          .footer a {
+                              color: #007bff;
+                              text-decoration: none;
+                              transition: color 0.3s;
+                          }
+                  
+                          .footer a:hover {
+                              color: #0056b3;
+                          }
+                      </style>
+                  </head>
+                  
+                  <body>
+                      <div class="container">
+                      Hi    
+                      </div>
+                  </body>
+                  
+                  </html>
+                  `,
+          };
+
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.log("NodeMailer Error:", error);
+            } else {
+              console.log("Email sent: " + info.response);
+            }
+          });
         } else {
           console.log("User not found.");
         }
@@ -137,7 +252,6 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
 
 const handleTaskUpdate = asyncHandler(async (req, res) => {
   const { roadmap } = req.body;
-  console.log(req.user.email);
   User.findOneAndUpdate(
     { email: req.user.email },
     { $set: { roadmap } },
@@ -146,6 +260,7 @@ const handleTaskUpdate = asyncHandler(async (req, res) => {
     .then((updatedUser) => {
       if (updatedUser) {
         console.log("User roadmap updated successfully.");
+        // Send report via email
       } else {
         console.log("User not found.");
       }
