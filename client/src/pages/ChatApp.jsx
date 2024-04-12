@@ -60,6 +60,7 @@ const ChatApp = () => {
         content: inputText,
       };
       setInputText("");
+
       setLoading(true);
       if (window.speechSynthesis.speaking) {
         window.speechSynthesis.cancel();
@@ -183,9 +184,13 @@ const ChatApp = () => {
       microphoneAnimationControls.start({
         scale: [1, 1.2, 1],
         transition: { duration: 0.5, repeat: Infinity },
+        color: "red",
       });
     } else {
       // Stop the animation when not listening
+      microphoneAnimationControls.start({
+        color: "white",
+      });
       microphoneAnimationControls.stop();
     }
   }, [listening, microphoneAnimationControls]);
