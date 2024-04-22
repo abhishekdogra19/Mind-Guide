@@ -40,10 +40,8 @@ const ReportModal = ({ report }) => {
       const pdfContent = content.cloneNode(true);
 
       // Remove the button from the PDF content
-      const buttonToRemove = pdfContent.querySelector("button");
-      if (buttonToRemove) {
-        buttonToRemove.remove();
-      }
+      const buttonsToRemove = pdfContent.querySelectorAll("button");
+      buttonsToRemove?.forEach((button) => button.remove());
 
       const pdfOptions = {
         margin: 10,
