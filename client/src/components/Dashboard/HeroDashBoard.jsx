@@ -1,59 +1,120 @@
+import axios from "axios";
 import { Chart, registerables } from "chart.js"; // Import Chart.js and its modules
 Chart.register(...registerables); // Register all the necessary components
-import React from "react";
+import { useState, useEffect } from "react";
 import { Bar, Pie } from "react-chartjs-2";
 
 const HeroDashBoard = () => {
   // Sample data for the bar chart
-  const barChartData = {
-    labels: ["January", "February", "March", "April", "May"],
+  const [barChartData, setBarChartData] = useState({
+    labels: [],
     datasets: [
       {
         label: "Sessions Attended",
-        data: [8, 12, 10, 15, 11], // Number of sessions attended each month
+        data: [],
         backgroundColor: [
-          "rgba(255, 99, 132, 0.2)", // Red
-          "rgba(54, 162, 235, 0.2)", // Blue
-          "rgba(255, 206, 86, 0.2)", // Yellow
-          "rgba(75, 192, 192, 0.2)", // Green
-          "rgba(153, 102, 255, 0.2)", // Purple
+          "rgba(255, 99, 132, 0.2)",
+          // Add other colors as needed
         ],
         borderColor: [
-          "rgba(255, 99, 132, 1)", // Red
-          "rgba(54, 162, 235, 1)", // Blue
-          "rgba(255, 206, 86, 1)", // Yellow
-          "rgba(75, 192, 192, 1)", // Green
-          "rgba(153, 102, 255, 1)", // Purple
+          "rgba(255, 99, 132, 1)",
+          // Add other colors as needed
         ],
         borderWidth: 1,
       },
     ],
-  };
+  });
 
-  // Sample data for the pie chart
-  const pieChartData = {
-    labels: ["Report A", "Report B", "Report C", "Report D", "Report E"],
+  const [pieChartData, setPieChartData] = useState({
+    labels: [],
     datasets: [
       {
         label: "Reports Created",
-        data: [30, 20, 10, 15, 25], // Number of reports created
+        data: [],
         backgroundColor: [
-          "rgba(255, 99, 132, 0.2)", // Red
-          "rgba(54, 162, 235, 0.2)", // Blue
-          "rgba(255, 206, 86, 0.2)", // Yellow
-          "rgba(75, 192, 192, 0.2)", // Green
-          "rgba(153, 102, 255, 0.2)", // Purple
+          // Define colors as before
         ],
         borderColor: [
-          "rgba(255, 99, 132, 1)", // Red
-          "rgba(54, 162, 235, 1)", // Blue
-          "rgba(255, 206, 86, 1)", // Yellow
-          "rgba(75, 192, 192, 1)", // Green
-          "rgba(153, 102, 255, 1)", // Purple
+          // Define borders as before
         ],
         borderWidth: 1,
       },
     ],
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axios.get(
+        "http://localhost:3001/api/v1/user/userDashboard"
+      );
+      console.log(data.user);
+      updateCharts(data.user);
+    };
+    fetchData();
+  }, []);
+  const updateCharts = (userData) => {
+    const sessionsPerDay = userData.sessionHistory.reduce((acc, session) => {
+      const date = new Date(session.date).toLocaleDateString();
+      if (acc[date]) {
+        acc[date] += 1;
+      } else {
+        acc[date] = 1;
+      }
+      return acc;
+    }, {});
+
+    const sessionLabels = Object.keys(sessionsPerDay);
+    const sessionData = Object.values(sessionsPerDay);
+
+    setBarChartData({
+      labels: sessionLabels,
+      datasets: [
+        {
+          label: "Sessions Attended",
+          data: sessionData,
+          backgroundColor: "rgba(54, 162, 235, 0.2)",
+          borderColor: "rgba(54, 162, 235, 1)",
+        },
+      ],
+    });
+
+    const reportLabels = userData.reportHistory.map(
+      (report) => report.title // Using report title for the pie chart labels
+    );
+    const reportData = new Array(reportLabels.length).fill(1); // Each report counts as one
+
+    setBarChartData({
+      labels: sessionLabels,
+      datasets: [
+        {
+          ...barChartData.datasets[0],
+          data: sessionData,
+          backgroundColor: "rgba(54, 162, 235, 0.2)",
+          borderColor: "rgba(54, 162, 235, 1)",
+        },
+      ],
+    });
+
+    setPieChartData({
+      labels: reportLabels,
+      datasets: [
+        {
+          label: "Reports Created",
+          data: reportData,
+          backgroundColor: reportLabels.map(
+            () =>
+              `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
+                Math.random() * 255
+              )}, ${Math.floor(Math.random() * 255)}, 0.2)`
+          ),
+          borderColor: reportLabels.map(
+            () =>
+              `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
+                Math.random() * 255
+              )}, ${Math.floor(Math.random() * 255)}, 1)`
+          ),
+        },
+      ],
+    });
   };
 
   // Configuration options for the charts

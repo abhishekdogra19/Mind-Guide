@@ -25,6 +25,7 @@ const ChatApp = () => {
   const { type } = useParams();
   const [report, setReport] = useState();
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
+  const { type: counsellorType } = useParams();
   const startListening = () => {
     if (!listening) {
       if (window.speechSynthesis.speaking) {
@@ -101,6 +102,7 @@ const ChatApp = () => {
         {
           chat: messages,
           userName: userInfo?.name,
+          counsellorType,
         }
       );
       if (response.status === 200) {
@@ -116,6 +118,8 @@ const ChatApp = () => {
   };
 
   useEffect(() => {
+    console.log("userInfo ", userInfo);
+    if (!userInfo) return;
     const fetchData = async () => {
       try {
         const response = await axios.get(

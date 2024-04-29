@@ -22,23 +22,29 @@ async function getChatGPTResponse(messages) {
   return response.choices[0].message.content;
 }
 
-const getChat = (req, res) => {
+const getChat = asyncHandler(async (req, res) => {
   const counselorType = req.params.counselorType;
-  messages = [
-    {
-      role: "system",
-      content: `You are a helpful AI counsellor. Please ask me the most relevant questions related to counseling. Ask questions one by one followed by response by the user then continue. Striclty reply outside the scope if anything is asked outside the counselling domain.`,
-    },
-    { role: "system", content: "Ask me questions one by one." },
-    {
-      role: "system",
-      content: `I want you to act as a ${counselorType}.`,
-    },
-  ];
-
-  res.status(200).json(messages);
-};
-
+  try {
+    messages = [
+      {
+        role: "system",
+        content: `You are a helpful AI counsellor. Please ask me the most relevant questions related to counseling. Ask questions one by one followed by response by the user then continue. Striclty reply outside the scope if anything is asked outside the counselling domain.`,
+      },
+      { role: "system", content: "Ask me questions one by one." },
+      {
+        role: "system",
+        content: `I want you to act as a ${counselorType}.`,
+      },
+    ];
+    const user = await User.findById(req.user._id);
+    user.sessionHistory.push({ date: new Date(), status: "started" });
+    await user.save();
+    res.status(200).json(messages);
+  } catch (err) {
+    console.error("Error in getting chat", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
 const handleSendChat = asyncHandler(async (req, res) => {
   try {
     const userMessage = req.body.messages.slice(-1)[0];
@@ -46,7 +52,6 @@ const handleSendChat = asyncHandler(async (req, res) => {
 
     const modelResponse = await getChatGPTResponse(messages);
     messages = updateChat(messages, "assistant", modelResponse);
-
     console.log(messages);
     res.status(200).json(modelResponse);
   } catch (err) {
@@ -56,7 +61,7 @@ const handleSendChat = asyncHandler(async (req, res) => {
 });
 
 const handleCreateReport = asyncHandler(async (req, res) => {
-  const { chat, userName } = req.body;
+  const { chat, userName, counsellorType } = req.body;
   console.log(chat);
   if (!chat || chat.length == 0) {
     res.status(400);
@@ -70,11 +75,20 @@ const handleCreateReport = asyncHandler(async (req, res) => {
         content: `I am ${userName} I want you to create a report from the above chat conversation for the user. compile a formal report with proper space and headings, including SWOT analysis, roadmap, tips, recommendation with proper roadmap, videos, books, blogs,news anything  and tricks to help user. To help user to understand more about him/her.`,
       },
     ];
-    report = await getChatGPTResponse(gptReportPrompt);
+    const report = await getChatGPTResponse(gptReportPrompt);
+    console.log("req.user: ", req.user);
+    const user = await User.findById(req.user._id);
+
+    user.reportHistory.push({
+      date: new Date(),
+      title: `${counsellorType} Session Report`,
+    });
+    await user.save();
+
     return res.status(200).json(report);
   } catch (error) {
     res.status(500);
-    throw new Error("Internal Server Error");
+    throw new Error("Internal Server Error", error);
   }
 });
 const handleCreateRoadmap = asyncHandler(async (req, res) => {

@@ -8,13 +8,13 @@ const {
   handleTaskUpdate,
 } = require("../controllers/chatControllers");
 const { protect, protectCookie } = require("../middleware/authMiddleware");
-const { handleGetRoadmap } = require("../controllers/userControllers");
+// const { handleGetRoadmap } = require("../controllers/userControllers");
 
 const router = express.Router();
 
-router.get("/:counselorType", getChat);
-router.post("/", handleSendChat);
-router.post("/report", handleCreateReport);
+router.get("/:counselorType", protectCookie, getChat);
+router.post("/", protectCookie, handleSendChat);
+router.post("/report", protectCookie, handleCreateReport);
 router
   .route("/roadmap")
   .post(protectCookie, handleCreateRoadmap)

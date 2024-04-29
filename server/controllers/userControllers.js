@@ -87,10 +87,25 @@ const handleGetRoadmap = asyncHandler(async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 });
+const handleGetUserData = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+    if (user) {
+      return res.status(200).json({ user });
+    } else {
+      return res.status(200).json({ user: null });
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
 module.exports = {
   registerUser,
   authUser,
   getUserProfile,
   handleLogout,
   handleGetRoadmap,
+  handleGetUserData,
 };

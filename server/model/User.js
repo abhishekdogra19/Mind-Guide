@@ -38,7 +38,19 @@ const userSchema = mongoose.Schema(
       ],
       default: [], // You may want to set a default value as an empty array
     },
+    sessionHistory: [
+      {
+        date: { type: Date, default: Date.now },
+      },
+    ],
+    reportHistory: [
+      {
+        date: { type: Date, default: Date.now },
+        title: { type: String, default: "New Report" },
+      },
+    ],
   },
+
   {
     timeStamps: true,
   }
