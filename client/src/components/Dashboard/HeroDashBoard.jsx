@@ -77,46 +77,41 @@ const HeroDashBoard = () => {
       ],
     });
 
-    const reportLabels = userData.reportHistory.map(
-      (report) => report.title // Using report title for the pie chart labels
+    const sessionsPerCounselor = userData.reportHistory.reduce(
+      (acc, session) => {
+        const counselorName = session.title; // Assuming counselor name is stored in session object
+        acc[counselorName] = (acc[counselorName] || 0) + 1;
+        return acc;
+      },
+      {}
     );
-    const reportData = new Array(reportLabels.length).fill(1); // Each report counts as one
 
-    setBarChartData({
-      labels: sessionLabels,
-      datasets: [
-        {
-          ...barChartData.datasets[0],
-          data: sessionData,
-          backgroundColor: "rgba(54, 162, 235, 0.2)",
-          borderColor: "rgba(54, 162, 235, 1)",
-        },
-      ],
-    });
+    const counselorLabels = Object.keys(sessionsPerCounselor);
+    const counselorData = Object.values(sessionsPerCounselor);
 
     setPieChartData({
-      labels: reportLabels,
+      labels: counselorLabels,
       datasets: [
         {
-          label: "Reports Created",
-          data: reportData,
-          backgroundColor: reportLabels.map(
+          label: "Counselor Sessions",
+          data: counselorData,
+          backgroundColor: counselorLabels.map(
             () =>
               `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
                 Math.random() * 255
               )}, ${Math.floor(Math.random() * 255)}, 0.2)`
           ),
-          borderColor: reportLabels.map(
+          borderColor: counselorLabels.map(
             () =>
               `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
                 Math.random() * 255
               )}, ${Math.floor(Math.random() * 255)}, 1)`
           ),
+          borderWidth: 1,
         },
       ],
     });
   };
-
   // Configuration options for the charts
   const options = {
     scales: {
