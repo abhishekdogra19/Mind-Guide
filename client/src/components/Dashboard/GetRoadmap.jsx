@@ -68,7 +68,7 @@ const GetRoadmap = () => {
 
   if (roadmapData.length === 0) {
     return (
-      <div className="min-h-screen w-full bg-black flex flex-col items-center text-white p-4">
+      <div className="min-h-screen w-full bg-gray-600 flex flex-col items-center text-white p-4">
         <div className="text-xl mt-8">No roadmap available</div>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
@@ -81,7 +81,7 @@ const GetRoadmap = () => {
   }
 
   return (
-    <div className="min-h-screen w-full bg-black flex flex-col items-center p-4">
+    <div className="min-h-screen w-full bg-gray-600 flex flex-col items-center p-4">
       <div className="w-full bg-gray-300 rounded-lg  ">
         <div
           className="bg-green-500 text-lg font-bold leading-none  text-center text-white"

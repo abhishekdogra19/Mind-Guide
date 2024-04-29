@@ -26,6 +26,7 @@ const ChatApp = () => {
   const [report, setReport] = useState();
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
   const { type: counsellorType } = useParams();
+  const [isReportModalOpen, setReportModalOpen] = useState(false);
   const startListening = () => {
     if (!listening) {
       if (window.speechSynthesis.speaking) {
@@ -108,6 +109,7 @@ const ChatApp = () => {
       if (response.status === 200) {
         console.log(response.data);
         setReport(response.data);
+        setReportModalOpen(true); // Open the modal after receiving the response
       } else {
         console.error("Error in fetching initial messages");
       }
@@ -222,7 +224,7 @@ const ChatApp = () => {
         </div>
       )}
       <div className="h-screen">
-        {report && <ReportModal report={report} />}
+        {report && <ReportModal report={report} open={isReportModalOpen} />}
         <div className="chatAppBG h-[85vh] overflow-y-scroll flex-1  flex flex-col example pb-6">
           <ScrollableFeed>{renderContent}</ScrollableFeed>
         </div>

@@ -1,17 +1,16 @@
-import { useState, useRef } from "react";
+/* eslint-disable react/prop-types */
+import { useRef } from "react";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { useSelector } from "react-redux";
 import ReactMarkdown from "react-markdown";
 import html2pdf from "html2pdf.js";
 import axios from "axios";
-const ReportModal = ({ report }) => {
-  const [open, setOpen] = useState(false);
+import { useNavigate, useParams } from "react-router-dom";
+const ReportModal = ({ report, open }) => {
   const contentRef = useRef(null);
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
 
-  const onOpenModal = () => setOpen(true);
-  const onCloseModal = () => setOpen(false);
   const handleRoadmapCreation = async () => {
     // const jsonData = JSON.stringify(setReport);
     // console.log(jsonData);
@@ -28,7 +27,7 @@ const ReportModal = ({ report }) => {
         console.error("Error in fetching initial messages");
       }
     } catch (error) {
-      console.error("Error in fetching roadmap", err);
+      console.error("Error in fetching roadmap", error);
     }
   };
 
@@ -54,14 +53,23 @@ const ReportModal = ({ report }) => {
       html2pdf().from(pdfContent).set(pdfOptions).save();
     }
   };
-
+  const { type: counsellorType } = useParams();
+  console.log(open);
+  const navigate = useNavigate();
   return (
     <div>
-      <button onClick={onOpenModal}>Open modal</button>
       <Modal
         open={open}
-        onClose={onCloseModal}
         center
+        closeOnOverlayClick={false}
+        closeIcon={
+          <button className="bg-red-700 px-2 py-1  rounded-xl font-bold text-white">
+            Back{" "}
+          </button>
+        }
+        onClose={() => {
+          navigate("../counselors");
+        }}
         classNames={{ modal: "custom-modal" }}
       >
         <div className="modal-content" ref={contentRef}>
@@ -81,8 +89,15 @@ const ReportModal = ({ report }) => {
               className="px-4 py-2  text-white bg-green-700 rounded-lg"
             >
               Download Report
-            </button>
-            <button onClick={handleRoadmapCreation}>Create Roadmap 🚀</button>
+            </button>{" "}
+            {counsellorType == "career counselor" && (
+              <button
+                onClick={handleRoadmapCreation}
+                className="bg-gray-400 py-2 rounded-lg px-2 text-white"
+              >
+                Create Roadmap 🚀
+              </button>
+            )}
           </div>
         </div>
       </Modal>

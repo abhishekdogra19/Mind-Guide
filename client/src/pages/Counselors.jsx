@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const counselors = [
   {
@@ -39,6 +40,20 @@ const counselors = [
 ];
 
 const Counselors = () => {
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [selectedCounselor, setSelectedCounselor] = useState(null);
+  const navigate = useNavigate();
+  const handleCounselorClick = (counselor) => {
+    setSelectedCounselor(counselor);
+    setShowConfirmation(true);
+  };
+  const handleConfirmation = (confirmed) => {
+    if (confirmed && selectedCounselor) {
+      const link = `/counselors/chat/${selectedCounselor.type.toLowerCase()}`;
+      navigate(link);
+    }
+    setShowConfirmation(false);
+  };
   return (
     <div className="overflow-hidden p-10">
       <div className="text-4xl font-bold text-center text-gray-800 py-10">
@@ -50,20 +65,48 @@ const Counselors = () => {
           <div
             key={index}
             className="text-white bg-slate-700 h-96 p-2 rounded-xl relative hover:scale-110 hover:flex-1  duration-300"
+            onClick={() => handleCounselorClick(counselor)}
           >
-            <Link to={`/counselors/chat/${counselor.type.toLowerCase()}`}>
-              <img
-                src={counselor.image}
-                alt=""
-                className="h-2/3 w-full object-cover"
-              />
-              <h2 className="text-3xl text-center mt-10 hover:text-red-500">
-                {counselor.type}
-              </h2>
-            </Link>
+            <img
+              src={counselor.image}
+              alt=""
+              className="h-2/3 w-full object-cover"
+            />
+            <h2 className="text-3xl text-center mt-10 hover:text-red-500">
+              {counselor.type}
+            </h2>
           </div>
         ))}
       </div>
+      {showConfirmation && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-10 rounded-md">
+            <p className="text-lg">
+              Start counseling session with{" "}
+              {
+                <span className="text-blue-600 font-bold">
+                  {selectedCounselor.type}{" "}
+                </span>
+              }
+              ?
+            </p>
+            <div className="flex justify-center mt-3">
+              <button
+                className="bg-green-500 text-white px-4 py-2 mr-2 rounded hover:brightness-110 transition duration-300"
+                onClick={() => handleConfirmation(true)}
+              >
+                Yes
+              </button>
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded hover:brightness-110"
+                onClick={() => handleConfirmation(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

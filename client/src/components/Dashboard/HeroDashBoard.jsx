@@ -122,13 +122,13 @@ const HeroDashBoard = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-10">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-10 items-center justify-between">
       <div>
-        <h2>Bar Chart: Sessions Attended</h2>
+        <h2> Sessions Attended</h2>
         <Bar data={barChartData} options={options} />
       </div>
       <div>
-        <h2>Pie Chart: Reports Created</h2>
+        <h2>Reports Created</h2>
         <Pie data={pieChartData} options={options} />
       </div>
     </div>
