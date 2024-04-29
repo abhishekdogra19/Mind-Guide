@@ -138,93 +138,84 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
           const mailOptions = {
             from: `${process.env.USERNAME}`,
             to: req.user.email,
-            subject: "Verify your Account",
+            subject: "Mind Guide Session Report",
             html: `
-                  <!DOCTYPE html>
-                  <html lang="en">
-                  
-                  <head>
-                      <meta charset="UTF-8">
-                      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                      <title>Email Verification</title>
-                      <style>
-                          /* Add your custom CSS styles here */
-                          body {
-                              font-family: Arial, sans-serif;
-                              line-height: 1.6;
-                              margin: 0;
-                              padding: 0;
-                              background-color: #f4f4f4;
-                              text-align: center;
-                          }
-                  
-                          .container {
-                              max-width: 600px;
-                              margin: 20px auto;
-                              padding: 20px;
-                              background-color: #fff;
-                              border-radius: 8px;
-                              box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-                          }
-                  
-                          h1 {
-                              color: #333;
-                          }
-                  
-                          h2 {
-                              color: #007bff;
-                          }
-                  
-                          p {
-                              margin-bottom: 20px;
-                              color: #666;
-                          }
-                  
-                          .verify-button {
-                              display: inline-block;
-                              padding: 10px 20px;
-                              background-color: #007bff;
-                              color: #fff;
-                              text-decoration: none;
-                              border-radius: 5px;
-                              margin-top: 20px;
-                              transition: background-color 0.3s, transform 0.3s;
-                          }
-                  
-                          .verify-button:hover {
-                              background-color: #0056b3;
-                              transform: scale(1.05);
-                          }
-                  
-                          .section {
-                              margin-bottom: 30px;
-                          }
-                  
-                          .footer {
-                              margin-top: 30px;
-                              border-top: 1px solid #ddd;
-                              padding-top: 20px;
-                          }
-                  
-                          .footer a {
-                              color: #007bff;
-                              text-decoration: none;
-                              transition: color 0.3s;
-                          }
-                  
-                          .footer a:hover {
-                              color: #0056b3;
-                          }
-                      </style>
-                  </head>
-                  
-                  <body>
-                      <div class="container">
-                      Hi    
-                      </div>
-                  </body>
-                  
-                  </html>
+            <!DOCTYPE html>
+            <html lang="en">
+      
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Download Your Mind Guide Session Report</title>
+                <style>
+                    body {
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f0f0f0;
+                        color: #333;
+                    }
+      
+                    .container {
+                        max-width: 600px;
+                        margin: 20px auto;
+                        padding: 20px;
+                        background-color: #ffffff;
+                        border-radius: 10px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        text-align: center;
+                    }
+      
+                    h1 {
+                        color: #2a5298;
+                    }
+      
+                    p {
+                        color: #666;
+                        line-height: 1.5;
+                        margin: 10px 0;
+                    }
+      
+                    a {
+                        display: inline-block;
+                        padding: 10px 20px;
+                        margin-top: 20px;
+                        background-color: #007bff;
+                        color: #ffffff;
+                        text-decoration: none;
+                        border-radius: 5px;
+                        transition: background-color 0.3s;
+                    }
+      
+                    a:hover {
+                        background-color: #0056b3;
+                    }
+      
+                    .footer {
+                        text-align: center;
+                        font-size: 0.85em;
+                        margin-top: 40px;
+                        color: #777;
+                    }
+                </style>
+            </head>
+      
+            <body>
+                <div class="container">
+                    <h1>Your Mind Guide Session Report</h1>
+                    <p>Dear [Client Name],</p>
+                    <p>Your latest session report is now available for download:</p>
+                    <a href="URL_TO_DOWNLOAD_REPORT" target="_blank">Download Report</a>
+                    <p>If you encounter any issues, please do not hesitate to contact us.</p>
+      
+                    <div class="footer">
+                        <p>Thank you for choosing Mind Guide.</p>
+                        <p><a href="#">Visit our Website</a></p>
+                    </div>
+                </div>
+            </body>
+      
+            </html>
                   `,
           };
 
@@ -316,5 +307,3 @@ module.exports = {
   handleRoadmapUpdation,
   handleTaskUpdate,
 };
-
-// On Friay Add A frontend Funtionality in which user an create the roadmap before that it must create roadmap using the conversation.
