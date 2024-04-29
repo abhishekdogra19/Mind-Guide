@@ -138,7 +138,7 @@ const ChatApp = () => {
     };
     fetchData();
     inputElement.current.focus();
-  }, [type]);
+  }, [type, userInfo]);
 
   useEffect(() => {
     setRenderContent(
