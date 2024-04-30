@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import ReactMarkdown from "react-markdown";
 import html2pdf from "html2pdf.js";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 const ReportModal = ({ report, open }) => {
   const contentRef = useRef(null);
@@ -35,12 +36,9 @@ const ReportModal = ({ report, open }) => {
     const content = contentRef.current;
 
     if (content) {
-      // Clone the content to create a separate HTML element for PDF conversion
       const pdfContent = content.cloneNode(true);
-
-      // Remove the button from the PDF content
       const buttonsToRemove = pdfContent.querySelectorAll("button");
-      buttonsToRemove?.forEach((button) => button.remove());
+      buttonsToRemove.forEach((button) => button.remove());
 
       const pdfOptions = {
         margin: 10,
@@ -50,9 +48,62 @@ const ReportModal = ({ report, open }) => {
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
       };
 
-      html2pdf().from(pdfContent).set(pdfOptions).save();
+      // Generate PDF and output as a blob
+      html2pdf()
+        .from(pdfContent)
+        .set(pdfOptions)
+        .output("blob")
+        .then(function (blob) {
+          // Create a FormData object and append the file with name 'file'
+          const formData = new FormData();
+          formData.append("file", blob, "report.pdf");
+
+          // Send a POST request to the server with the PDF file
+          toast.promise(() => {
+            axios
+              .post("http://localhost:3001/api/v1/user/uploadpdf", formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              })
+              .then((response) => {
+                console.log("Server response:", response.data);
+                // After uploading the PDF to the server, download the PDF in the client
+                downloadBlob(blob, "report.pdf");
+              })
+              .catch((error) => {
+                console.error("Upload error:", error.response);
+              }),
+              {
+                loading: "Uploading report...",
+                success: "Report uploaded successfully",
+                error: "Error uploading report",
+              };
+          });
+        });
     }
   };
+
+  // Function to trigger browser download of a Blob
+  function downloadBlob(blob, filename) {
+    // Create an invisible anchor element
+    const anchor = document.createElement("a");
+    const url = window.URL.createObjectURL(blob);
+
+    anchor.href = url;
+    anchor.download = filename;
+    anchor.style.display = "none";
+
+    // Append anchor to the body
+    document.body.appendChild(anchor);
+
+    // Trigger download
+    anchor.click();
+
+    // Clean up and remove the anchor element
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(anchor);
+  }
   const { type: counsellorType } = useParams();
   console.log(open);
   const navigate = useNavigate();
