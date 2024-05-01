@@ -10,7 +10,10 @@ const GetAllReports = () => {
         const { data } = await axios.get(
           "http://localhost:3001/api/v1/user/allReports"
         );
-        setReports(data);
+        const sortedData = data.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+        setReports(sortedData);
       } catch (error) {
         console.error("Error fetching reports:", error.response);
       }
@@ -21,23 +24,33 @@ const GetAllReports = () => {
 
   return (
     <div>
-      <h1>My Reports</h1>
       {reports.length > 0 ? (
-        <ul>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {reports.map((report, index) => (
-            <li key={index}>
-              <p>{report.title}</p>
-              <p>Date: {new Date(report.date).toLocaleDateString()}</p>
+            <div
+              key={index}
+              className=" p-10 m-1 flex flex-col items-center justify-between gap-2 group "
+            >
               <a
                 href={report.filePath}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src={doc} alt="Report" />
+                <img
+                  src={doc}
+                  alt="Report"
+                  className="h-40 group-hover:scale-110 duration-500"
+                />
               </a>
-            </li>
+              <p className="capitalize underline font-semibold">
+                {report.title}
+              </p>
+              <p className="text-xs">
+                Date: {new Date(report.date).toLocaleDateString()}
+              </p>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
         <p>No reports found.</p>
       )}
