@@ -47,6 +47,7 @@ const userSchema = mongoose.Schema(
       {
         date: { type: Date, default: Date.now },
         title: { type: String, default: "New Report" },
+        filePath: { type: String, default: "" },
       },
     ],
   },

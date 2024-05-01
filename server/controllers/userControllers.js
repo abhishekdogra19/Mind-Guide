@@ -1,6 +1,13 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../model/User");
+const AWS = require("aws-sdk");
 const jwt = require("jsonwebtoken");
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+});
+
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, pic } = req.body;
   if (!name || !email || !password) {
@@ -101,6 +108,59 @@ const handleGetUserData = asyncHandler(async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 });
+const handleReportUpload = asyncHandler(async (req, res) => {
+  if (!req.file) {
+    return res.status(400).send("No file uploaded.");
+  }
+  const { email } = req.user;
+
+  const params = {
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key: `pdfs/${Date.now()}_${req.file.originalname}`,
+    Body: req.file.buffer,
+    ContentType: "application/pdf",
+  };
+
+  try {
+    const data = await s3.upload(params).promise();
+
+    // Add the new report to the user's reportHistory
+    const updatedUser = await User.findOneAndUpdate(
+      { email },
+      {
+        $push: {
+          reportHistory: {
+            title: "Session Report", // Customize the title as needed
+            filePath: data.Location,
+          },
+        },
+      },
+      { new: true, upsert: true } // Upsert true to ensure the document is created if it does not exist
+    );
+    console.log("updatedUser ", updatedUser);
+    res.status(200).send({
+      message: "PDF uploaded and saved to report history successfully",
+      url: data.Location,
+      user: updatedUser,
+    });
+  } catch (err) {
+    console.error("Error uploading to S3 or updating user:", err);
+    res.status(500).send(err.message);
+  }
+});
+const handleGetAllReports = asyncHandler(async (req, res) => {
+  const { email } = req.user;
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      return res.status(200).json(user.reportHistory);
+    }
+    return res.status(200).json([]);
+  } catch (error) {
+    console.error("Error fetching reports:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
 module.exports = {
   registerUser,
   authUser,
@@ -108,4 +168,6 @@ module.exports = {
   handleLogout,
   handleGetRoadmap,
   handleGetUserData,
+  handleReportUpload,
+  handleGetAllReports,
 };
