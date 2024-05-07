@@ -29,7 +29,7 @@ const LoginPage = () => {
       dispatch(addUser(response.data));
       toast.success("Login Successfully");
     } catch (err) {
-      toast.error("Invalid credentials");
+      toast.error(err.message);
     }
     setLoading(false);
   };
