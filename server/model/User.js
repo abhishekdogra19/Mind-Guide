@@ -60,8 +60,13 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified) {
     next();
   }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  /*
+    We'll check for login problems with this code later.
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  */
+  const salt = 10;
+  this.password = await bcrypt.hashSync(this.password, salt);
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
