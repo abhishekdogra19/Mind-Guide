@@ -12,6 +12,7 @@ const ReportModal = ({ report, open }) => {
   const contentRef = useRef(null);
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
 
+  const { type: counsellorType } = useParams();
   const handleRoadmapCreation = async () => {
     // const jsonData = JSON.stringify(setReport);
     // console.log(jsonData);
@@ -59,27 +60,25 @@ const ReportModal = ({ report, open }) => {
           formData.append("file", blob, "report.pdf");
 
           // Send a POST request to the server with the PDF file
-          toast.promise(() => {
-            axios
-              .post("http://localhost:3001/api/v1/user/uploadpdf", formData, {
+          axios
+            .post(
+              `http://localhost:3001/api/v1/user/uploadpdf/${counsellorType}`,
+              formData,
+              {
                 headers: {
                   "Content-Type": "multipart/form-data",
                 },
-              })
-              .then((response) => {
-                console.log("Server response:", response.data);
-                // After uploading the PDF to the server, download the PDF in the client
-                downloadBlob(blob, "report.pdf");
-              })
-              .catch((error) => {
-                console.error("Upload error:", error.response);
-              }),
-              {
-                loading: "Uploading report...",
-                success: "Report uploaded successfully",
-                error: "Error uploading report",
-              };
-          });
+              }
+            )
+            .then((response) => {
+              console.log("Server response:", response.data);
+              // After uploading the PDF to the server, download the PDF in the client
+              downloadBlob(blob, "report.pdf");
+              toast.success("Report successfully downloaded");
+            })
+            .catch((error) => {
+              console.error("Upload error:", error.response);
+            });
         });
     }
   };
@@ -104,7 +103,7 @@ const ReportModal = ({ report, open }) => {
     window.URL.revokeObjectURL(url);
     document.body.removeChild(anchor);
   }
-  const { type: counsellorType } = useParams();
+
   console.log(open);
   const navigate = useNavigate();
   return (
@@ -123,15 +122,41 @@ const ReportModal = ({ report, open }) => {
         }}
         classNames={{ modal: "custom-modal" }}
       >
-        <div className="modal-content" ref={contentRef}>
-          <h2>
-            Greetings{" "}
-            <span className="capitalize underline font-extrabold">
-              {userInfo?.name}
-            </span>
-            , Here is your <span className="text-green-600">report</span>.
-          </h2>
-          <ReactMarkdown>{report}</ReactMarkdown>
+        <div
+          className="modal-content bg-slate-200 flex flex-col gap-1  border-black border-2 p-4"
+          ref={contentRef}
+        >
+          <div className="bg-slate-800 text-white text-3xl px-2 py-10 rounded-lg mb-3">
+            Mind Guide: Your Personalized AI Counsellor
+          </div>
+          <div className="flex font-medium justify-between text-lg">
+            <div className="flex flex-col  gap-1 ">
+              <h1>
+                Name:{" "}
+                <span className="capitalize underline underline-offset-4">
+                  {userInfo?.name}
+                </span>
+              </h1>
+              <h1>
+                Email:{" "}
+                <span className="underline underline-offset-4">
+                  {userInfo?.email}
+                </span>
+              </h1>
+            </div>
+            <h1>
+              Date:{" "}
+              <span className="underline underline-offset-4">
+                {new Date().toLocaleDateString()}
+              </span>
+            </h1>
+          </div>
+          <div className="px-6 mt-2 rounded-lg  py-10 bg-slate-50 ">
+            <ReactMarkdown className="flex flex-col gap-3 text-[16px] text-justify ">
+              {report}
+            </ReactMarkdown>
+          </div>
+          <div className=" border-b-2 border-black py-2">{/* Footer */}</div>
           <div style={{ marginTop: "10px" }}>
             <button
               onClick={() => {
