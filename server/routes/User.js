@@ -25,7 +25,7 @@ router.route("/roadmap").get(protectCookie, handleGetRoadmap);
 router.route("/userDashboard").get(protectCookie, handleGetUserData);
 router.route("/allReports").get(protectCookie, handleGetAllReports);
 router.post(
-  "/uploadpdf",
+  "/uploadpdf/:counsellorType",
   protectCookie,
   upload.single("file"),
   handleReportUpload

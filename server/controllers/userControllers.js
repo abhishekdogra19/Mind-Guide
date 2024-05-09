@@ -112,6 +112,7 @@ const handleReportUpload = asyncHandler(async (req, res) => {
   if (!req.file) {
     return res.status(400).send("No file uploaded.");
   }
+  const { counsellorType } = req.params;
   const { email } = req.user;
 
   const params = {
@@ -130,7 +131,7 @@ const handleReportUpload = asyncHandler(async (req, res) => {
       {
         $push: {
           reportHistory: {
-            title: "Session Report", // Customize the title as needed
+            title: `${counsellorType} Session Report`, // Customize the title as needed
             filePath: data.Location,
           },
         },
