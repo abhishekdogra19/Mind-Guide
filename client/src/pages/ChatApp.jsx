@@ -288,7 +288,7 @@ const ChatApp = () => {
                 totalMessages < 15 ? "cursor-not-allowed" : ""
               }`}
               onClick={() => {
-                if (totalMessages > 15) {
+                if (totalMessages < 15) {
                   toast.warning("Minimum 15 messages required to end session");
                 } else {
                   HandleReportGenerate();
