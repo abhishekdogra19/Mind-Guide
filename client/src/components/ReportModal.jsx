@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { useSelector } from "react-redux";
@@ -8,14 +8,23 @@ import html2pdf from "html2pdf.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
+
 const ReportModal = ({ report, open }) => {
   const contentRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
 
   const { type: counsellorType } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (open) {
+      saveReportToCloud();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
   const handleRoadmapCreation = async () => {
-    // const jsonData = JSON.stringify(setReport);
-    // console.log(jsonData);
     try {
       const response = await axios.post(
         "http://localhost:3001/api/v1/chat/roadmap",
@@ -30,6 +39,52 @@ const ReportModal = ({ report, open }) => {
       }
     } catch (error) {
       console.error("Error in fetching roadmap", error);
+    }
+  };
+
+  const saveReportToCloud = async () => {
+    setUploading(true);
+    const content = contentRef.current;
+    if (content) {
+      const pdfContent = content.cloneNode(true);
+      const buttonsToRemove = pdfContent.querySelectorAll("button");
+      buttonsToRemove.forEach((button) => button.remove());
+
+      const pdfOptions = {
+        margin: 10,
+        filename: "report.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      };
+
+      html2pdf()
+        .from(pdfContent)
+        .set(pdfOptions)
+        .output("blob")
+        .then(function (blob) {
+          const formData = new FormData();
+          formData.append("file", blob, "report.pdf");
+          axios
+            .post(
+              `http://localhost:3001/api/v1/user/uploadpdf/${counsellorType}`,
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            )
+            .then((response) => {
+              console.log("Server response:", response.data);
+              toast.success("Report successfully uploaded");
+              setUploading(false);
+            })
+            .catch((error) => {
+              console.error("Upload error:", error.response);
+              setUploading(false);
+            });
+        });
     }
   };
 
@@ -49,63 +104,10 @@ const ReportModal = ({ report, open }) => {
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
       };
 
-      // Generate PDF and output as a blob
-      html2pdf()
-        .from(pdfContent)
-        .set(pdfOptions)
-        .output("blob")
-        .then(function (blob) {
-          // Create a FormData object and append the file with name 'file'
-          const formData = new FormData();
-          formData.append("file", blob, "report.pdf");
-
-          // Send a POST request to the server with the PDF file
-          axios
-            .post(
-              `http://localhost:3001/api/v1/user/uploadpdf/${counsellorType}`,
-              formData,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              }
-            )
-            .then((response) => {
-              console.log("Server response:", response.data);
-              // After uploading the PDF to the server, download the PDF in the client
-              downloadBlob(blob, "report.pdf");
-              toast.success("Report successfully downloaded");
-            })
-            .catch((error) => {
-              console.error("Upload error:", error.response);
-            });
-        });
+      html2pdf().from(pdfContent).set(pdfOptions).save();
     }
   };
 
-  // Function to trigger browser download of a Blob
-  function downloadBlob(blob, filename) {
-    // Create an invisible anchor element
-    const anchor = document.createElement("a");
-    const url = window.URL.createObjectURL(blob);
-
-    anchor.href = url;
-    anchor.download = filename;
-    anchor.style.display = "none";
-
-    // Append anchor to the body
-    document.body.appendChild(anchor);
-
-    // Trigger download
-    anchor.click();
-
-    // Clean up and remove the anchor element
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(anchor);
-  }
-
-  console.log(open);
-  const navigate = useNavigate();
   return (
     <div>
       <Modal
@@ -113,13 +115,20 @@ const ReportModal = ({ report, open }) => {
         center
         closeOnOverlayClick={false}
         closeIcon={
-          <button className="bg-red-700 px-2 py-1  rounded-xl font-bold text-white">
-            Back{" "}
-          </button>
+          uploading ? null : (
+            <button
+              className="bg-red-700 px-2 py-1  rounded-xl font-bold text-white"
+              onClick={() => {
+                // Prevent closing if still uploading
+                if (!uploading) {
+                  navigate("../counselors");
+                }
+              }}
+            >
+              Back
+            </button>
+          )
         }
-        onClose={() => {
-          navigate("../counselors");
-        }}
         classNames={{ modal: "custom-modal" }}
       >
         <div
@@ -160,16 +169,23 @@ const ReportModal = ({ report, open }) => {
           <div style={{ marginTop: "10px" }}>
             <button
               onClick={() => {
-                downloadReport();
+                if (uploading) {
+                  toast.warning("Please wait, report is being uploaded...");
+                } else {
+                  downloadReport();
+                }
               }}
-              className="px-4 py-2  text-white bg-green-700 rounded-lg"
+              className={`px-4 py-2 text-white bg-green-700 rounded-lg ${
+                uploading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
               Download Report
             </button>{" "}
-            {counsellorType == "career counselor" && (
+            {counsellorType === "career counselor" && (
               <button
                 onClick={handleRoadmapCreation}
                 className="bg-gray-400 py-2 rounded-lg px-2 text-white"
+                disabled={uploading}
               >
                 Create Roadmap 🚀
               </button>
