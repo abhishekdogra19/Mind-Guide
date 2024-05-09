@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const User = require("../model/User");
 const AWS = require("aws-sdk");
 const jwt = require("jsonwebtoken");
+require("aws-sdk/lib/maintenance_mode_message").suppress = true;
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
