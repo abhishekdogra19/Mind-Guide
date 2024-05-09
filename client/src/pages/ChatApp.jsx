@@ -14,6 +14,7 @@ import ScrollableFeed from "react-scrollable-feed";
 import ReportModal from "../components/ReportModal";
 import ReactMarkdown from "react-markdown";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
@@ -27,6 +28,7 @@ const ChatApp = () => {
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
   const { type: counsellorType } = useParams();
   const [isReportModalOpen, setReportModalOpen] = useState(false);
+  const [totalMessages, setTotalMessages] = useState(0);
   const startListening = () => {
     if (!listening) {
       if (window.speechSynthesis.speaking) {
@@ -200,6 +202,9 @@ const ChatApp = () => {
       microphoneAnimationControls.stop();
     }
   }, [listening, microphoneAnimationControls]);
+  useEffect(() => {
+    setTotalMessages(messages.length); // Update total messages when messages change
+  }, [messages]);
   return (
     <div className="h-[90vh] bg-slate-500 flex flex-col relative w-full ">
       {loading && (
@@ -279,8 +284,16 @@ const ChatApp = () => {
               </svg>
             </button>
             <button
-              className="bg-red-500 text-white py-2 px-4"
-              onClick={HandleReportGenerate}
+              className={`bg-red-500 text-white py-2 px-4 ${
+                totalMessages < 15 ? "cursor-not-allowed" : ""
+              }`}
+              onClick={() => {
+                if (totalMessages > 15) {
+                  toast.warning("Minimum 15 messages required to end session");
+                } else {
+                  HandleReportGenerate();
+                }
+              }}
             >
               End Session
             </button>

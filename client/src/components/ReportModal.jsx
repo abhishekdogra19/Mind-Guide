@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useRef, useState, useEffect } from "react";
 import "react-responsive-modal/styles.css";
@@ -13,35 +14,9 @@ const ReportModal = ({ report, open }) => {
   const contentRef = useRef(null);
   const [uploading, setUploading] = useState(false);
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
-
+  const [contentReady, setContentReady] = useState(false);
   const { type: counsellorType } = useParams();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (open) {
-      saveReportToCloud();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
-
-  const handleRoadmapCreation = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/api/v1/chat/roadmap",
-        {
-          roadmap: {},
-        }
-      );
-      if (response.status === 200) {
-        console.log(response.data);
-      } else {
-        console.error("Error in fetching initial messages");
-      }
-    } catch (error) {
-      console.error("Error in fetching roadmap", error);
-    }
-  };
-
   const saveReportToCloud = async () => {
     setUploading(true);
     const content = contentRef.current;
@@ -85,6 +60,38 @@ const ReportModal = ({ report, open }) => {
               setUploading(false);
             });
         });
+    }
+  };
+
+  useEffect(() => {
+    if (open) {
+      setContentReady(true);
+    } else {
+      setContentReady(false);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (contentReady && open) {
+      saveReportToCloud();
+    }
+  }, [contentReady, open]);
+
+  const handleRoadmapCreation = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/api/v1/chat/roadmap",
+        {
+          roadmap: {},
+        }
+      );
+      if (response.status === 200) {
+        console.log(response.data);
+      } else {
+        console.error("Error in fetching initial messages");
+      }
+    } catch (error) {
+      console.error("Error in fetching roadmap", error);
     }
   };
 
