@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const skillTypes = ["technical", "nontechnical"];
 const userSchema = mongoose.Schema(
   {
     name: {
@@ -21,7 +22,19 @@ const userSchema = mongoose.Schema(
       default:
         "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
-    // skills:[String]
+    skills: [
+      {
+        skill: {
+          type: String,
+          required: true,
+        },
+        type: {
+          type: String,
+          enum: skillTypes,
+          default: "technical", // Default to technical if not provided
+        },
+      },
+    ],
     roadmap: {
       type: [
         {
@@ -70,7 +83,14 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 userSchema.methods.createJWT = function () {
   return jwt.sign(
-    { email: this.email, _id: this._id, name: this.name, pic: this.pic },
+    {
+      email: this.email,
+      _id: this._id,
+      name: this.name,
+      pic: this.pic,
+      createdAt: this._id.getTimestamp(),
+      skills: this.skills,
+    },
     process.env.JWT_SECRET,
     {
       expiresIn: process.env.JWT_LIFETIME,

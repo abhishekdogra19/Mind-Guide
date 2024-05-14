@@ -217,9 +217,9 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
             <body>
                 <div class="container">
                     <h1>Your Mind Guide Session Report</h1>
-                    <p>Dear [Client Name],</p>
+                    <p>Dear ${req.user.name},</p>
                     <p>Your latest session report is now available for download:</p>
-                    <a href="URL_TO_DOWNLOAD_REPORT" target="_blank">Download Report</a>
+                    <a href=#{} target="_blank">Download Report</a>
                     <p>If you encounter any issues, please do not hesitate to contact us.</p>
       
                     <div class="footer">

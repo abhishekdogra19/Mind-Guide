@@ -8,6 +8,7 @@ const {
   handleGetUserData,
   handleReportUpload,
   handleGetAllReports,
+  handleGetSkills,
 } = require("../controllers/userControllers");
 const multer = require("multer");
 const { protectCookie } = require("../middleware/authMiddleware");
@@ -30,4 +31,5 @@ router.post(
   upload.single("file"),
   handleReportUpload
 );
+router.route("/getSkills").get(protectCookie, handleGetSkills);
 module.exports = router;
