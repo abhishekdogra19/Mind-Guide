@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaExternalLinkAlt } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser } from "../../redux/mindGuideSlice";
 
 const GetRoadmap = () => {
   const [roadmapData, setRoadmapData] = useState([]);
@@ -8,7 +10,8 @@ const GetRoadmap = () => {
     useState(null);
   const [loading, setLoading] = useState(true);
   const [unsavedChanges, setUnsavedChanges] = useState(false); // State to track unsaved changes
-
+  const user = useSelector((state) => state.mindGuide.userInfo);
+  const dispatch = useDispatch();
   useEffect(() => {
     const fetchRoadmap = async () => {
       try {
@@ -31,6 +34,16 @@ const GetRoadmap = () => {
       ? 0
       : Math.round((completedTasksCount / totalTasksCount) * 100);
 
+  const handleExtractSkill = async () => {
+    try {
+      await axios.get("/api/v1/user/getSkills");
+      const { data } = await axios.get("/api/v1/user/getUserProfile");
+      console.log(data);
+      dispatch(addUser(data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const handleTaskClick = async (index) => {
     try {
       const updatedRoadmapData = [...roadmapData];
@@ -160,14 +173,32 @@ const GetRoadmap = () => {
       </div>
 
       {/* Display save button only if there are unsaved changes */}
-      {unsavedChanges && (
-        <button
-          className="bg-blue-500 w-full max-w-lg rounded-lg hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4"
-          onClick={handleSave}
-        >
-          Save Changes
-        </button>
+
+      {progress === 100 && (
+        <div className="text-white mt-4">
+          Congratulations! You have completed your roadmap.
+        </div>
       )}
+      <div className="max-w-2xl w-full flex  items-center justify-between gap-4">
+        {unsavedChanges && (
+          <button
+            className="bg-blue-500 w-full max-w-lg rounded-lg hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4"
+            onClick={handleSave}
+          >
+            Save Changes
+          </button>
+        )}
+        {progress === 100 && (
+          <>
+            <button
+              onClick={handleExtractSkill}
+              className="bg-blue-500 w-full max-w-lg rounded-lg hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4"
+            >
+              Completed
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };
