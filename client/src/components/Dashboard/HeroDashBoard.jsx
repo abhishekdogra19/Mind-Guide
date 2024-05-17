@@ -177,7 +177,7 @@ const HeroDashBoard = () => {
   };
 
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 p-10  justify-between">
+    <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-6 p-10  justify-between">
       <div>
         <h2> Sessions Attended</h2>
         <Bar data={barChartData} options={options} />
