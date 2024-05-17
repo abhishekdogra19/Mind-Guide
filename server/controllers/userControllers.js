@@ -68,8 +68,12 @@ const authUser = asyncHandler(async (req, res) => {
 const getUserProfile = asyncHandler(async (req, res) => {
   const { token } = req.cookies;
   if (token) {
-    const user = jwt.verify(token, process.env.JWT_SECRET);
-    return res.json(user);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    let user = await User.findById(decoded._id).select("-password");
+    return res.status(200).json({
+      ...user._doc,
+      createdAt: user._id.getTimestamp(),
+    });
   }
   return res.status(200).json(null);
 });

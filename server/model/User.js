@@ -89,7 +89,6 @@ userSchema.methods.createJWT = function () {
       name: this.name,
       pic: this.pic,
       createdAt: this._id.getTimestamp(),
-      skills: this.skills,
     },
     process.env.JWT_SECRET,
     {
