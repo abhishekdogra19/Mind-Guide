@@ -206,7 +206,7 @@ const ChatApp = () => {
     setTotalMessages(messages.length); // Update total messages when messages change
   }, [messages]);
   return (
-    <div className="h-[90vh] bg-slate-500 flex flex-col relative w-full ">
+    <div className=" flex flex-col relative w-full min-h-screen ">
       {loading && (
         <div className=" absolute   w-full h-full  modal flex items-center justify-center z-10">
           <div className="flex flex-col">
@@ -228,12 +228,12 @@ const ChatApp = () => {
           </div>
         </div>
       )}
-      <div className="h-screen">
+      <div className="h-screen flex flex-col">
         {report && <ReportModal report={report} open={isReportModalOpen} />}
-        <div className="chatAppBG h-[85vh] overflow-y-scroll flex-1  flex flex-col example pb-6">
+        <div className=" bg-[#131419] h-[80vh] overflow-y-scroll   flex flex-col example pb-6">
           <ScrollableFeed>{renderContent}</ScrollableFeed>
         </div>
-        <div className="bg-slate-600  flex items-center w-full z-0">
+        <div className="bg-black max-w-4xl mx-auto p-6 rounded-lg  flex items-center w-full z-0">
           <input
             type="text"
             className="h-10  bg-cyan-50 px-4 py-2 flex-1"
@@ -255,7 +255,7 @@ const ChatApp = () => {
               <motion.div
                 animate={microphoneAnimationControls}
                 onClick={startListening}
-                className="text-xl text-white"
+                className="text-xl text-black"
               >
                 <FontAwesomeIcon icon={faMicrophone} />
               </motion.div>

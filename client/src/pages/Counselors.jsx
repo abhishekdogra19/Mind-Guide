@@ -55,16 +55,16 @@ const Counselors = () => {
     setShowConfirmation(false);
   };
   return (
-    <div className="overflow-hidden p-10">
-      <div className="text-4xl font-bold text-center text-gray-800 py-10">
+    <div className="overflow-hidden p-10 mb-6">
+      <div className="text-xl lg:text-4xl font-bold text-center text-gray-800 py-10">
         Kindly choose your designated{" "}
         <span className="text-green-400">counselor</span>.
       </div>
-      <div className="p-3 grid grid-cols-3 gap-10 ">
+      <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 ">
         {counselors.map((counselor, index) => (
           <div
             key={index}
-            className="text-white bg-slate-700 h-96 p-2 rounded-xl relative hover:scale-110 hover:flex-1  duration-300"
+            className="text-white bg-slate-700 lg:h-96 w-full max-w-xl p-2 rounded-xl relative hover:scale-110 hover:flex-1  duration-300"
             onClick={() => handleCounselorClick(counselor)}
           >
             <img
@@ -72,7 +72,7 @@ const Counselors = () => {
               alt=""
               className="h-2/3 w-full object-cover"
             />
-            <h2 className="text-3xl text-center mt-10 hover:text-red-500">
+            <h2 className="text-lg lg:text-2xl text-center mt-10 hover:text-red-500">
               {counselor.type}
             </h2>
           </div>

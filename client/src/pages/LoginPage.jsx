@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { addUser } from "../redux/mindGuideSlice";
+import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,6 +13,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
   const dispatch = useDispatch();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) return;
@@ -33,6 +36,7 @@ const LoginPage = () => {
     }
     setLoading(false);
   };
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       const response = await axios.get("/api/v1/user/getUserProfile");
@@ -40,69 +44,60 @@ const LoginPage = () => {
     };
     fetchUserProfile();
   }, [dispatch]);
+
   useEffect(() => {
     if (userInfo) {
       navigate("/");
     }
   }, [navigate, userInfo]);
+
   return (
-    <div className="flex h-full items-center justify-center">
+    <div className="flex  h-full items-center justify-center py-10">
       <form
-        className="bg-white shadow-md  rounded px-8 pt-6 pb-8 mb-4"
+        className="flex w-full max-w-xl flex-col gap-4 bg-white shadow-md rounded px-8 pb-8 mb-4"
         onSubmit={handleSubmit}
       >
         <h2 className="text-2xl font-bold mb-8 text-center">Login</h2>
 
         {/* Email field */}
-        <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Email
-          </label>
-          <input
+        <div>
+          <div className="mb-2 block">
+            <Label htmlFor="email1" value="Your email" />
+          </div>
+          <TextInput
+            id="email1"
             type="email"
-            id="email"
-            name="email"
+            placeholder="name@flowbite.com"
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
-            className="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Email"
           />
         </div>
 
         {/* Password field */}
-        <div className="mb-4">
-          <label
-            htmlFor="password"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Password
-          </label>
-          <input
+        <div>
+          <div className="mb-2 block">
+            <Label htmlFor="password1" value="Your password" />
+          </div>
+          <TextInput
+            id="password1"
             type="password"
-            id="password"
-            name="password"
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
-            className="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Password"
           />
         </div>
 
-        {/* Submit Button */}
-        <div className="flex items-center justify-center">
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            {loading ? "Loading..." : "Login"}
-          </button>
+        {/* Remember me checkbox */}
+        <div className="flex items-center gap-2">
+          <Checkbox id="remember" />
+          <Label htmlFor="remember">Remember me</Label>
         </div>
+
+        {/* Submit Button */}
+        <Button type="submit" disabled={loading}>
+          {loading ? "Loading..." : "Login"}
+        </Button>
 
         {/* Link to Register Page */}
         <div className="mt-4 text-center">

@@ -1,31 +1,27 @@
-// src/components/Register.js
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Button, Label, TextInput, FileInput } from "flowbite-react";
+
 const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [loading, setLoading] = useState("");
+  const [loading, setLoading] = useState(false);
   const [pic, setPic] = useState();
   const navigate = useNavigate();
+
   const handlePicUpload = async (e) => {
     const pics = e.target.files[0];
     setLoading(true);
-    if (pics === undefined) {
-      toast({
-        title: "Please select an image!",
-        variant: "destructive",
-      });
+    if (!pics) {
+      toast.error("Please select an image!");
+      setLoading(false);
       return;
     }
-    if (
-      pics.type === "image/jpeg" ||
-      pics.type === "image/jpg" ||
-      pics.type === "image/png"
-    ) {
+    if (["image/jpeg", "image/jpg", "image/png"].includes(pics.type)) {
       const data = new FormData();
       data.append("file", pics);
       data.append("upload_preset", "Mind-Guide");
@@ -40,23 +36,27 @@ const RegisterPage = () => {
         );
         toast.success("Image successfully uploaded");
         setPic(response.data.url.toString());
-        console.log(response.data.url);
       } catch (error) {
-        console.log("Error While uploading image: ", error.response.data);
+        toast.error("Error while uploading image!");
       }
     } else {
       toast.error("Please select a valid image!");
     }
     setLoading(false);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    if (!name || !email || !password || !confirmPassword) return;
-    if (password != confirmPassword) return;
+    if (!name || !email || !password || !confirmPassword) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
     try {
       setLoading(true);
-      // Send a POST request to the server
       await axios.post("/api/v1/user/", {
         name,
         email,
@@ -74,122 +74,81 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center ">
+    <div className="flex items-center justify-center h-full py-10">
       <form
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        className="flex w-full max-w-xl flex-col gap-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
         onSubmit={handleSubmit}
       >
         <h2 className="text-2xl font-bold mb-8 text-center">Register</h2>
 
         {/* Name field */}
-        <div className="mb-4">
-          <label
-            htmlFor="name"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Name
-          </label>
-          <input
+        <div>
+          <Label htmlFor="name" value="Name" />
+          <TextInput
             required
             type="text"
             id="name"
-            name="name"
+            placeholder="Your Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Your Name"
           />
         </div>
 
         {/* Email field */}
-        <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Email
-          </label>
-          <input
+        <div>
+          <Label htmlFor="email" value="Email" />
+          <TextInput
             required
             type="email"
             id="email"
-            name="email"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Email"
           />
         </div>
 
         {/* Password field */}
-        <div className="mb-4">
-          <label
-            htmlFor="password"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Password
-          </label>
-          <input
+        <div>
+          <Label htmlFor="password" value="Password" />
+          <TextInput
             required
             type="password"
             id="password"
-            name="password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Password"
           />
         </div>
 
         {/* Confirm Password field */}
-        <div className="mb-4">
-          <label
-            htmlFor="confirmPassword"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Confirm Password
-          </label>
-          <input
+        <div>
+          <Label htmlFor="confirmPassword" value="Confirm Password" />
+          <TextInput
             required
             type="password"
             id="confirmPassword"
-            name="confirmPassword"
+            placeholder="Confirm Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Confirm Password"
           />
         </div>
 
         {/* Profile Picture field */}
-        <div className="mb-4">
-          <label
-            htmlFor="profilePic"
-            className="block text-gray-700 text-sm font-bold mb-2"
-          >
-            Profile Picture URL
-          </label>
-          <input
-            type="file"
+        <div>
+          <Label htmlFor="profilePic" value="Profile Picture" />
+          <FileInput
             id="profilePic"
-            name="profilePic"
             accept="image/*"
-            className="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Profile Picture URL"
-            onChange={(e) => handlePicUpload(e)}
+            onChange={handlePicUpload}
           />
         </div>
 
         {/* Submit Button */}
-        <div className="flex items-center justify-center">
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            <span>{loading ? "Please Wait" : "Register"}</span>
-          </button>
-        </div>
+        <Button type="submit" disabled={loading}>
+          {loading ? "Please Wait" : "Register"}
+        </Button>
+
+        {/* Link to Login Page */}
         <div className="mt-4 text-center">
           <p>
             Already a customer?{" "}

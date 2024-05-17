@@ -38,9 +38,6 @@ body {
   color: white;
 }
 
-#contact {
-  height: 26rem;
-}
 .example::-webkit-scrollbar {
   display: none;
 }
