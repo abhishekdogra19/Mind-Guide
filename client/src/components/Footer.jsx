@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Footer } from "flowbite-react";
 import headerIcon from "../assets/headerIcon.png";
 import {

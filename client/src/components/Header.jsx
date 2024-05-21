@@ -32,36 +32,19 @@ const Header = () => {
       <Divider />
       <List>
         <ListItem
-          button // Add button prop for ListItem to make it clickable
           component={NavLink} // Use NavLink instead of Link
-          to="/about" // Specify the route
-          activeClassName="active" // Add active class name
+          to="https://github.com/abhishekdogra19/Mind-Guide"
         >
           <ListItemText primary="About Us" />
         </ListItem>
-        <ListItem
-          button
-          component={NavLink}
-          to="/counselors"
-          activeClassName="active"
-        >
+        <ListItem component={NavLink} to="/counselors">
           <ListItemText primary="Counselors" />
         </ListItem>
-        <ListItem
-          button
-          component={NavLink}
-          to="/tools"
-          activeClassName="active"
-        >
+        <ListItem component={NavLink} to="/tools">
           <ListItemText primary="Tools" />
         </ListItem>
         {userInfo ? (
-          <ListItem
-            button
-            component={NavLink}
-            to="/account/dashboard"
-            activeClassName="active"
-          >
+          <ListItem component={NavLink} to="/account/dashboard">
             <Avatar
               alt="User Logo"
               src={userInfo.pic}
@@ -70,12 +53,7 @@ const Header = () => {
             <ListItemText primary={userInfo.name} />
           </ListItem>
         ) : (
-          <ListItem
-            button
-            component={NavLink}
-            to="/login"
-            activeClassName="active"
-          >
+          <ListItem component={NavLink} to="/login">
             <ListItemText primary="Login" />
           </ListItem>
         )}
@@ -122,28 +100,13 @@ const Header = () => {
               gap: 2,
             }}
           >
-            <Button
-              component={Link}
-              to="/about"
-              sx={{ color: "#fff" }}
-              activeClassName="active"
-            >
+            <Button component={Link} to="/about" sx={{ color: "#fff" }}>
               About Us
             </Button>
-            <Button
-              component={Link}
-              to="/counselors"
-              sx={{ color: "#fff" }}
-              activeClassName="active"
-            >
+            <Button component={Link} to="/counselors" sx={{ color: "#fff" }}>
               Counselors
             </Button>
-            <Button
-              component={Link}
-              to="/tools"
-              sx={{ color: "#fff" }}
-              activeClassName="active"
-            >
+            <Button component={Link} to="/tools" sx={{ color: "#fff" }}>
               Tools
             </Button>
           </Box>
@@ -166,23 +129,10 @@ const Header = () => {
                 }}
               >
                 <Avatar alt="User Logo" src={userInfo.pic} />
-                <Typography
-                  sx={{
-                    marginLeft: 1,
-                    fontWeight: "bold",
-                    textDecoration: "underline",
-                  }}
-                >
-                  {userInfo.name}
-                </Typography>
+                <h1 className="text-xs lg:text-xl ">{userInfo.name}</h1>
               </Link>
             ) : (
-              <Button
-                component={Link}
-                to="/login"
-                sx={{ color: "#fff" }}
-                activeClassName="active"
-              >
+              <Button component={Link} to="/login" sx={{ color: "#fff" }}>
                 Login
               </Button>
             )}

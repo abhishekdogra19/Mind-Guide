@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Avatar } from "react-avataaars";
+import { useMediaQuery } from "react-responsive";
 
 const AssistantAvatar = () => {
   const hash = "5";
@@ -19,6 +20,7 @@ const AssistantAvatar = () => {
     top: "shortHair",
     accessories: "prescription02",
   };
+
   useEffect(() => {
     const blinkingInterval = setInterval(() => {
       setBlinking(true);
@@ -28,6 +30,7 @@ const AssistantAvatar = () => {
     }, 3000);
     return () => clearInterval(blinkingInterval);
   }, []);
+
   useEffect(() => {
     const speakingInterval = setInterval(() => {
       const randomIndex = Math.floor(Math.random() * mouthMovements.length);
@@ -46,7 +49,15 @@ const AssistantAvatar = () => {
     };
   }, [mouthMovements]);
 
-  return <Avatar options={options} hash={hash} size="200px" />;
+  const isSmallScreen = useMediaQuery({ maxWidth: 767 });
+
+  return (
+    <Avatar
+      options={options}
+      hash={hash}
+      size={isSmallScreen ? "100px" : "160px"}
+    />
+  );
 };
 
 export default AssistantAvatar;

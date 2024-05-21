@@ -36,6 +36,7 @@
     "react-mermaid": "^0.1.3",
     "react-mermaid2": "^0.1.4",
     "react-redux": "^9.0.4",
+    "react-responsive": "^10.0.0",
     "react-responsive-modal": "^6.4.2",
     "react-router-dom": "^6.14.1",
     "react-say": "^2.1.0",

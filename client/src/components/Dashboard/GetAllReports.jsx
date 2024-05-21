@@ -23,13 +23,13 @@ const GetAllReports = () => {
   }, []);
 
   return (
-    <div>
+    <div className="px-4 py-2">
       {reports.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-6">
           {reports.map((report, index) => (
             <div
               key={index}
-              className=" p-10 m-1 flex flex-col items-center justify-between gap-2 group "
+              className=" p-3 lg:p-10 m-1 flex flex-col items-center justify-between gap-2 group bg-gray-200 rounded-lg  "
             >
               <a
                 href={report.filePath}
@@ -39,13 +39,13 @@ const GetAllReports = () => {
                 <img
                   src={doc}
                   alt="Report"
-                  className="h-40 group-hover:scale-110 duration-500"
+                  className="h-20 lg:h-40 group-hover:scale-110 duration-500"
                 />
               </a>
-              <p className="capitalize underline font-semibold">
+              <p className="text-xs lg:text-lg capitalize text-center font-semibold">
                 {report.title}
               </p>
-              <p className="text-xs">
+              <p className="text-xs"  >
                 Date: {new Date(report.date).toLocaleDateString()}
               </p>
             </div>

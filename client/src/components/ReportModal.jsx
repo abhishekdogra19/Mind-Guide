@@ -142,10 +142,10 @@ const ReportModal = ({ report, open }) => {
           className="modal-content bg-slate-200 flex flex-col gap-1  border-black border-2 p-4"
           ref={contentRef}
         >
-          <div className="bg-slate-800 text-white text-3xl px-2 py-10 rounded-lg mb-3">
+          <div className="bg-slate-800 text-white text-xs lg:text-3xl px-2 py-10 rounded-lg mb-3">
             Mind Guide: Your Personalized AI Counsellor
           </div>
-          <div className="flex font-medium justify-between text-lg">
+          <div className="flex font-medium justify-between text-xs lg:text-lg">
             <div className="flex flex-col  gap-1 ">
               <h1>
                 Name:{" "}
@@ -168,7 +168,7 @@ const ReportModal = ({ report, open }) => {
             </h1>
           </div>
           <div className="px-6 mt-2 rounded-lg  py-10 bg-slate-50 ">
-            <ReactMarkdown className="flex flex-col gap-3 text-[16px] text-justify ">
+            <ReactMarkdown className="flex flex-col gap-3 text-xs lg:text-sm text-justify ">
               {report}
             </ReactMarkdown>
           </div>
