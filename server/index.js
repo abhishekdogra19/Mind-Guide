@@ -7,7 +7,7 @@ const connectDB = require("./config/connectDB");
 const userRouter = require("./routes/User");
 const chatRouter = require("./routes/Chat"); // Import chatRouter module
 const { errorHandler, notFound } = require("./middleware/errorMiddleware");
-
+const path = require("path");
 const app = express();
 const port = 3001;
 
