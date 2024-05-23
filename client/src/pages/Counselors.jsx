@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import * as React from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { CardActionArea } from "@mui/material";
 const counselors = [
   {
     type: "Academic Counselor",
@@ -55,59 +60,67 @@ const Counselors = () => {
     setShowConfirmation(false);
   };
   return (
-    <div className="overflow-hidden p-10 mb-6">
-      <div className="text-xl lg:text-4xl font-bold text-center text-gray-800 py-10">
-        Kindly choose your designated{" "}
-        <span className="text-green-400">counselor</span>.
-      </div>
-      <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 ">
-        {counselors.map((counselor, index) => (
-          <div
-            key={index}
-            className="text-white bg-slate-700 lg:h-96 w-full max-w-xl p-2 rounded-xl relative hover:scale-110 hover:flex-1  duration-300"
-            onClick={() => handleCounselorClick(counselor)}
-          >
-            <img
-              src={counselor.image}
-              alt=""
-              className="h-2/3 w-full object-cover"
-            />
-            <h2 className="text-lg lg:text-2xl text-center mt-10 hover:text-red-500">
-              {counselor.type}
-            </h2>
-          </div>
-        ))}
-      </div>
-      {showConfirmation && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-10 rounded-md">
-            <p className="text-lg">
-              Start counseling session with{" "}
-              {
-                <span className="text-blue-600 font-bold">
-                  {selectedCounselor.type}{" "}
-                </span>
-              }
-              ?
-            </p>
-            <div className="flex justify-center mt-3">
-              <button
-                className="bg-green-500 text-white px-4 py-2 mr-2 rounded hover:brightness-110 transition duration-300"
-                onClick={() => handleConfirmation(true)}
-              >
-                Yes
-              </button>
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded hover:brightness-110"
-                onClick={() => handleConfirmation(false)}
-              >
-                No
-              </button>
+    <>
+      <div className="overflow-hidden p-10 mb-6">
+        <div className="text-xl lg:text-4xl font-bold text-center text-gray-800 py-10">
+          Kindly choose your designated{" "}
+          <span className="text-green-400">counselor</span>.
+        </div>
+        <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 place-items-center ">
+          {counselors.map((counselor, index) => (
+            <CardActionArea
+              key={index}
+              onClick={() => handleCounselorClick(counselor)}
+              className="h-96 overflow-hidden group max-w-lg rounded-t-lg"
+            >
+              <div className="h-72 overflow-hidden rounded-t-lg">
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={counselor.image}
+                  alt={counselor.type}
+                  className="flex items-center justify-center  border-2 h-full group-hover:scale-110 duration-300 "
+                />
+              </div>
+              <CardContent className="text-center bg-gray-600 rounded-b-lg text-white h-full">
+                <Typography gutterBottom variant="h5" component="div">
+                  {counselor.type}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          ))}
+        </div>
+        {showConfirmation && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-10 rounded-md">
+              <p className="text-lg">
+                Start counseling session with{" "}
+                {
+                  <span className="text-blue-600 font-bold">
+                    {selectedCounselor.type}{" "}
+                  </span>
+                }
+                ?
+              </p>
+              <div className="flex justify-center mt-3">
+                <button
+                  className="bg-green-500 text-white px-4 py-2 mr-2 rounded hover:brightness-110 transition duration-300"
+                  onClick={() => handleConfirmation(true)}
+                >
+                  Yes
+                </button>
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:brightness-110"
+                  onClick={() => handleConfirmation(false)}
+                >
+                  No
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 };
 
