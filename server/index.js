@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:4000",
-  "https://chat-app-zpvi.onrender.com",
+  "https://mind-guide.onrender.com",
 ];
 
 const corsOptions = {
