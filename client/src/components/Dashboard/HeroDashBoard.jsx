@@ -55,9 +55,7 @@ const HeroDashBoard = () => {
   });
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get(
-        "http://localhost:3001/api/v1/user/userDashboard"
-      );
+      const { data } = await axios.get("/api/v1/user/userDashboard");
       console.log(data.user);
       updateCharts(data.user);
     };

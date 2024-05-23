@@ -42,7 +42,7 @@ const ReportModal = ({ report, open }) => {
           formData.append("file", blob, "report.pdf");
           axios
             .post(
-              `http://localhost:3001/api/v1/user/uploadpdf/${counsellorType}`,
+              `/api/v1/user/uploadpdf/${counsellorType}`,
               formData,
               {
                 headers: {
@@ -80,7 +80,7 @@ const ReportModal = ({ report, open }) => {
   const handleRoadmapCreation = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/v1/chat/roadmap",
+        "/api/v1/chat/roadmap",
         {
           roadmap: {},
         }

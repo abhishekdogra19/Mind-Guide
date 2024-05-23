@@ -69,7 +69,7 @@ const ChatApp = () => {
       if (window.speechSynthesis.speaking) {
         window.speechSynthesis.cancel();
       }
-      const response = await axios.post("http://localhost:3001/api/v1/chat", {
+      const response = await axios.post("/api/v1/chat", {
         messages: [...messages, userMessage],
       });
       setLoading(false);
@@ -100,14 +100,11 @@ const ChatApp = () => {
   const HandleReportGenerate = async () => {
     try {
       setLoading(true);
-      const response = await axios.post(
-        "http://localhost:3001/api/v1/chat/report",
-        {
-          chat: messages,
-          userName: userInfo?.name,
-          counsellorType,
-        }
-      );
+      const response = await axios.post("/api/v1/chat/report", {
+        chat: messages,
+        userName: userInfo?.name,
+        counsellorType,
+      });
       if (response.status === 200) {
         console.log(response.data);
         setReport(response.data);
@@ -126,9 +123,7 @@ const ChatApp = () => {
     if (!userInfo) return;
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3001/api/v1/chat/${type}`
-        );
+        const response = await axios.get(`/api/v1/chat/${type}`);
         if (response.status === 200) {
           setMessages(response.data);
         } else {

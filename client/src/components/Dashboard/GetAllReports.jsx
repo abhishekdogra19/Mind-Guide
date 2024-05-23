@@ -7,9 +7,7 @@ const GetAllReports = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:3001/api/v1/user/allReports"
-        );
+        const { data } = await axios.get("/api/v1/user/allReports");
         const sortedData = data.sort(
           (a, b) => new Date(b.date) - new Date(a.date)
         );
@@ -45,7 +43,7 @@ const GetAllReports = () => {
               <p className="text-xs lg:text-lg capitalize text-center font-semibold">
                 {report.title}
               </p>
-              <p className="text-xs"  >
+              <p className="text-xs">
                 Date: {new Date(report.date).toLocaleDateString()}
               </p>
             </div>
