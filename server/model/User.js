@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const skillTypes = ["technical", "nontechnical"];
 const userSchema = mongoose.Schema(
   {
     name: {
@@ -30,7 +29,6 @@ const userSchema = mongoose.Schema(
         },
         type: {
           type: String,
-          enum: skillTypes,
           default: "technical", // Default to technical if not provided
         },
       },

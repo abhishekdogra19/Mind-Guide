@@ -55,7 +55,6 @@ const authUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid Credentials");
   }
   const token = user.createJWT();
-  console.log("token", user);
   res.cookie("token", token, {
     expires: new Date(Date.now() + 604800000),
   });

@@ -2,16 +2,14 @@ const asyncHandler = require("express-async-handler");
 const OpenAIApi = require("openai");
 const User = require("../model/User");
 const jwt = require("jsonwebtoken");
+const {
+  loadUserSession,
+  saveUserSession,
+} = require("../middleware/sessionManagement");
 const nodemailer = require("nodemailer");
 const openai = new OpenAIApi({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-let messages = [];
-function updateChat(messages, role, content) {
-  messages.push({ role, content });
-  return messages;
-}
 
 async function getChatGPTResponse(messages) {
   const response = await openai.chat.completions.create({
@@ -21,45 +19,36 @@ async function getChatGPTResponse(messages) {
 
   return response.choices[0].message.content;
 }
-
 const getChat = asyncHandler(async (req, res) => {
   const counselorType = req.params.counselorType;
-  try {
-    messages = [
-      {
-        role: "system",
-        content: `You are a helpful AI counsellor. Please ask me the most relevant questions related to counseling. Ask questions one by one followed by response by the user then continue. Striclty reply outside the scope if anything is asked outside the counselling domain.`,
-      },
-      { role: "system", content: "Ask me questions one by one." },
-      {
-        role: "system",
-        content: `I want you to act as a ${counselorType}.`,
-      },
-    ];
-    const user = await User.findById(req.user._id);
-    user.sessionHistory.push({ date: new Date(), status: "started" });
-    await user.save();
-    res.status(200).json(messages);
-  } catch (err) {
-    console.error("Error in getting chat", err);
-    res.status(500).send("Internal Server Error");
-  }
+  const session = req.sessionData;
+
+  session.messages = [
+    {
+      role: "system",
+      content: `You are a helpful AI counsellor. Please ask me the most relevant questions related to counseling. Ask questions one by one followed by response by the user then continue. Strictly reply outside the scope if anything is asked outside the counselling domain.`,
+    },
+    { role: "system", content: "Ask me questions one by one." },
+    { role: "system", content: `I want you to act as a ${counselorType}.` },
+  ];
+  const user = await User.findById(req.user._id);
+  user.sessionHistory.push({ date: new Date(), status: "started" });
+  await user.save();
+  await saveUserSession(req, res, () => {}); // Save the session
+  res.status(200).json(session.messages);
 });
+
 const handleSendChat = asyncHandler(async (req, res) => {
-  try {
-    const userMessage = req.body.messages.slice(-1)[0];
-    messages = updateChat(messages, "user", userMessage.content);
+  const session = req.sessionData;
+  const userMessage = req.body.messages.slice(-1)[0];
+  session.messages.push({ role: "user", content: userMessage.content });
 
-    const modelResponse = await getChatGPTResponse(messages);
-    messages = updateChat(messages, "assistant", modelResponse);
-    console.log(messages);
-    res.status(200).json(modelResponse);
-  } catch (err) {
-    console.error("Error processing chat request", err);
-    res.status(500).send("Internal Server Error");
-  }
+  const modelResponse = await getChatGPTResponse(session.messages);
+  session.messages.push({ role: "assistant", content: modelResponse });
+  console.log("Session messages: ", session.messages);
+  await saveUserSession(req, res, () => {}); // Save the session
+  res.status(200).json(modelResponse);
 });
-
 const handleCreateReport = asyncHandler(async (req, res) => {
   const { chat, userName, counsellorType } = req.body;
   console.log(chat);
@@ -314,10 +303,10 @@ const handleRoadmapUpdation = asyncHandler(async (req, res) => {
   }
 });
 module.exports = {
-  getChat,
-  handleSendChat,
-  handleCreateReport,
-  handleCreateRoadmap,
-  handleRoadmapUpdation,
-  handleTaskUpdate,
+  getChat: [loadUserSession, getChat],
+  handleSendChat: [loadUserSession, handleSendChat],
+  handleCreateReport: [loadUserSession, handleCreateReport],
+  handleCreateRoadmap: [loadUserSession, handleCreateRoadmap],
+  handleRoadmapUpdation: [loadUserSession, handleRoadmapUpdation],
+  handleTaskUpdate: [loadUserSession, handleTaskUpdate],
 };
