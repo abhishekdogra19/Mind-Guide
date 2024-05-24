@@ -15,7 +15,7 @@ import ReportModal from "../components/ReportModal";
 import ReactMarkdown from "react-markdown";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-
+import Typewriter from "react-typewriter-effect"; // Import Typewriter
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
@@ -174,7 +174,15 @@ const ChatApp = () => {
                   whiteSpace: "pre-line",
                 }}
               >
-                <ReactMarkdown>{message.content}</ReactMarkdown>
+                {isNewMessage && !isUserMessage ? (
+                  <Typewriter
+                    text={message.content}
+                    typeSpeed={50}
+                    cursorColor="transparent"
+                  />
+                ) : (
+                  <ReactMarkdown>{message.content}</ReactMarkdown>
+                )}
               </div>
             </span>
           </div>
