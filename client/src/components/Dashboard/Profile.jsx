@@ -1,9 +1,7 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../../redux/mindGuideSlice";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 import badge from "../../assets/badge.png";
 import tick from "../../assets/tick.png";
 const Profile = () => {
@@ -17,7 +15,7 @@ const Profile = () => {
   const skills = userInfo.skills;
   const TechSkills = [];
   const nonTechSkills = [];
-  skills.forEach((skill) => {
+  skills?.forEach((skill) => {
     if (skill.type === "technical") {
       TechSkills.push(skill.skill);
     } else {
@@ -45,10 +43,16 @@ const Profile = () => {
     createdAtDate.getFullYear();
   console.log("userInfo", userInfo);
   return (
-    <div className=" h-full border-2 rounded-lg">
-      <div className="bg-blue-200 px-10 py-2 rounded-lg flex gap-2">
-        <img src={userInfo.pic} alt="" className="h-60 mb-4 rounded-lg" />
-        <div className="text-xl flex flex-col gap-6 mb-10 p-10">
+    <div className=" h-full lg:border-2 rounded-lg">
+      <div className="bg-blue-200 px-10 py-2 rounded-lg flex flex-col lg:flex-row gap-2">
+        <div className="h-32 lg:h-72 overflow-hidden">
+          <img
+            src={userInfo.pic}
+            alt=""
+            className="h-full w-full object-cover rounded-lg"
+          />
+        </div>
+        <div className="text-sm lg:text-xl flex flex-col gap-6 mb-10 lg:p-10">
           <h1>
             Name:{" "}
             <span className="font-semibold capitalize">{userInfo.name}</span>
@@ -64,26 +68,60 @@ const Profile = () => {
       </div>
       <div className="flex flex-col gap-6 p-10">
         <div>
-          <h1 className="text-xl font-semibold">Skills</h1>
-          <ul className="grid grid-cols-2 md:grid-cols-4">
-            {TechSkills.map((skill, index) => (
-              <li key={index} className="flex items-center ">
-                <img src={badge} alt="" className="h-14 w-14" />
-                {skill}
-              </li>
-            ))}
-          </ul>
+          <h1 className="text-sm kg:text-xl font-semibold">Technical Skills</h1>
+          {
+            // Display the technical skills only if the user has any
+            TechSkills?.length > 0 ? (
+              <ul className="grid grid-cols-2 md:grid-cols-4  pt-6">
+                {TechSkills.map((skill, index) => (
+                  <li
+                    key={index}
+                    className="flex items-center text-xs lg:text-lg gap-2 "
+                  >
+                    <img
+                      src={badge}
+                      alt=""
+                      className="h-10 w-10 lg:h-14 lg:w-14"
+                    />
+                    {skill}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-xs lg:text-lg mt-2">
+                You have not added any technical skills yet.
+              </p>
+            )
+          }
         </div>
         <div>
-          <h1 className="text-xl font-semibold">Non Technical Skills</h1>
-          <ul className="grid grid-cols-2 md:grid-cols-4">
-            {nonTechSkills.map((skill, index) => (
-              <li key={index} className="flex items-center ">
-                <img src={tick} alt="" className="h-14 w-14" />
-                {skill}
-              </li>
-            ))}
-          </ul>
+          <h1 className="text-sm kg:text-xl font-semibold">
+            Non Technical Skills
+          </h1>
+          {
+            // Display the non-technical skills only if the user has any
+            nonTechSkills?.length > 0 ? (
+              <ul className="grid grid-cols-2 md:grid-cols-4 pt-6">
+                {nonTechSkills.map((skill, index) => (
+                  <li
+                    key={index}
+                    className="flex items-center text-xs lg:text-lg gap-2 "
+                  >
+                    <img
+                      src={tick}
+                      alt=""
+                      className="h-10 w-10 lg:h-14 lg:w-14"
+                    />
+                    {skill}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-xs lg:text-lg mt-2">
+                You have not added any non-technical skills yet.
+              </p>
+            )
+          }
         </div>
         <button
           onClick={handleLogout}

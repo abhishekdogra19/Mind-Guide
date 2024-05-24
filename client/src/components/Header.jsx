@@ -100,13 +100,28 @@ const Header = () => {
               gap: 2,
             }}
           >
-            <Button component={Link} to="/about" sx={{ color: "#fff" }}>
+            <Button
+              className="hover:brightness-75 "
+              component={Link}
+              to="/about"
+              sx={{ color: "#fff" }}
+            >
               About Us
             </Button>
-            <Button component={Link} to="/counselors" sx={{ color: "#fff" }}>
+            <Button
+              className="hover:brightness-75 "
+              component={Link}
+              to="/counselors"
+              sx={{ color: "#fff" }}
+            >
               Counselors
             </Button>
-            <Button component={Link} to="/tools" sx={{ color: "#fff" }}>
+            <Button
+              className="hover:brightness-75 "
+              component={Link}
+              to="/tools"
+              sx={{ color: "#fff" }}
+            >
               Tools
             </Button>
           </Box>
@@ -127,6 +142,7 @@ const Header = () => {
                   color: "inherit",
                   textDecoration: "none",
                 }}
+                className="flex items-center gap-2 hover:scale-105 transition duration-300"
               >
                 <Avatar alt="User Logo" src={userInfo.pic} />
                 <h1 className="text-xs lg:text-xl ">{userInfo.name}</h1>
