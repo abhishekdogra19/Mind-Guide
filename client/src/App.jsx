@@ -17,6 +17,7 @@ import GetAllReports from "./components/Dashboard/GetAllReports.jsx";
 import GetRoadmap from "./components/Dashboard/GetRoadmap.jsx";
 import Profile from "./components/Dashboard/Profile.jsx";
 import HeroDashBoard from "./components/Dashboard/HeroDashBoard.jsx";
+
 axios.defaults.baseURL = "https://mind-guide.onrender.com";
 axios.defaults.withCredentials = true;
 function App() {

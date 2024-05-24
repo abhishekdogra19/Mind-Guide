@@ -43,7 +43,7 @@ const Profile = () => {
     createdAtDate.getFullYear();
   console.log("userInfo", userInfo);
   return (
-    <div className=" h-full lg:border-2 rounded-lg">
+    <div className=" h-full rounded-lg">
       <div className="bg-blue-200 px-10 py-2 rounded-lg flex flex-col lg:flex-row gap-2">
         <div className="h-32 lg:h-72 overflow-hidden">
           <img
