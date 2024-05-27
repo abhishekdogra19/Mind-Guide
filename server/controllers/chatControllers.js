@@ -82,10 +82,12 @@ const handleCreateReport = asyncHandler(async (req, res) => {
 });
 const handleCreateRoadmap = asyncHandler(async (req, res) => {
   const { roadmap } = req.body;
+  const session = req.sessionData;
+  console.log(session.messages);
   let roadmapPrompt = [];
   try {
     roadmapPrompt = [
-      ...messages,
+      ...session.messages,
       {
         role: "system",
         content: `Pretend you are an expert helpful AI  career counsellor.`,
