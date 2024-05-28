@@ -66,14 +66,6 @@ const handleCreateReport = asyncHandler(async (req, res) => {
     ];
     const report = await getChatGPTResponse(gptReportPrompt);
     console.log("req.user: ", req.user);
-    const user = await User.findById(req.user._id);
-
-    user.reportHistory.push({
-      date: new Date(),
-      title: `${counsellorType} Session Report`,
-    });
-    await user.save();
-
     return res.status(200).json(report);
   } catch (error) {
     res.status(500);
