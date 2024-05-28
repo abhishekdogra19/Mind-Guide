@@ -56,12 +56,17 @@ const handleCreateReport = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Failed to create the report!!");
   }
+  console.log(counsellorType);
   try {
     const gptReportPrompt = [
       ...chat,
       {
         role: "system",
-        content: `I am ${userName} I want you to create a report from the above chat conversation for the user. compile a formal report with proper space and headings, including SWOT analysis, roadmap, tips, recommendation with proper roadmap, videos, books, blogs,news anything  and tricks to help user. To help user to understand more about him/her.`,
+        content: `I am ${userName} I want you to create a report from the above chat conversation for the user. compile a formal report with proper space and headings, ${
+          counsellorType == "health and wellness counselor"
+            ? "it should includes current assesment ,counselling plan and recommendations and conclusions in a well mannered intutive structred way"
+            : " including SWOT analysis, roadmap, tips, recommendation with proper roadmap, videos, books, blogs,news anything  and tricks to help user. To help user to understand more about him/her."
+        }`,
       },
     ];
     const report = await getChatGPTResponse(gptReportPrompt);
