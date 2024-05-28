@@ -16,6 +16,7 @@ const ReportModal = ({ report, open }) => {
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
   const [contentReady, setContentReady] = useState(false);
   const { type: counsellorType } = useParams();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const saveReportToCloud = async () => {
     setUploading(true);
@@ -41,15 +42,11 @@ const ReportModal = ({ report, open }) => {
           const formData = new FormData();
           formData.append("file", blob, "report.pdf");
           axios
-            .post(
-              `/api/v1/user/uploadpdf/${counsellorType}`,
-              formData,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              }
-            )
+            .post(`/api/v1/user/uploadpdf/${counsellorType}`, formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
             .then((response) => {
               console.log("Server response:", response.data);
               toast.success("Report successfully uploaded");
@@ -78,21 +75,26 @@ const ReportModal = ({ report, open }) => {
   }, [contentReady, open]);
 
   const handleRoadmapCreation = async () => {
+    setLoading(true);
     try {
-      const response = await axios.post(
-        "/api/v1/chat/roadmap",
-        {
-          roadmap: {},
-        }
-      );
+      const response = await axios.post("/api/v1/chat/roadmap", {
+        roadmap: {},
+      });
       if (response.status === 200) {
         console.log(response.data);
+        toast.success("Roadmap created successfully");
+        setTimeout(() => {
+          navigate("../counselors");
+        }, 2000);
       } else {
         console.error("Error in fetching initial messages");
+        toast.error("Failed to create roadmap");
       }
     } catch (error) {
       console.error("Error in fetching roadmap", error);
+      toast.error("Error creating roadmap");
     }
+    setLoading(false);
   };
 
   const downloadReport = () => {
@@ -192,9 +194,9 @@ const ReportModal = ({ report, open }) => {
               <button
                 onClick={handleRoadmapCreation}
                 className="bg-gray-400 py-2 rounded-lg px-2 text-white"
-                disabled={uploading}
+                disabled={loading}
               >
-                Create Roadmap 🚀
+                {!loading ? "Create Roadmap 🚀" : "Generating Roadmap ⌛"}
               </button>
             )}
           </div>
