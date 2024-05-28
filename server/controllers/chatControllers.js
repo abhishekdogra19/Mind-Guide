@@ -116,7 +116,7 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
     console.log("roadmapGenerate: ", roadmapData);
     // Decode the JWT token to get the user's I
     console.log(req.user);
-    User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { email: req.user.email }, // Replace with actual user email
       { $set: { roadmap: roadmapData } }, // Update the roadmap field
       { new: true } // To return the updated user object
@@ -124,110 +124,6 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
       .then((updatedUser) => {
         if (updatedUser) {
           console.log("User roadmap updated successfully:", updatedUser);
-          const transporter = nodemailer.createTransport({
-            // Configure your email service provider
-            host: "smtp.gmail.com",
-            port: 465,
-            secure: true,
-            auth: {
-              user: process.env.Email,
-              pass: process.env.PASS,
-            },
-            tls: {
-              rejectUnauthorized: false,
-            },
-          });
-          const mailOptions = {
-            from: `${process.env.USERNAME}`,
-            to: req.user.email,
-            subject: "Mind Guide Session Report",
-            html: `
-            <!DOCTYPE html>
-            <html lang="en">
-      
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Download Your Mind Guide Session Report</title>
-                <style>
-                    body {
-                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                        margin: 0;
-                        padding: 0;
-                        background-color: #f0f0f0;
-                        color: #333;
-                    }
-      
-                    .container {
-                        max-width: 600px;
-                        margin: 20px auto;
-                        padding: 20px;
-                        background-color: #ffffff;
-                        border-radius: 10px;
-                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                        text-align: center;
-                    }
-      
-                    h1 {
-                        color: #2a5298;
-                    }
-      
-                    p {
-                        color: #666;
-                        line-height: 1.5;
-                        margin: 10px 0;
-                    }
-      
-                    a {
-                        display: inline-block;
-                        padding: 10px 20px;
-                        margin-top: 20px;
-                        background-color: #007bff;
-                        color: #ffffff;
-                        text-decoration: none;
-                        border-radius: 5px;
-                        transition: background-color 0.3s;
-                    }
-      
-                    a:hover {
-                        background-color: #0056b3;
-                    }
-      
-                    .footer {
-                        text-align: center;
-                        font-size: 0.85em;
-                        margin-top: 40px;
-                        color: #777;
-                    }
-                </style>
-            </head>
-      
-            <body>
-                <div class="container">
-                    <h1>Your Mind Guide Session Report</h1>
-                    <p>Dear ${req.user.name},</p>
-                    <p>Your latest session report is now available for download:</p>
-                    <a href=#{} target="_blank">Download Report</a>
-                    <p>If you encounter any issues, please do not hesitate to contact us.</p>
-      
-                    <div class="footer">
-                        <p>Thank you for choosing Mind Guide.</p>
-                        <p><a href="#">Visit our Website</a></p>
-                    </div>
-                </div>
-            </body>
-      
-            </html>
-                  `,
-          };
-
-          transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-              console.log("NodeMailer Error:", error);
-            } else {
-              console.log("Email sent: " + info.response);
-            }
-          });
         } else {
           console.log("User not found.");
         }
