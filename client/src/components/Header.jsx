@@ -63,7 +63,10 @@ const Header = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ backgroundColor: "#1E1E1E" }}>
+      <AppBar
+        position="fixed"
+        sx={{ boxShadow: "none", backgroundColor: "#325342" }}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -87,6 +90,7 @@ const Header = () => {
               src={headIcon}
               alt="Header Icon"
               style={{ height: 48, marginRight: 8 }}
+              className="text-white"
             />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Mind Guide
@@ -101,10 +105,10 @@ const Header = () => {
             }}
           >
             <Button
-              className="hover:brightness-75 "
+              className="hover:brightness-75  text-xs"
               component={Link}
               to="/about"
-              sx={{ color: "#fff" }}
+              sx={{ color: "#fff", fontSize: "0.75rem", lineHeight: "1.5" }}
             >
               About Us
             </Button>
@@ -112,7 +116,7 @@ const Header = () => {
               className="hover:brightness-75 "
               component={Link}
               to="/counselors"
-              sx={{ color: "#fff" }}
+              sx={{ color: "#fff", fontSize: "0.75rem", lineHeight: "1.5" }}
             >
               Counselors
             </Button>
@@ -120,7 +124,7 @@ const Header = () => {
               className="hover:brightness-75 "
               component={Link}
               to="/tools"
-              sx={{ color: "#fff" }}
+              sx={{ color: "#fff", fontSize: "0.75rem", lineHeight: "1.5" }}
             >
               Tools
             </Button>
@@ -148,7 +152,16 @@ const Header = () => {
                 <h1 className="text-xs lg:text-xl ">{userInfo.name}</h1>
               </Link>
             ) : (
-              <Button component={Link} to="/login" sx={{ color: "#fff" }}>
+              <Button
+                component={Link}
+                to="/login"
+                sx={{
+                  color: "#fff",
+                  border: "1px solid",
+                  borderRadius: 20,
+                  padding: "5px 20px",
+                }}
+              >
                 Login
               </Button>
             )}

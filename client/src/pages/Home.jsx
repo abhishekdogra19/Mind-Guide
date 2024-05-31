@@ -1,114 +1,99 @@
 import { useNavigate } from "react-router-dom";
 import { Button, Label, TextInput, Textarea } from "flowbite-react";
+import hero from "../assets/hero.png";
 
 const Home = () => {
   const navigate = useNavigate();
+  const cards = [
+    {
+      title: "Career Counseling",
+      img: "https://i.pinimg.com/564x/94/2d/25/942d2571b68cfb3e577352f3790ca598.jpg",
+      description: `Our AI-powered career counseling offers students tailored advice
+      by analyzing their profiles and matching them with ideal career
+      options, ensuring they embark on a fulfilling professional
+      journey.`,
+    },
+    {
+      title: "Sentiment Analysis Tool",
+      img: "https://i.pinimg.com/564x/c1/21/d3/c121d3f414b1bf5214a6b876451d26b9.jpg",
+      description:
+        "Using cutting-edge AI, our sentiment analysis tools monitor students' well-being, alerting them to potential issues and enhancing overall emotional support by assessing sentiment in feedback and interactions.      ",
+    },
+    {
+      title: "Academic Planning and Goal Setting",
+      img: "https://i.pinimg.com/564x/94/2d/25/942d2571b68cfb3e577352f3790ca598.jpg",
+      description:
+        "Our AI constructs personalized academic roadmaps for students, considering their unique learning styles and progress, while also generating detailed student reports to provide insights into academic performance and areas for improvement.      ",
+    },
+  ];
   return (
     <div>
-      <section
-        id="secOne"
-        className="min-h-screen pl-3 flex flex-col items-start justify-center gap-6"
-      >
-        <h1 className="text-4xl lg:text-7xl">Unlock your Potential</h1>
-        <p className="text-xs lg:text-2xl">
-          Discover the power of education with Mind-Guide.
-          <br /> Transform your future and achieve your goals.
-        </p>
-        <Button
-          className="bg-cyan-950 text-xs lg:text-xl px-7 py-4 rounded-2xl hover:bg-cyan-700"
-          onClick={() => navigate("/")}
+      <section className="min-h-screen relative flex flex-col pt-32 lg:pt-0 lg:justify-center  bg-primaryColor text-white">
+        <div className="flex flex-col-reverse lg:items-center justify-center lg:flex-row w-full">
+          <div className="flex px-6 lg:pl-6  flex-col items-start justify-center gap-6  lg:w-full">
+            <h1 className="text-3xl lg:text-6xl font-semibold">
+              Unlock your Potential
+            </h1>
+            <p className="text-xs lg:text-xl">
+              Discover the power of education with Mind-Guide.
+              <br /> Transform your future and achieve your goals.
+            </p>
+            <Button
+              className="bg-white text-primaryColor text-xs lg:text-xl px-2 py-1 rounded-2xl hover:bg-cyan-700"
+              onClick={() => navigate("/")}
+            >
+              Enroll Now
+            </Button>
+          </div>
+          <div className="w-full  object-cover z-50">
+            <img src={hero} alt="" className="   mx-auto " />
+          </div>
+        </div>
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 320"
+          className="absolute bottom-0 border-white z-40 "
         >
-          Enroll Now
-        </Button>
+          <path
+            fill="#ffffff"
+            fill-opacity="1"
+            d="M0,96L48,122.7C96,149,192,203,288,229.3C384,256,480,256,576,218.7C672,181,768,107,864,69.3C960,32,1056,32,1152,37.3C1248,43,1344,53,1392,58.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+          ></path>
+        </svg>
       </section>
-      <section
-        id="secTwo"
-        className="flex flex-col gap-6 lg:flex-row items-start justify-between px-2 py-6 lg:py-32 bg-gray-200"
-      >
-        <div className="text-sm px-2 lg:w-2/4">
-          <h1 className="text-2xl lg:text-5xl mb-6 font-semibold">About us</h1>
-          <p className="text-justify leading-7">
-            Welcome to our Mind Guide App, where we empower students on their
-            educational journey by harnessing the power of AI. Our mission is to
-            provide students with personalized guidance and counseling across a
-            multitude of fields, helping them navigate the complexities of
-            academia and career choices. Whether you&#39;re seeking advice in
-            the realms of science, art, business, or any other area, our
-            AI-driven platform connects you with expert counselors who can offer
-            tailored insights and support. We believe that by leveraging
-            cutting-edge technology, we can offer a comprehensive, dynamic, and
-            inclusive approach to counseling, ensuring that every student has
-            the opportunity to reach their full potential. Your aspirations are
-            our priority, and we&#39;re here to guide you every step of the way.
-          </p>
+
+      <section className="min-h-96  py-6 flex flex-col gap-6  items-center justify-between  w-full mx-auto bg-white">
+        {/* Heading */}
+        <div>
+          <h1 className="text-2xl font-bold text-center  max-w-2xl w-full lg:text-4xl ">
+            {" "}
+            What type of therapy are you looking for ?
+          </h1>
         </div>
-        <img
-          src={
-            "https://images.unsplash.com/photo-1573495804664-b1c0849525af?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          }
-          alt=""
-          className="lg:w-2/4 rounded-2xl"
-        />
-      </section>
-      <section className="min-h-screen py-6 px-2 bg-gradient-to-br from-white to-gray-800">
-        <h1 className="text-3xl lg:text-6xl">Services</h1>
-        <div className="flex flex-col lg:flex-row">
-          <div className="w-full px-2 py-6">
-            <img
-              src={
-                "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1864&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              }
-              alt=""
-              className="w-full object-cover rounded-3xl"
-            />
-            <h2 className="text-xl lg:text-2xl my-2 font-semibold">
-              Career Counseling
-            </h2>
-            <p className="text-sm text-justify">
-              Our AI-powered career counseling offers students tailored advice
-              by analyzing their profiles and matching them with ideal career
-              options, ensuring they embark on a fulfilling professional
-              journey.
-            </p>
-          </div>
-          <div className="w-full px-2 py-6">
-            <img
-              src={
-                "https://img.freepik.com/free-photo/collage-customer-experience-concept_23-2149367121.jpg?w=1380&t=st=1700475840~exp=1700476440~hmac=59cd5b9a7bb333be1068e7a5acc1825fed98eb474ae182bc91c4d03c3a788e37"
-              }
-              alt=""
-              className="w-full h-80 object-cover rounded-3xl"
-            />
-            <h2 className="text-xl lg:text-2xl my-2 font-semibold">
-              Sentiment Analysis Tools
-            </h2>
-            <p className="text-justify text-sm">
-              Using cutting-edge AI, our sentiment analysis tools monitor
-              students&#39; well-being, alerting them to potential issues and
-              enhancing overall emotional support by assessing sentiment in
-              feedback and interactions.
-            </p>
-          </div>
-          <div className="w-full px-2 py-6">
-            <img
-              src={
-                "https://images.unsplash.com/photo-1506784881475-0e408bbca849?q=80&w=2068&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              }
-              alt=""
-              className="w-full h-80 object-cover rounded-3xl"
-            />
-            <h2 className="text-xl lg:text-2xl my-2 font-semibold">
-              Academic Planning and Goal Setting
-            </h2>
-            <p className="text-justify text-sm">
-              Our AI constructs personalized academic roadmaps for students,
-              considering their unique learning styles and progress, while also
-              generating detailed student reports to provide insights into
-              academic performance and areas for improvement.
-            </p>
-          </div>
+
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full px-10">
+          {cards.map((card) => (
+            <div className="border-2 px-4 lg:px-10 py-6 lg:py-20 text-xl rounded-lg">
+              <h1 className="text-xl lg:text-2xl font-extrabold mb-2 text-center text-primaryColor">
+                {card.title}
+              </h1>
+              <div className="lg:h-96 group overflow-hidden  rounded-lg  mb-10 ">
+                <img
+                  src={card.img}
+                  alt=""
+                  className="w-full h-full object-cover group-hover:scale-105 duration-300"
+                />
+              </div>
+              <p className="text-sm lg:text-xl font-semibold text-primaryColor text-justify">
+                {card.description}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
+
       <section id="contact" className="p-3 py-6 lg:p-10 flex flex-col gap-1">
         <div className="flex flex-col items-start justify-start gap-2 lg:gap-10">
           <h1 className="text-2xl lg:text-4xl">Contact Us</h1>
