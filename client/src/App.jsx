@@ -18,8 +18,7 @@ import GetRoadmap from "./components/Dashboard/GetRoadmap.jsx";
 import Profile from "./components/Dashboard/Profile.jsx";
 import HeroDashBoard from "./components/Dashboard/HeroDashBoard.jsx";
 
-// axios.defaults.baseURL = "https://mind-guide.onrender.com";
-axios.defaults.baseURL = "http://localhost:3001";
+axios.defaults.baseURL = "https://mind-guide.onrender.com";
 axios.defaults.withCredentials = true;
 function App() {
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
