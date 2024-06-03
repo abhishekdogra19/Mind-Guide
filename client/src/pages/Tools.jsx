@@ -1,35 +1,64 @@
-import toneAnalyzer from "../assets/tone-detector.jpeg";
+import React from "react";
+import { CardContent, CardMedia, CardActionArea } from "@mui/material";
+import toneAnalyzer from "../assets/TextTone.jpg";
+import personalityTest from "../assets/PersonalityTest.jpg";
+import { toast } from "react-toastify";
+
 const Tools = () => {
+  const tools = [
+    {
+      type: "Tone Detector",
+      image: toneAnalyzer,
+    },
+    {
+      type: "Personality Insights",
+      image: personalityTest,
+    },
+  ];
+  const handleClick = (tool) => {
+    if (tool.type === "Tone Detector") {
+      window.open(
+        "https://abhishekdogra19.github.io/Speech-Text-ToneAnalyzer/",
+        "_blank"
+      );
+    } else {
+      toast.info("Coming Soon");
+    }
+  };
+
   return (
-    <div className="min-h-screen py-2 flex flex-col gap-5">
-      <h1 className="text-lg lg:text-5xl p-2 text-center font-semibold">
-        Analysis & Assessment Tools
+    <div className="p-12 md:p-16 flex flex-col gap-5" id="tools">
+      <h1 className="text-lg lg:text-4xl p-2 text-center font-bold">
+        Analysis & Assessment <span className="text-primaryColor">Tools</span>.
       </h1>
-      <div className="flex flex-col lg:flex-row gap-6  h-full bg-slate-200 text-sm lg:text-3xl p-10 justify-around">
-        <div className="text-white h-72 lg:h-96 bg-slate-700 w-full p-2 rounded-xl hover:scale-110 duration-500">
-          <img src={toneAnalyzer} alt="" className="h-2/3" />
-          <h2 className=" text-center mt-10 hover:text-red-500">
-            <a href="https://abhishekdogra19.github.io/Speech-Text-ToneAnalyzer/">
-              Text Tone Analyzer
-            </a>
-          </h2>
-        </div>
-        <div className="text-white h-72 lg:h-96 bg-slate-700 w-full p-2 rounded-xl hover:scale-110 duration-500 relative">
-          <div className="bg-black absolute top-0 left-0 w-full h-full opacity-60 z-10 rounded-xl"></div>
-          <img
-            src={
-              "https://img.freepik.com/free-vector/sad-corporate-man-worried-about-failure-decreasing-business-leadership-success-career-progress-concept-flat-illustration-business-man_1150-37432.jpg?w=740&t=st=1700475485~exp=1700476085~hmac=8e4d76e2582af8e7c5f00497f8e2007abf5dca4e65197d7c1596a03c4254ce31"
-            }
-            alt=""
-            className="h-2/3 w-full object-cover "
-          />
-          <h2 className=" text-center mt-10 hover:text-red-500">
-            <a href="">Personality Test</a>
-          </h2>
-          <p className="text-3xl lg:text-4xl whitespace-nowrap -rotate-12 text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-            Coming Soon
-          </p>
-        </div>
+      <div className=" grid grid-cols-1 sm:grid-cols-2 lg:py-10 gap-10 place-items-center ">
+        {tools.map((tool, index) => (
+          <CardActionArea
+            key={index}
+            onClick={() => handleClick(tool)}
+            className="h-96 overflow-hidden group max-w-lg rounded-t-lg"
+          >
+            <div className="h-80 overflow-hidden rounded-t-lg bg-cover">
+              <CardMedia
+                component="img"
+                height="140"
+                image={tool.image}
+                alt={tool.type}
+                className="flex items-center justify-center  border-2 h-full group-hover:scale-110 duration-300 "
+              />
+            </div>
+            <CardContent className="text-center bg-black rounded-b-lg text-white h-full">
+              <h1 className="text-white group-hover:scale-105 group-hover:font-semibold group-hover:underline duration-300">
+                {tool.type}
+              </h1>
+            </CardContent>
+            {tool.type === "Personality Insights" && (
+              <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center text-white text-3xl lg:text-4xl">
+                Coming Soon
+              </div>
+            )}
+          </CardActionArea>
+        ))}
       </div>
     </div>
   );

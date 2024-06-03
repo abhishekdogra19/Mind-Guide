@@ -32,10 +32,8 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route element={<ProtectRoute userInfo={userInfo} />}>
-              <Route path="counselors" element={<Counselors />} />
               {/* Add a dynamic route to capture the counselor type */}
               <Route path="counselors/chat/:type" element={<ChatApp />} />
-              <Route path="tools" element={<Tools />} />
               <Route path="account/dashboard" element={<Dashboard />}>
                 <Route index element={<HeroDashBoard />} />
                 <Route path="reports" element={<GetAllReports />} />
@@ -46,7 +44,6 @@ function App() {
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
           </Route>
-          <Route path="visualRoadmap" element={<VisualRoadmap />} />
         </Routes>
       </Router>
       <ToastContainer />

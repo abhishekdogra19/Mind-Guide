@@ -44,12 +44,6 @@ body {
   color: white;
 }
 
-.chatAppBG {
-  background: url(https://images.pexels.com/photos/305821/pexels-photo-305821.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
 .box {
   width: 150px;
   height: 150px;

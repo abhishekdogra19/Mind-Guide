@@ -15,7 +15,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import headIcon from "../assets/headerIcon.png";
-
+import { HashLink, NavHashLink } from "react-router-hash-link";
 const Header = () => {
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -37,10 +37,10 @@ const Header = () => {
         >
           <ListItemText primary="About Us" />
         </ListItem>
-        <ListItem component={NavLink} to="/counselors">
+        <ListItem component={HashLink} to="/#counselors">
           <ListItemText primary="Counselors" />
         </ListItem>
-        <ListItem component={NavLink} to="/tools">
+        <ListItem component={HashLink} to="/#tools">
           <ListItemText primary="Tools" />
         </ListItem>
         {userInfo ? (
@@ -77,8 +77,8 @@ const Header = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Link
-            to="/"
+          <HashLink
+            to="#"
             style={{
               display: "flex",
               alignItems: "center",
@@ -95,7 +95,7 @@ const Header = () => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Mind Guide
             </Typography>
-          </Link>
+          </HashLink>
           <Box
             sx={{
               display: { xs: "none", sm: "flex" },
@@ -114,16 +114,16 @@ const Header = () => {
             </Button>
             <Button
               className="hover:brightness-75 "
-              component={Link}
-              to="/counselors"
+              component={NavHashLink}
+              to="./#counselors"
               sx={{ color: "#fff", fontSize: "0.75rem", lineHeight: "1.5" }}
             >
               Counselors
             </Button>
             <Button
               className="hover:brightness-75 "
-              component={Link}
-              to="/tools"
+              component={NavHashLink}
+              to="./#tools"
               sx={{ color: "#fff", fontSize: "0.75rem", lineHeight: "1.5" }}
             >
               Tools
