@@ -27,7 +27,7 @@ const Header = () => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{}}>
-        Mind Guide
+        <HashLink to="/#top">Mind Guide</HashLink>
       </Typography>
       <Divider />
       <List>
@@ -93,7 +93,7 @@ const Header = () => {
               className="text-white"
             />
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Mind Guide
+              <HashLink to="/#top">Mind Guide</HashLink>
             </Typography>
           </HashLink>
           <Box

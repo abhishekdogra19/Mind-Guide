@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { Button, Label, TextInput, Textarea } from "flowbite-react";
 import hero from "../assets/hero.png";
-import Counselors from "./Counselors";
-import Tools from "./Tools";
+import Counselors from "../components/Counselors";
+import Tools from "../components/Tools";
 import ContactIllustraion from "../assets/Contact_illustration.jpg";
 const Home = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const Home = () => {
       journey.`,
     },
     {
-      title: "Sentiment Analysis Tool",
+      title: "Sentiment Analys`is` Tool",
       img: "https://i.pinimg.com/564x/c1/21/d3/c121d3f414b1bf5214a6b876451d26b9.jpg",
       description:
         "Using cutting-edge AI, our sentiment analysis tools monitor students' well-being, alerting them to potential issues and enhancing overall emotional support by assessing sentiment in feedback and interactions.      ",
@@ -59,7 +59,7 @@ const Home = () => {
         >
           <path
             fill="#ffffff"
-            fill-opacity="1"
+            fillOpacity="1"
             d="M0,96L48,122.7C96,149,192,203,288,229.3C384,256,480,256,576,218.7C672,181,768,107,864,69.3C960,32,1056,32,1152,37.3C1248,43,1344,53,1392,58.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
           ></path>
         </svg>
@@ -78,7 +78,10 @@ const Home = () => {
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full px-10">
           {cards.map((card) => (
-            <div className="border-2 px-4 lg:px-10 py-6 lg:py-8 text-xl rounded-lg">
+            <div
+              key={card.title}
+              className="border-2 px-4 lg:px-10 py-6 lg:py-8 text-xl rounded-lg"
+            >
               <h1 className="text-xl lg:text-2xl font-extrabold mb-2 text-center text-primaryColor">
                 {card.title}
               </h1>
@@ -157,7 +160,7 @@ const Home = () => {
       >
         <path
           fill="#325342"
-          fill-opacity="1"
+          fillOpacity="1"
           d="M0,96L48,122.7C96,149,192,203,288,229.3C384,256,480,256,576,218.7C672,181,768,107,864,69.3C960,32,1056,32,1152,37.3C1248,43,1344,53,1392,58.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
         ></path>
       </svg>
