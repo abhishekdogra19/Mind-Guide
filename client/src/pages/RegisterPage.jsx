@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button, Label, TextInput, FileInput } from "flowbite-react";
+import TextField from "@mui/material/TextField";
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
@@ -74,64 +75,61 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-full py-10">
+    <div className="h-full px-2  py-20">
       <form
-        className="flex w-full max-w-xl flex-col gap-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        className="flex w-full max-w-xl mx-auto flex-col gap-4 bg-white shadow-md rounded px-8 mt-20 pb-8 mb-4"
         onSubmit={handleSubmit}
+        style={{
+          boxShadow: "0 6px 10px rgba(0,0,0,0.3)",
+          borderRadius: "15px",
+        }}
       >
         <h2 className="text-2xl font-bold mb-8 text-center">Register</h2>
 
         {/* Name field */}
-        <div>
-          <Label htmlFor="name" value="Name" />
-          <TextInput
-            required
-            type="text"
-            id="name"
-            placeholder="Your Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
+        <TextField
+          id="standard-basic"
+          label="Name"
+          variant="standard"
+          required
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
 
         {/* Email field */}
-        <div>
-          <Label htmlFor="email" value="Email" />
-          <TextInput
-            required
-            type="email"
-            id="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+
+        <TextField
+          id="standard-basic"
+          label="Email"
+          variant="standard"
+          required
+          type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
         {/* Password field */}
-        <div>
-          <Label htmlFor="password" value="Password" />
-          <TextInput
-            required
-            type="password"
-            id="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+        <TextField
+          id="standard-basic"
+          label="Password"
+          variant="standard"
+          required
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
         {/* Confirm Password field */}
-        <div>
-          <Label htmlFor="confirmPassword" value="Confirm Password" />
-          <TextInput
-            required
-            type="password"
-            id="confirmPassword"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </div>
+        <TextField
+          id="standard-basic"
+          label="Confirm Password"
+          variant="standard"
+          required
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
 
         {/* Profile Picture field */}
         <div>
@@ -144,15 +142,22 @@ const RegisterPage = () => {
         </div>
 
         {/* Submit Button */}
-        <Button type="submit" disabled={loading}>
+        <button
+          type="submit"
+          className="bg-primaryColor hover:brightness-105 py-3 rounded-lg text-white "
+          disabled={loading}
+        >
           {loading ? "Please Wait" : "Register"}
-        </Button>
+        </button>
 
         {/* Link to Login Page */}
         <div className="mt-4 text-center">
           <p>
             Already a customer?{" "}
-            <Link to="/login" className="text-blue-500 hover:underline">
+            <Link
+              to="/login"
+              className="text-primaryColor font-semibold hover:underline"
+            >
               Login here
             </Link>
           </p>

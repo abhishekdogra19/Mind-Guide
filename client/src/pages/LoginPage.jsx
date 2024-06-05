@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { addUser } from "../redux/mindGuideSlice";
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import TextField from "@mui/material/TextField";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
