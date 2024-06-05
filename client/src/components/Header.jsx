@@ -42,28 +42,41 @@ const Header = () => {
         </HashLink>
       </div>
       <Divider />
-      <List className="flex flex-col h-full  bg-green-50 ">
+      <List className="flex flex-col h-full gap-2 ">
         <div className="flex-1 flex-grow overflow-y-scroll">
           <ListItem
             component={NavLink} // Use NavLink instead of Link
             to="https://github.com/abhishekdogra19/Mind-Guide"
+            className="hover:bg-gray-400"
           >
             <span className="flex items-center ">
               <IoInformationCircleOutline /> About us
             </span>
           </ListItem>
-          <ListItem component={HashLink} to="/#counselors">
+          <ListItem
+            component={HashLink}
+            to="/#counselors"
+            className="hover:bg-gray-400"
+          >
             <span className="flex items-center gap-2">
               <IoPerson /> Counsellor
             </span>
           </ListItem>
-          <ListItem component={HashLink} to="/#tools">
+          <ListItem
+            component={HashLink}
+            to="/#tools"
+            className="hover:bg-gray-400"
+          >
             <span className="flex items-center gap-2">
               <AiFillTool /> Tools
             </span>
           </ListItem>
           {!userInfo && (
-            <ListItem component={NavLink} to="/login">
+            <ListItem
+              component={NavLink}
+              to="/login"
+              className="hover:bg-gray-400"
+            >
               <span className="fkex items-center gap-2">
                 <LoginIcon /> Login
               </span>
@@ -72,7 +85,7 @@ const Header = () => {
         </div>
         <hr className="border border-gray-300" />
         <div className="p-2 flex flex-col gap-2">
-          <span className="flex items-center px-4 text-sm">
+          <span className="flex items-center px-4 text-sm hover:bg-gray-300 py-2 gap-2">
             <CiLogout />
             Logout
           </span>
