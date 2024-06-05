@@ -15,7 +15,7 @@ const FooteSr = () => {
       <div className="w-full  ">
         <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
           <div className="flex items-center gap-2 mb-6">
-            <img src={headerIcon} alt="" className="w-8 lg:w-14" />
+            <img src={headerIcon} alt="" className="w-8 lg:w-14 invert" />
             <HashLink className="text-white text-2xl" to="#top">
               Mind Guide
             </HashLink>

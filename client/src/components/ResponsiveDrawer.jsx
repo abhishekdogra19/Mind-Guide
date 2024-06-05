@@ -34,27 +34,21 @@ const ResponsiveDrawer = () => {
   };
 
   return (
-    <div className="border-x md:bg-white">
-      <button
-        className="block lg:hidden p-1 ml-4 absolute text-white bg-cyan-400"
-        onClick={toggleSidebar}
-      >
-        {!isOpen && <FaChevronRight size={20} />}
-      </button>
+    <div className=" md:bg-white">
       <div
         className={`fixed inset-0 bg-white z-40 transition-transform transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:relative lg:translate-x-0 lg:bg-transparent lg:flex lg:flex-col w-72 duration-500`}
       >
-        <div className="flex flex-col gap-3 w-full max-w-xs px-2 py-10 font-semibold bg-white lg:bg-transparent">
+        <div className="flex flex-col gap-3 w-full max-w-sm px-2 py-10 font-semibold bg-white lg:bg-transparent">
           {navLinks.map((link) => (
             <Link
               to={link.link}
               key={link.title}
-              className={`p-6 text-sm lg:text-lg hover:bg-blue-400 rounded-lg  duration-300 
+              className={`p-6 text-sm lg:text-lg hover:bg-primaryColor hover:text-white rounded-lg  duration-300 
               ${
                 currentTab === link.link.split("/")[1]
-                  ? "bg-blue-400 text-white"
+                  ? "bg-primaryColor text-white"
                   : ""
               }`}
               onClick={toggleSidebar}
