@@ -16,6 +16,12 @@ import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import headIcon from "../assets/headerIcon.png";
 import { HashLink, NavHashLink } from "react-router-hash-link";
+import { IoInformationCircleOutline } from "react-icons/io5";
+import InfoIcon from "@mui/icons-material/Info";
+import { IoPerson } from "react-icons/io5";
+import { CiLogout } from "react-icons/ci";
+import LoginIcon from "@mui/icons-material/Login";
+import { AiFillTool } from "react-icons/ai";
 const Header = () => {
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -23,40 +29,73 @@ const Header = () => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
+  console.log(userInfo);
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{}}>
-        <HashLink to="/#top">Mind Guide</HashLink>
-      </Typography>
+    <Box
+      onClick={handleDrawerToggle}
+      sx={{ textAlign: "center" }}
+      className="h-full overflow-hidden pb-10"
+    >
+      <div className="py-2">
+        <HashLink to="/#top" className="font-bold ">
+          Mind Guide
+        </HashLink>
+      </div>
       <Divider />
-      <List>
-        <ListItem
-          component={NavLink} // Use NavLink instead of Link
-          to="https://github.com/abhishekdogra19/Mind-Guide"
-        >
-          <ListItemText primary="About Us" />
-        </ListItem>
-        <ListItem component={HashLink} to="/#counselors">
-          <ListItemText primary="Counselors" />
-        </ListItem>
-        <ListItem component={HashLink} to="/#tools">
-          <ListItemText primary="Tools" />
-        </ListItem>
-        {userInfo ? (
-          <ListItem component={NavLink} to="/account/dashboard">
-            <Avatar
-              alt="User Logo"
-              src={userInfo.pic}
-              sx={{ marginRight: 2 }}
-            />
-            <ListItemText primary={userInfo.name} />
+      <List className="flex flex-col h-full  bg-green-50 ">
+        <div className="flex-1 flex-grow overflow-y-scroll">
+          <ListItem
+            component={NavLink} // Use NavLink instead of Link
+            to="https://github.com/abhishekdogra19/Mind-Guide"
+          >
+            <span className="flex items-center ">
+              <IoInformationCircleOutline /> About us
+            </span>
           </ListItem>
-        ) : (
-          <ListItem component={NavLink} to="/login">
-            <ListItemText primary="Login" />
+          <ListItem component={HashLink} to="/#counselors">
+            <span className="flex items-center gap-2">
+              <IoPerson /> Counsellor
+            </span>
           </ListItem>
-        )}
+          <ListItem component={HashLink} to="/#tools">
+            <span className="flex items-center gap-2">
+              <AiFillTool /> Tools
+            </span>
+          </ListItem>
+          {!userInfo && (
+            <ListItem component={NavLink} to="/login">
+              <span className="fkex items-center gap-2">
+                <LoginIcon /> Login
+              </span>
+            </ListItem>
+          )}
+        </div>
+        <hr className="border border-gray-300" />
+        <div className="p-2 flex flex-col gap-2">
+          <span className="flex items-center px-4 text-sm">
+            <CiLogout />
+            Logout
+          </span>
+          {userInfo && (
+            <ListItem
+              className="flex gap-2 "
+              component={NavLink}
+              to="/account/dashboard"
+            >
+              <div className="overflow-hidden rounded-full w-10 h-10 ">
+                <img
+                  alt="User Logo"
+                  src={userInfo.pic}
+                  className="w-full h-full"
+                />
+              </div>
+              <div>
+                <h1 className="text-sm">{userInfo.name}</h1>
+                <p className="text-xs text-gray-500">{userInfo.email}</p>
+              </div>
+            </ListItem>
+          )}
+        </div>
       </List>
     </Box>
   );

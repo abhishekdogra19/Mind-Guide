@@ -7,46 +7,61 @@ import {
   BsInstagram,
   BsTwitter,
 } from "react-icons/bs";
+import { HashLink } from "react-router-hash-link";
 
 const FooteSr = () => {
   return (
-    <Footer container className="bg-[#1E1E1E] text-white rounded-none ">
+    <Footer container className="bg-[#1d2d25] text-white rounded-none ">
       <div className="w-full  ">
         <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
-          <div>
-            <Footer.Brand
-              href="/"
-              src={headerIcon}
-              alt="Flowbite Logo"
-              name="Mind Guide"
-            />
+          <div className="flex items-center gap-2 mb-6">
+            <img src={headerIcon} alt="" className="w-8 lg:w-14" />
+            <HashLink className="text-white text-2xl" to="#top">
+              Mind Guide
+            </HashLink>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:mt-4 sm:grid-cols-3 sm:gap-6">
             <div>
-              <Footer.Title title="about" />
+              <h1 className="mb-3">About</h1>
               <Footer.LinkGroup col>
-                <Footer.Link href="#">Mind Guide</Footer.Link>
+                <HashLink
+                  to={"https://github.com/abhishekdogra19/Mind-Guide"}
+                  className="text-white  "
+                >
+                  Mind Guide
+                </HashLink>
               </Footer.LinkGroup>
             </div>
             <div>
-              <Footer.Title title="Follow us" />
+              <h1 className="mb-3">Follow us</h1>
               <Footer.LinkGroup col>
-                <Footer.Link href="#">Github</Footer.Link>
-                <Footer.Link href="#">Discord</Footer.Link>
+                <HashLink
+                  className="text-white  "
+                  to={"https://github.com/abhishekdogra19"}
+                >
+                  Github
+                </HashLink>
+                <HashLink className="text-white  ">Discord</HashLink>
               </Footer.LinkGroup>
             </div>
             <div>
-              <Footer.Title title="Legal" />
+              <h1 className="mb-3">Legal</h1>
               <Footer.LinkGroup col>
-                <Footer.Link href="#">Privacy Policy</Footer.Link>
-                <Footer.Link href="#">Terms &amp; Conditions</Footer.Link>
+                <HashLink className="text-white  ">Privacy Policy</HashLink>
+                <HashLink className="text-white  ">
+                  Terms &amp; Conditions
+                </HashLink>
               </Footer.LinkGroup>
             </div>
           </div>
         </div>
         <Footer.Divider />
         <div className="w-full sm:flex sm:items-center sm:justify-between">
-          <Footer.Copyright href="#" by="Flowbite™" year={2022} />
+          <Footer.Copyright
+            href="#"
+            by="Mind Guide"
+            year={new Date().getFullYear()}
+          />
           <div className="mt-4 flex space-x-6 sm:mt-0 sm:justify-center">
             <Footer.Icon href="#" icon={BsFacebook} />
             <Footer.Icon href="#" icon={BsInstagram} />

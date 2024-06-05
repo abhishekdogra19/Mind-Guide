@@ -156,7 +156,7 @@ const Home = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1440 320"
-        className="absolute bottom-0 border-white z-10 "
+        className="absolute bottom-0 border-white z-10 min-h-[24rem] "
       >
         <path
           fill="#325342"
