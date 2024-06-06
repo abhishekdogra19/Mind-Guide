@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, Link, useLocation } from "react-router-dom"; // Import NavLink
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -23,8 +23,11 @@ import { AiFillTool } from "react-icons/ai";
 import { IoDocumentTextSharp } from "react-icons/io5";
 import { MdDashboard } from "react-icons/md";
 import { RiRoadMapFill } from "react-icons/ri";
+import axios from "axios";
+import { removeUser } from "../redux/mindGuideSlice";
 const Header = () => {
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
+  const dispatch = useDispatch();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const location = useLocation();
   const isDashboard = location.pathname.split("/")[2] === "dashboard";
@@ -48,7 +51,15 @@ const Header = () => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  
+  const handleLogout = async () => {
+    try {
+      await axios.post("/api/v1/user/logout");
+      dispatch(removeUser());
+      toast.success("Logged out successfully");
+    } catch (error) {
+      console.error("Error in logging out", error);
+    }
+  };
   console.log(userInfo);
   const drawer = (
     <Box
@@ -130,8 +141,11 @@ const Header = () => {
         {!isDashboard && <hr className="border border-gray-300" />}
         <div className=" flex flex-col gap-2">
           {userInfo && (
-            <span className="flex items-center px-4 text-sm hover:bg-gray-300 py-2 gap-2">
-              <IoLogOut onClick={handleLogout} size={16} className="rotate-180" />
+            <span
+              onClick={handleLogout}
+              className="flex items-center px-4 text-sm hover:bg-gray-300 py-2 gap-2"
+            >
+              <IoLogOut size={16} className="rotate-180" />
               Logout
             </span>
           )}
