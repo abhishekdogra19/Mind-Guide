@@ -25,6 +25,7 @@ import { MdDashboard } from "react-icons/md";
 import { RiRoadMapFill } from "react-icons/ri";
 import axios from "axios";
 import { removeUser } from "../redux/mindGuideSlice";
+import { toast } from "react-toastify";
 const Header = () => {
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
   const dispatch = useDispatch();

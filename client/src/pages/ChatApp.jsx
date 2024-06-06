@@ -166,7 +166,7 @@ const ChatApp = () => {
                 className={`text-xs  lg:text-xl ${
                   isUserMessage
                     ? "userMsg  max-w-3xl"
-                    : "botMsg bg-black  max-w-3xl"
+                    : "botMsg bg-black w-2/3  max-w-3xl"
                 } py-3  px-6 `}
                 style={{
                   boxShadow: "0 6px 10px rgba(0,0,0,0.3)",
