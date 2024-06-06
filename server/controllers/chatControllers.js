@@ -1,31 +1,14 @@
 const asyncHandler = require("express-async-handler");
 const OpenAIApi = require("openai");
 const User = require("../model/User");
-const jwt = require("jsonwebtoken");
 const {
   loadUserSession,
   saveUserSession,
 } = require("../middleware/sessionManagement");
-const nodemailer = require("nodemailer");
 const openai = new OpenAIApi({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-async function run(model, input) {
-  const response = await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/d06014849fc1ed8b3010b2666003cb0b/ai/run/${model}`,
-    {
-      headers: {
-        Authorization: "Bearer ue_qa2i53IlAmSRhK7W23ezavvt5lebVeAvCLitz",
-      },
-      method: "POST",
-      body: JSON.stringify(input),
-    }
-  );
-  const result = await response.json();
-  return result;
-}
-/*
 async function getChatGPTResponse(messages) {
   const response = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
@@ -33,13 +16,6 @@ async function getChatGPTResponse(messages) {
   });
 
   return response.choices[0].message.content;
-} */
-async function getChatGPTResponse(messages) {
-  const { result } = await run("@cf/meta/llama-2-7b-chat-int8", {
-    messages: messages,
-  });
-
-  return result.response;
 }
 const getChat = asyncHandler(async (req, res) => {
   const counselorType = req.params.counselorType;
