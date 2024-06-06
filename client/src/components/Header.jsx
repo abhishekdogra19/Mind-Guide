@@ -48,6 +48,7 @@ const Header = () => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+  
   console.log(userInfo);
   const drawer = (
     <Box
@@ -130,7 +131,7 @@ const Header = () => {
         <div className=" flex flex-col gap-2">
           {userInfo && (
             <span className="flex items-center px-4 text-sm hover:bg-gray-300 py-2 gap-2">
-              <IoLogOut size={16} className="rotate-180" />
+              <IoLogOut onClick={handleLogout} size={16} className="rotate-180" />
               Logout
             </span>
           )}
@@ -138,7 +139,7 @@ const Header = () => {
             <ListItem
               className="flex gap-2  bg-primaryColor text-white p-2 "
               component={NavLink}
-              to="/account/dashboard"
+              to="/account/dashboard/profile"
             >
               <div className="overflow-hidden rounded-full w-8 h-8  ">
                 <img
@@ -233,7 +234,7 @@ const Header = () => {
           >
             {userInfo ? (
               <Link
-                to="/account/dashboard"
+                to="/account/dashboard/profile"
                 style={{
                   display: "flex",
                   alignItems: "center",

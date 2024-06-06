@@ -81,23 +81,23 @@ const GetRoadmap = () => {
 
   if (roadmapData.length === 0) {
     return (
-      <div className="min-h-screen w-full bg-gray-600 flex flex-col items-center text-white p-4">
-        <div className="text-xl mt-8">No roadmap available</div>
+      <div className="min-h-screen   w-full  flex flex-col items-center text-primaryColor p-4">
+        <div className="text-xl mt-8 ">No roadmap available</div>
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+          className="bg-primaryColor hover:bg-primaryColor text-white font-bold py-2 px-4 rounded mt-4"
           onClick={() => window.history.back()}
         >
-          Return
+          return
         </button>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen w-full bg-gray-600 flex flex-col items-center p-4">
+    <div className="min-h-screen w-full border  flex flex-col items-center lg:p-4">
       <div className="w-full bg-gray-300 rounded-lg  ">
         <div
-          className="bg-green-500 text-lg font-bold leading-none  text-center text-white"
+          className="bg-primaryColor text-lg font-bold leading-none  text-center text-white"
           style={{
             width: `${progress}%`,
             transition: "width 0.5s ease-in-out",
@@ -114,14 +114,16 @@ const GetRoadmap = () => {
             <div
               key={index}
               className={`text-white p-4 m-4 rounded cursor-pointer ${
-                item.isCompleted ? "bg-green-500" : "bg-red-500"
+                item.isCompleted ? "bg-primaryColor" : "bg-red-500"
               }`}
               onClick={() => handleTaskClick(index)}
             >
               <div className="flex items-center justify-between mb-2">
-                <h2 className="font-semibold">{item.Goal}</h2>
+                <h2 className="text-xs lg:text-sm font-semibold">
+                  {item.Goal}
+                </h2>
                 <button
-                  className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                  className="bg-gray-800 text-xs lg:text-sm hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDropdownClick(index);
@@ -161,7 +163,7 @@ const GetRoadmap = () => {
                       ))}
                     </ul>
                   ) : (
-                    <div>
+                    <div className="text-xs lg:text-sm">
                       Sorry, no recommendations. You can search on Google.
                     </div>
                   )}
@@ -175,14 +177,14 @@ const GetRoadmap = () => {
       {/* Display save button only if there are unsaved changes */}
 
       {progress === 100 && (
-        <div className="text-white mt-4">
+        <div className="text-white mt-4 text-xs lg:text-sm">
           Congratulations! You have completed your roadmap.
         </div>
       )}
-      <div className="max-w-2xl w-full flex  items-center justify-between gap-4">
+      <div className="max-w-3xl px-6 w-full flex  items-center justify-center gap-4">
         {unsavedChanges && (
           <button
-            className="bg-blue-500 w-full max-w-lg rounded-lg hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4"
+            className="bg-primaryColor text-xs lg:text-sm w-full max-w-lg rounded-lg hover:brightness-75 text-white font-bold py-2 px-4 mt-4"
             onClick={handleSave}
           >
             Save Changes
@@ -192,7 +194,7 @@ const GetRoadmap = () => {
           <>
             <button
               onClick={handleExtractSkill}
-              className="bg-blue-500 w-full max-w-lg rounded-lg hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4"
+              className="bg-primaryColor text-xs lg:text-sm w-full max-w-lg rounded-lg hover:brightness-75 text-white font-bold py-2 px-4 mt-4"
             >
               Completed
             </button>

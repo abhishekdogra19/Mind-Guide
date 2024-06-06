@@ -21,33 +21,28 @@ const GetAllReports = () => {
   }, []);
 
   return (
-    <div className="px-4 py-2">
+    <div className="lg:px-4 lg:py-2 py-2">
       {reports.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-6">
-          {reports.map((report, index) => (
-            <div
-              key={index}
-              className=" p-3 lg:p-10 m-1 flex flex-col items-center justify-between gap-2 group bg-gray-200 rounded-lg  "
-            >
-              <a
-                href={report.filePath}
-                target="_blank"
-                rel="noopener noreferrer"
+        <div className="px-2">
+          <h1 className="font-extrabold">Your Reports</h1>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 lg:px-6">
+            {reports.map((report, index) => (
+              <div
+                key={index}
+                className="p-3 lg:px-2 lg:py-6 hover:scale-110 hover:bg-gray-400 duration-500 border border-black m-1 flex flex-col items-center justify-between gap-2 bg-gray-200 rounded-lg"
               >
-                <img
-                  src={doc}
-                  alt="Report"
-                  className="h-20 lg:h-40 group-hover:scale-110 duration-500"
-                />
-              </a>
-              <p className="text-xs lg:text-lg capitalize text-center font-semibold">
-                {report.title}
-              </p>
-              <p className="text-xs">
-                Date: {new Date(report.date).toLocaleDateString()}
-              </p>
-            </div>
-          ))}
+                <a href={report.filePath} target="_blank">
+                  <img src={doc} alt="Report" className="h-20 lg:h-32" />
+                </a>
+                <p className="text-xs capitalize text-center font-semibold">
+                  {report.title}
+                </p>
+                <p className="text-xs">
+                  Date: {new Date(report.date).toLocaleDateString()}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
         <p>No reports found.</p>

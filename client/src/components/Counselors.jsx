@@ -64,7 +64,7 @@ const Counselors = () => {
       <div id="counselors" className="overflow-hidden p-10 mb-6">
         <div className="text-xl lg:text-4xl font-bold text-center text-gray-800 py-10">
           Kindly choose your designated{" "}
-          <span className="text-green-600">counselor</span>.
+          <span className="text-primaryColor">counselor</span>.
         </div>
         <div className=" grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-10 place-items-center ">
           {counselors.map((counselor, index) => (
@@ -91,12 +91,12 @@ const Counselors = () => {
           ))}
         </div>
         {showConfirmation && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="fixed inset-0 px-2 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="bg-white p-10 rounded-md">
-              <p className="text-lg">
+              <p className="text-sm lg:text-lg">
                 Start counseling session with{" "}
                 {
-                  <span className="text-blue-600 font-bold">
+                  <span className="text-primaryColor font-extrabold">
                     {selectedCounselor.type}{" "}
                   </span>
                 }
@@ -104,7 +104,7 @@ const Counselors = () => {
               </p>
               <div className="flex justify-center mt-3">
                 <button
-                  className="bg-green-500 text-white px-4 py-2 mr-2 rounded hover:brightness-110 transition duration-300"
+                  className="bg-primaryColor text-white px-4 py-2 mr-2 rounded hover:brightness-110 transition duration-300"
                   onClick={() => handleConfirmation(true)}
                 >
                   Yes

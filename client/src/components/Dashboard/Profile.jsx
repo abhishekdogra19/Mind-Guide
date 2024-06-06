@@ -43,8 +43,8 @@ const Profile = () => {
     createdAtDate.getFullYear();
   console.log("userInfo", userInfo);
   return (
-    <div className=" h-full rounded-lg">
-      <div className="bg-blue-200 px-10 py-2 rounded-lg flex flex-col lg:flex-row gap-2">
+    <div className=" h-full rounded-lg px-6">
+      <div className="bg-primaryColor text-white px-10 py-4 rounded-lg flex flex-col lg:flex-row gap-2">
         <div className="h-32 lg:h-72 overflow-hidden">
           <img
             src={userInfo.pic}
@@ -125,7 +125,7 @@ const Profile = () => {
         </div>
         <button
           onClick={handleLogout}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+          className="bg-primaryColor py-4 hover:bg-primaryColor max-w-4xl mt-2 mx-auto w-full text-white  rounded-lg"
         >
           Logout
         </button>

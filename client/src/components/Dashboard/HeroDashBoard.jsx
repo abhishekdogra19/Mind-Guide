@@ -1,66 +1,99 @@
 import axios from "axios";
-import { Chart, registerables } from "chart.js"; // Import Chart.js and its modules
-Chart.register(...registerables); // Register all the necessary components
 import { useState, useEffect } from "react";
-import { Bar, Pie, Line } from "react-chartjs-2";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+import ReportsCarousel from "../ReportsCarousel";
 
 const HeroDashBoard = () => {
-  // Sample data for the bar chart
   const [barChartData, setBarChartData] = useState({
-    labels: [],
-    datasets: [
+    chart: {
+      type: "column",
+    },
+    title: {
+      text: "Sessions Attended",
+    },
+    xAxis: {
+      categories: [],
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: "Sessions",
+      },
+    },
+    series: [
       {
-        label: "Sessions Attended",
+        name: "Sessions Attended",
         data: [],
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          // Add other colors as needed
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          // Add other colors as needed
-        ],
-        borderWidth: 1,
       },
     ],
   });
 
   const [pieChartData, setPieChartData] = useState({
-    labels: [],
-    datasets: [
+    chart: {
+      type: "pie",
+    },
+    title: {
+      text: "Reports Created",
+    },
+    series: [
       {
-        label: "Reports Created",
+        name: "Counselor Sessions",
+        colorByPoint: true,
         data: [],
-        backgroundColor: [
-          // Define colors as before
-        ],
-        borderColor: [
-          // Define borders as before
-        ],
-        borderWidth: 1,
       },
     ],
   });
+
   const [lineChartData, setLineChartData] = useState({
-    labels: [],
-    datasets: [
+    title: {
+      text: "Sessions vs Reports",
+    },
+    xAxis: {
+      categories: [],
+    },
+    yAxis: {
+      title: {
+        text: "Count",
+      },
+    },
+    series: [
       {
-        label: "Sessions vs Reports",
+        name: "Sessions Attended",
         data: [],
-        fill: false,
-        borderColor: "rgba(75,192,192,1)",
-        tension: 0.1,
+      },
+      {
+        name: "Reports Created",
+        data: [],
       },
     ],
   });
+
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get("/api/v1/user/userDashboard");
-      console.log(data.user);
       updateCharts(data.user);
     };
     fetchData();
   }, []);
+
+  const [reports, setReports] = useState([]);
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const { data } = await axios.get("/api/v1/user/allReports");
+        const sortedData = data.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+        setReports(sortedData);
+      } catch (error) {
+        console.error("Error fetching reports:", error.response);
+      }
+    };
+    fetchReports();
+  }, []);
+
   const updateCharts = (userData) => {
     const sessionsPerDay = userData.sessionHistory.reduce((acc, session) => {
       const date = new Date(session.date).toLocaleDateString();
@@ -75,17 +108,12 @@ const HeroDashBoard = () => {
     const sessionLabels = Object.keys(sessionsPerDay);
     const sessionData = Object.values(sessionsPerDay);
 
-    setBarChartData({
-      labels: sessionLabels,
-      datasets: [
-        {
-          label: "Sessions Attended",
-          data: sessionData,
-          backgroundColor: "rgba(54, 162, 235, 0.2)",
-          borderColor: "rgba(54, 162, 235, 1)",
-        },
-      ],
-    });
+    setBarChartData((prevData) => ({
+      ...prevData,
+      xAxis: { categories: sessionLabels },
+      series: [{ ...prevData.series[0], data: sessionData }],
+    }));
+
     const reportsPerDay = userData.reportHistory.reduce((acc, report) => {
       const date = new Date(report.date).toLocaleDateString();
       if (acc[date]) {
@@ -96,7 +124,6 @@ const HeroDashBoard = () => {
       return acc;
     }, {});
 
-    const reportLabels = Object.keys(reportsPerDay);
     const sessionsPerCounselor = userData.reportHistory.reduce(
       (acc, session) => {
         const counselorName = session.title; // Assuming counselor name is stored in session object
@@ -107,30 +134,16 @@ const HeroDashBoard = () => {
     );
 
     const counselorLabels = Object.keys(sessionsPerCounselor);
-    const counselorData = Object.values(sessionsPerCounselor);
+    const counselorData = counselorLabels.map((label) => ({
+      name: label,
+      y: sessionsPerCounselor[label],
+    }));
 
-    setPieChartData({
-      labels: counselorLabels,
-      datasets: [
-        {
-          label: "Counselor Sessions",
-          data: counselorData,
-          backgroundColor: counselorLabels.map(
-            () =>
-              `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
-                Math.random() * 255
-              )}, ${Math.floor(Math.random() * 255)}, 0.2)`
-          ),
-          borderColor: counselorLabels.map(
-            () =>
-              `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
-                Math.random() * 255
-              )}, ${Math.floor(Math.random() * 255)}, 1)`
-          ),
-          borderWidth: 1,
-        },
-      ],
-    });
+    setPieChartData((prevData) => ({
+      ...prevData,
+      series: [{ ...prevData.series[0], data: counselorData }],
+    }));
+
     const allDates = [
       ...new Set([
         ...Object.keys(sessionsPerDay),
@@ -139,60 +152,66 @@ const HeroDashBoard = () => {
     ];
 
     const lineLabels = allDates;
-    const lineData = allDates.map((date) => ({
-      x: date,
-      y1: sessionsPerDay[date] || 0,
-      y2: reportsPerDay[date] || 0,
-    }));
+    const lineSessionsData = allDates.map((date) => sessionsPerDay[date] || 0);
+    const lineReportsData = allDates.map((date) => reportsPerDay[date] || 0);
 
-    setLineChartData({
-      labels: lineLabels,
-      datasets: [
-        {
-          label: "Sessions Attended",
-          data: lineData.map((data) => ({ x: data.x, y: data.y1 })),
-          fill: false,
-          borderColor: "rgba(54, 162, 235, 1)",
-          tension: 0.1,
-        },
-        {
-          label: "Reports Created",
-          data: lineData.map((data) => ({ x: data.x, y: data.y2 })),
-          fill: false,
-          borderColor: "rgba(255, 99, 132, 1)",
-          tension: 0.1,
-        },
+    setLineChartData((prevData) => ({
+      ...prevData,
+      xAxis: { categories: lineLabels },
+      series: [
+        { ...prevData.series[0], data: lineSessionsData },
+        { ...prevData.series[1], data: lineReportsData },
       ],
-    });
-  };
-  // Configuration options for the charts
-  const options = {
-    scales: {
-      y: {
-        beginAtZero: true,
-      },
-    },
+    }));
   };
 
   return (
     <>
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-6 p-10  justify-between">
-        <div>
-          <h2> Sessions Attended</h2>
-          <Bar data={barChartData} options={options} />
+      <div className="w-full grid grid-cols-1  gap-10 p-10 justify-between">
+        <div
+          style={{
+            boxShadow: "0 6px 10px rgba(0,0,0,0.3)",
+            borderRadius: "15px",
+          }}
+          className="border border-black py-6 px-2 rounded-3xl  "
+        >
+          <HighchartsReact highcharts={Highcharts} options={barChartData} />
         </div>
-        <div>
-          <h2>Reports Created</h2>
-          <Pie data={pieChartData} options={options} />
-        </div>
-        <div>
-          <h2>Sessions vs Reports</h2>
-          <Line data={lineChartData} options={options} />
+        <div className="w-full grid grid-cols-1 lg:grid-cols-2  gap-10  justify-between">
+          <div
+            style={{
+              boxShadow: "0 6px 10px rgba(0,0,0,0.3)",
+              borderRadius: "15px",
+            }}
+            className="border border-black py-6 px-2 rounded-3xl"
+          >
+            <HighchartsReact highcharts={Highcharts} options={pieChartData} />
+          </div>
+          <div
+            style={{
+              boxShadow: "0 6px 10px rgba(0,0,0,0.3)",
+              borderRadius: "15px",
+            }}
+            className="border border-black py-6 px-2 rounded-3xl"
+          >
+            <HighchartsReact highcharts={Highcharts} options={lineChartData} />
+          </div>
         </div>
       </div>
-      {/* Latest report carousel */}
-      <div></div>
+      <div
+        style={{
+          boxShadow: "0 6px 10px rgba(0,0,0,0.3)",
+          borderRadius: "15px",
+        }}
+        className="border border-black py-6 px-2 rounded-3xl flex flex-col items-center justify-center overflow-hidden mb-10 mx-10 gap-6"
+      >
+        <h1 className="ml-8 text-sm lg:text-xl font-bold">Latest Reports</h1>
+        <div className="flex-grow flex-1 h-full flex items-center justify-center">
+          <ReportsCarousel reports={reports} />
+        </div>
+      </div>
     </>
   );
 };
+
 export default HeroDashBoard;

@@ -23,18 +23,17 @@ body {
 }
 
 .userMsg {
-  background: rgba(0, 0, 0, 0.65);
+  background: rgb(255, 255, 255);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(7.8px);
   -webkit-backdrop-filter: blur(7.8px);
   border: 1px solid rgba(0, 0, 0, 0.3);
-  color: white;
+  color: black;
   border-radius: "8px 0";
   margin-left: auto;
 }
 .botMsg {
-  background: rgba(252, 252, 252, 0.38);
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(7.8px);

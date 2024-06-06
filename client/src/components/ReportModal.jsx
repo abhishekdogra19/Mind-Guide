@@ -9,6 +9,7 @@ import html2pdf from "html2pdf.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
+import { motion, useAnimation } from "framer-motion";
 
 const ReportModal = ({ report, open }) => {
   const contentRef = useRef(null);
@@ -84,7 +85,7 @@ const ReportModal = ({ report, open }) => {
         console.log(response.data);
         toast.success("Roadmap created successfully");
         setTimeout(() => {
-          navigate("../counselors");
+          navigate("../");
         }, 2000);
       } else {
         console.error("Error in fetching initial messages");
@@ -130,7 +131,7 @@ const ReportModal = ({ report, open }) => {
               onClick={() => {
                 // Prevent closing if still uploading
                 if (!uploading) {
-                  navigate("../counselors");
+                  navigate("../");
                 }
               }}
             >
@@ -140,8 +141,29 @@ const ReportModal = ({ report, open }) => {
         }
         classNames={{ modal: "custom-modal" }}
       >
+        {loading && (
+          <div className=" absolute top-0 left-0 w-full h-full  modal flex items-center justify-center z-10">
+            <div className="flex flex-col">
+              <motion.div
+                className="box"
+                animate={{
+                  scale: [1, 2, 2, 1, 1],
+                  rotate: [0, 0, 180, 180, 0],
+                  borderRadius: ["0%", "0%", "50%", "50%", "0%"],
+                }}
+                transition={{
+                  duration: 2,
+                  ease: "easeInOut",
+                  times: [0, 0.2, 0.5, 0.8, 1],
+                  repeat: Infinity,
+                  repeatDelay: 1,
+                }}
+              />
+            </div>
+          </div>
+        )}
         <div
-          className="modal-content bg-slate-200 flex flex-col gap-1  border-black border-2 p-4"
+          className="modal-content relative bg-slate-200 flex flex-col gap-1  border-black border-2 p-4"
           ref={contentRef}
         >
           <div className="bg-slate-800 text-white text-xs lg:text-3xl px-2 py-10 rounded-lg mb-3">

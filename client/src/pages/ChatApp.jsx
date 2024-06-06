@@ -16,6 +16,7 @@ import ReactMarkdown from "react-markdown";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Typewriter from "react-typewriter-effect"; // Import Typewriter
+import { TextField } from "@mui/material";
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
@@ -162,14 +163,14 @@ const ChatApp = () => {
             >
               {isNewMessage && !isUserMessage && <AssistantAvatar />}
               <div
-                className={`text-xs lg:text-xl ${
-                  isUserMessage ? "userMsg" : "botMsg"
-                }`}
+                className={`text-xs  lg:text-xl ${
+                  isUserMessage
+                    ? "userMsg  max-w-3xl"
+                    : "botMsg bg-black  max-w-3xl"
+                } py-3  px-6 `}
                 style={{
-                  padding: "10px",
-                  margin: "8px",
-                  maxWidth: "50%",
-                  minWidth: "10%",
+                  boxShadow: "0 6px 10px rgba(0,0,0,0.3)",
+                  borderRadius: "15px",
                   wordWrap: "break-word",
                   whiteSpace: "pre-line",
                 }}
@@ -211,7 +212,7 @@ const ChatApp = () => {
     setTotalMessages(messages.length); // Update total messages when messages change
   }, [messages]);
   return (
-    <div className=" flex flex-col relative w-full ">
+    <div className=" flex flex-col relative w-full h-full ">
       {loading && (
         <div className=" absolute   w-full h-full  modal flex items-center justify-center z-10">
           <div className="flex flex-col">
@@ -233,17 +234,19 @@ const ChatApp = () => {
           </div>
         </div>
       )}
-      <div className="h-[90vh] flex flex-col bg-green-950 relative">
+      <div className="h-screen  flex flex-col  relative ">
         {report && <ReportModal report={report} open={isReportModalOpen} />}
-        <div className=" bg-[#131419] flex-1 overflow-y-scroll   flex flex-col example pb-52 ">
+        <div className="  bg-gray-300  h-full overflow-y-scroll   flex flex-col px-2 py-2  lg:p-20 pt-16  ">
           <ScrollableFeed>{renderContent}</ScrollableFeed>
         </div>
         <div className="flex items-center justify-center">
-          <div className="bg-black max-w-4xl  mx-auto p-6 rounded-xl mb-1  flex flex-col lg:flex-row items-center w-full z-0 absolute bottom-0  ">
-            <input
+          <div className="bg-[#1d2d25] max-w-4xl  mx-auto p-6 lg:rounded-xl lg:mb-2  flex flex-col lg:flex-row items-center w-full z-0 absolute bottom-0  ">
+            <TextField
+              className="focus:border-2 bg-white p-6 w-full"
+              id="standard-basic"
+              label="Your message"
+              variant="filled"
               type="text"
-              className="w-full lg:w-2/3  bg-cyan-50 px-4 py-2 flex-1 rounded-lg"
-              placeholder="Type hello..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               ref={inputElement}
@@ -256,6 +259,7 @@ const ChatApp = () => {
                 }
               }}
             />
+
             <span className="flex py-2 w-full lg:w-1/3  gap-1 px-2">
               <div className="flex px-2 items-center justify-center   active:scale-75 duration-300">
                 <motion.div
