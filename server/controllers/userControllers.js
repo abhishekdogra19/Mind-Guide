@@ -13,7 +13,26 @@ const s3 = new AWS.S3({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 });
+async function run(model, input) {
+  const response = await fetch(
+    `https://api.cloudflare.com/client/v4/accounts/d06014849fc1ed8b3010b2666003cb0b/ai/run/${model}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.LLAMA_SECRET}`,
+      },
+      method: "POST",
+      body: JSON.stringify(input),
+    }
+  );
+  const result = await response.json();
+  return result;
+}
 
+async function getLlamaResponse(messages) {
+  const { result } = await run("@cf/meta/llama-2-7b-chat-int8", {
+    messages: messages,
+  });
+}
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, pic } = req.body;
   if (!name || !email || !password) {
@@ -303,15 +322,9 @@ const handleGetSkills = asyncHandler(async (req, res) => {
       `,
     },
   ];
-  // console.log("Heading:", response.choices[0].message.content);
-  // console.log(response.choices[0].message.content);
   try {
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: Heading,
-    });
-    let skill = response.choices[0].message.content;
-
+    const response = await getLlamaResponse(Heading);
+    let skill = response;
     skill = JSON.parse(skill);
     const user = await User.findOne({ email });
     skill.forEach((element) => {
@@ -328,6 +341,7 @@ const handleGetSkills = asyncHandler(async (req, res) => {
     res.json("Error while saving User skills!!!");
   }
 });
+
 module.exports = {
   registerUser,
   authUser,

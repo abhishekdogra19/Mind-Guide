@@ -9,14 +9,29 @@ const openai = new OpenAIApi({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-async function getChatGPTResponse(messages) {
-  const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+async function run(model, input) {
+  const response = await fetch(
+    `https://api.cloudflare.com/client/v4/accounts/d06014849fc1ed8b3010b2666003cb0b/ai/run/${model}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.LLAMA_SECRET}`,
+      },
+      method: "POST",
+      body: JSON.stringify(input),
+    }
+  );
+  const result = await response.json();
+  return result;
+}
+
+async function getLlamaResponse(messages) {
+  const { result } = await run("@cf/meta/llama-2-7b-chat-int8", {
     messages: messages,
   });
 
-  return response.choices[0].message.content;
+  return result.response;
 }
+
 const getChat = asyncHandler(async (req, res) => {
   const counselorType = req.params.counselorType;
   const session = req.sessionData;
@@ -41,7 +56,7 @@ const handleSendChat = asyncHandler(async (req, res) => {
   const userMessage = req.body.messages.slice(-1)[0];
   session.messages.push({ role: "user", content: userMessage.content });
 
-  const modelResponse = await getChatGPTResponse(session.messages);
+  const modelResponse = await getLlamaResponse(session.messages);
   session.messages.push({ role: "assistant", content: modelResponse });
   console.log("Session messages: ", session.messages);
   await saveUserSession(req, res, () => {}); // Save the session
@@ -67,7 +82,7 @@ const handleCreateReport = asyncHandler(async (req, res) => {
         }`,
       },
     ];
-    const report = await getChatGPTResponse(gptReportPrompt);
+    const report = await getLlamaResponse(gptReportPrompt);
     console.log("req.user: ", req.user);
     return res.status(200).json(report);
   } catch (error) {
@@ -104,13 +119,10 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
           }]`,
       },
     ];
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: roadmapPrompt,
-    });
 
-    console.log(response.choices[0].message.content);
-    const roadmapData = JSON.parse(response.choices[0].message.content);
+    const response = await getLlamaResponse(roadmapPrompt);
+    console.log(response);
+    const roadmapData = JSON.parse(response);
     console.log("roadmapGenerate: ", roadmapData);
     // Decode the JWT token to get the user's I
     console.log(req.user);
@@ -122,7 +134,7 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
       .then((updatedUser) => {
         if (updatedUser) {
           console.log("User roadmap updated successfully:", updatedUser);
-        } else {
+        } else {  
           console.log("User not found.");
         }
       })
@@ -130,7 +142,7 @@ const handleCreateRoadmap = asyncHandler(async (req, res) => {
         console.error("Error updating user roadmap:", error);
       });
 
-    return res.send(response.choices[0].message.content);
+    return res.send(response);
   } catch (err) {
     console.error("Error Happened ", err);
     res.status(500).send("Internal Server Error ");
@@ -183,14 +195,12 @@ const handleRoadmapUpdation = asyncHandler(async (req, res) => {
           }].`,
       },
     ];
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: updatedRoadmapPrompt,
-    });
 
-    console.log("HandleUpdateRoadmap ", response.choices[0].message.content);
-    // messages = [...messages, response.choices[0].message.content];
-    return res.send(response.choices[0].message.content);
+    const response = await getLlamaResponse(updatedRoadmapPrompt);
+
+    console.log("HandleUpdateRoadmap ", response);
+    // messages = [...messages, response];
+    return res.send(response);
   } catch (err) {
     console.error("Error Happened ", err);
     res.status(500).send("Internal Server Error ");
