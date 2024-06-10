@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:4000",
-  process.env.HOST_URL,
+  "https://mind-guide.onrender.com",
 ];
 
 const corsOptions = {
