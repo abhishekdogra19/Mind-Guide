@@ -84,6 +84,7 @@ const Header = () => {
             isDashboard &&
             dashboardLinks.map((link) => (
               <ListItem
+                key={link.title}
                 component={NavLink}
                 to={link.link}
                 className="hover:bg-primaryColor hover:text-white"

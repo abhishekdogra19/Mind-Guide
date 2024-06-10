@@ -22,8 +22,9 @@
     "axios": "^1.6.7",
     "browserify-fs": "^1.0.0",
     "chart.js": "^4.4.2",
+    "clsx": "^2.1.1",
     "flowbite-react": "^0.9.0",
-    "framer-motion": "^10.16.16",
+    "framer-motion": "^10.18.0",
     "highcharts-react-official": "^3.2.1",
     "html2pdf.js": "^0.10.1",
     "mermaid": "^10.9.0",
@@ -47,7 +48,8 @@
     "react-toastify": "^9.1.3",
     "react-typewriter-effect": "^1.1.0",
     "redux-persist": "^6.0.0",
-    "regenerator-runtime": "^0.14.0"
+    "regenerator-runtime": "^0.14.0",
+    "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

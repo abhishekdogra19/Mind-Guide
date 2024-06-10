@@ -1,4 +1,5 @@
 const flowbite = require("flowbite-react/tailwind");
+const flattenColorPalette = require("tailwindcss/lib/util/flattenColorPalette");
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", flowbite.content()],
@@ -8,15 +9,27 @@ export default {
         primaryColor: "#325342",
       },
       animation: {
-        "infinite-scroll": "infinite-scroll 25s linear infinite",
+        scroll:
+          "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
       },
       keyframes: {
-        "infinite-scroll": {
-          from: { transform: "translateX(0)" },
-          to: { transform: "translateX(-100%)" },
+        scroll: {
+          to: {
+            transform: "translate(calc(-50% - 0.5rem))",
+          },
         },
       },
     },
   },
-  plugins: [flowbite.plugin()],
+  plugins: [flowbite.plugin(), addVariablesForColors],
 };
+function addVariablesForColors({ addBase, theme }) {
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+
+  addBase({
+    ":root": newVars,
+  });
+}

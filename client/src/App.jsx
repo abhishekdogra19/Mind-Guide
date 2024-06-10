@@ -17,8 +17,7 @@ import HeroDashBoard from "./components/Dashboard/HeroDashBoard.jsx";
 import { useEffect } from "react";
 import { addUser } from "./redux/mindGuideSlice.js";
 
-// axios.defaults.baseURL = "https://mind-guide.onrender.com";
-axios.defaults.baseURL = "http://localhost:3001";
+axios.defaults.baseURL = import.meta.env.VITE_HOST_URL;
 axios.defaults.withCredentials = true;
 function App() {
   const userInfo = useSelector((state) => state.mindGuide.userInfo);

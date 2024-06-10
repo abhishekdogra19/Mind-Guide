@@ -108,22 +108,20 @@ const GetRoadmap = () => {
         </div>
       </div>
 
-      <div className="mt-8 flex flex-col items-center overflow-y-auto">
-        <div className="flex flex-col">
+      <div className="mt-8 flex flex-col items-center overflow-y-auto w-full">
+        <div className="flex flex-col items-center w-full ">
           {roadmapData.map((item, index) => (
             <div
               key={index}
-              className={`text-white p-4 m-4 rounded cursor-pointer ${
-                item.isCompleted ? "bg-primaryColor" : "bg-red-500"
+              className={`text-white p-4 m-4 w-full  rounded-xl cursor-pointer ${
+                item.isCompleted ? "bg-green-600" : "bg-red-500 "
               }`}
               onClick={() => handleTaskClick(index)}
             >
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-xs lg:text-sm font-semibold">
-                  {item.Goal}
-                </h2>
+                <h2 className="text-xs lg:text-sm ">{item.Goal}</h2>
                 <button
-                  className="bg-gray-800 text-xs lg:text-sm hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                  className="underline underline-offset-4 text-xs lg:text-xs hover:bg-gray-700 text-white py-4   px-4 rounded duration-300"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDropdownClick(index);

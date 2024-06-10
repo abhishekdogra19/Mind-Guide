@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import doc from "../../assets/google-docs.png";
+import reportImg from "../../assets/SummaryReport.jpg";
 const GetAllReports = () => {
   const [reports, setReports] = useState([]);
 
@@ -29,10 +29,14 @@ const GetAllReports = () => {
             {reports.map((report, index) => (
               <div
                 key={index}
-                className="p-3 lg:px-2 lg:py-6 hover:scale-110 hover:bg-gray-400 duration-500 border border-black m-1 flex flex-col items-center justify-between gap-2 bg-gray-200 rounded-lg"
+                className=" p-2  hover:scale-110 hover:bg-gray-400 duration-500 border border-black m-1 flex flex-col items-center justify-between gap-2 bg-gray-200 rounded-lg"
               >
-                <a href={report.filePath} target="_blank">
-                  <img src={doc} alt="Report" className="h-20 lg:h-32" />
+                <a href={report.filePath} className="w-full" target="_blank">
+                  <img
+                    src={reportImg}
+                    alt="Report"
+                    className="h-20 lg:h-32 w-full object-cover"
+                  />
                 </a>
                 <p className="text-xs capitalize text-center font-semibold">
                   {report.title}
