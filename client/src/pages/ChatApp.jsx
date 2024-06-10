@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -17,6 +16,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Typewriter from "react-typewriter-effect"; // Import Typewriter
 import { TextField } from "@mui/material";
+
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
@@ -30,6 +30,7 @@ const ChatApp = () => {
   const { type: counsellorType } = useParams();
   const [isReportModalOpen, setReportModalOpen] = useState(false);
   const [totalMessages, setTotalMessages] = useState(0);
+
   const startListening = () => {
     if (!listening) {
       if (window.speechSynthesis.speaking) {
@@ -42,9 +43,11 @@ const ChatApp = () => {
       setListening(false);
     }
   };
+
   const microphoneAnimationControls = useAnimation();
   const { transcript, resetTranscript, browserSupportsSpeechRecognition } =
     useSpeechRecognition();
+
   if (!browserSupportsSpeechRecognition) {
     return null;
   }
@@ -52,9 +55,11 @@ const ChatApp = () => {
   useEffect(() => {
     setInputText(transcript);
   }, [transcript]);
+
   useEffect(() => {
     inputElement.current.focus();
   }, [messages]);
+
   const generateText = async () => {
     if (inputText.trim() === "") {
       return;
@@ -208,13 +213,15 @@ const ChatApp = () => {
       microphoneAnimationControls.stop();
     }
   }, [listening, microphoneAnimationControls]);
+
   useEffect(() => {
     setTotalMessages(messages.length); // Update total messages when messages change
   }, [messages]);
+
   return (
-    <div className=" flex flex-col relative w-full h-full ">
+    <div className="flex flex-col relative w-full h-full">
       {loading && (
-        <div className=" absolute   w-full h-full  modal flex items-center justify-center z-10">
+        <div className="absolute w-full h-full modal flex items-center justify-center z-10">
           <div className="flex flex-col">
             <motion.div
               className="box"
@@ -234,19 +241,17 @@ const ChatApp = () => {
           </div>
         </div>
       )}
-      <div className="h-screen  flex flex-col  relative ">
+      <div className="h-screen flex flex-col relative">
         {report && <ReportModal report={report} open={isReportModalOpen} />}
-        <div className="  bg-gray-300  h-full overflow-y-scroll   flex flex-col px-2 py-2  lg:p-20 pt-16  ">
+        <div className="bg-gray-300 h-full overflow-y-scroll flex flex-col px-2 py-2 lg:p-20 pt-16">
           <ScrollableFeed>{renderContent}</ScrollableFeed>
         </div>
         <div className="flex items-center justify-center">
-          <div className="bg-[#1d2d25] max-w-4xl  mx-auto p-6 lg:rounded-xl lg:mb-2  flex flex-col lg:flex-row items-center w-full z-0 absolute bottom-0  ">
-            <TextField
-              className="focus:border-2 bg-white p-6 w-full"
-              id="standard-basic"
-              label="Your message"
-              variant="filled"
+          <div className="bg-[#1d2d25] max-w-4xl mx-auto p-6 lg:rounded-xl lg:mb-2 flex flex-col lg:flex-row items-center w-full z-0 absolute bottom-0">
+            <input
               type="text"
+              className="w-full lg:w-2/3  bg-cyan-50 px-4 py-2 flex-1 rounded-lg"
+              placeholder="Type hello..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               ref={inputElement}
@@ -260,8 +265,8 @@ const ChatApp = () => {
               }}
             />
 
-            <span className="flex py-2 w-full lg:w-1/3  gap-1 px-2">
-              <div className="flex px-2 items-center justify-center   active:scale-75 duration-300">
+            <span className="flex py-2 w-full lg:w-1/3 gap-1 px-2">
+              <div className="flex px-2 items-center justify-center active:scale-75 duration-300">
                 <motion.div
                   animate={microphoneAnimationControls}
                   onClick={startListening}

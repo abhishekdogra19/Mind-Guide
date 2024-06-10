@@ -43,7 +43,7 @@ const Profile = () => {
     createdAtDate.getFullYear();
   console.log("userInfo", userInfo);
   return (
-    <div className=" h-full rounded-lg px-6">
+    <div className=" h-full rounded-lg px-2 lg:px-6">
       <div className="bg-primaryColor text-white px-10 py-4 rounded-lg flex flex-col lg:flex-row gap-2">
         <div className="h-32 lg:h-72 overflow-hidden">
           <img
@@ -65,8 +65,14 @@ const Profile = () => {
             <span className="font-semibold">{formattedCreatedAt}</span>
           </h1>
         </div>
+        <button
+          onClick={handleLogout}
+          className="bg-white py-3 hover:brightness-110 max-w-4xl mt-2 mx-auto w-full text-primaryColor font-bold  rounded-lg text-xs lg:text-sm"
+        >
+          Logout
+        </button>
       </div>
-      <div className="flex flex-col gap-6 p-10">
+      <div className="flex flex-col gap-6 py-10 px-4">
         <div>
           <h1 className="text-sm kg:text-xl font-semibold">Technical Skills</h1>
           {
@@ -76,7 +82,7 @@ const Profile = () => {
                 {TechSkills.map((skill, index) => (
                   <li
                     key={index}
-                    className="flex items-center text-xs lg:text-lg gap-2 "
+                    className="flex items-center text-xs lg:text-sm gap-2 "
                   >
                     <img
                       src={badge}
@@ -105,7 +111,7 @@ const Profile = () => {
                 {nonTechSkills.map((skill, index) => (
                   <li
                     key={index}
-                    className="flex items-center text-xs lg:text-lg gap-2 "
+                    className="flex items-center text-xs lg:text-sm gap-2 "
                   >
                     <img
                       src={tick}
@@ -123,12 +129,6 @@ const Profile = () => {
             )
           }
         </div>
-        <button
-          onClick={handleLogout}
-          className="bg-primaryColor py-4 hover:bg-primaryColor max-w-4xl mt-2 mx-auto w-full text-white  rounded-lg"
-        >
-          Logout
-        </button>
       </div>
     </div>
   );

@@ -10,6 +10,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion, useAnimation } from "framer-motion";
+import hero from "../assets/hero.png";
+import ReportBG from "../assets/ReportBG.png";
 
 const ReportModal = ({ report, open }) => {
   const contentRef = useRef(null);
@@ -142,7 +144,7 @@ const ReportModal = ({ report, open }) => {
         classNames={{ modal: "custom-modal" }}
       >
         {loading && (
-          <div className=" absolute top-0 left-0 w-full h-full  modal flex items-center justify-center z-10">
+          <div className=" absolute top-0 left-0 w-full h-full  modal flex items-center justify-center z-50">
             <div className="flex flex-col">
               <motion.div
                 className="box"
@@ -163,41 +165,46 @@ const ReportModal = ({ report, open }) => {
           </div>
         )}
         <div
-          className="modal-content relative bg-slate-200 flex flex-col gap-1  border-black border-2 p-4"
+          className="modal-content   flex flex-col gap-1  border-black border-2 relative "
           ref={contentRef}
         >
-          <div className="bg-slate-800 text-white text-xs lg:text-3xl px-2 py-10 rounded-lg mb-3">
-            Mind Guide: Your Personalized AI Counsellor
+          <div className="bg-primaryColor text-white text-xs lg:text-xl   mb-3 flex items-center justify-between px-10 z-50">
+            <h className="font-bold underline underline-offset-4">
+              Mind Guide: Your Personalized AI Counsellor
+            </h>
+            <div className="overflow-hidden h-40">
+              <img src={hero} alt="" className="object-cover w-full h-full" />
+            </div>
           </div>
-          <div className="flex font-medium justify-between text-xs lg:text-lg">
+          <div className="px-10 flex font-medium justify-between text-xs lg:text-lg z-50">
             <div className="flex flex-col  gap-1 ">
               <h1>
                 Name:{" "}
-                <span className="capitalize underline underline-offset-4">
+                <span className="capitalize underline underline-offset-4 font-semibold">
                   {userInfo?.name}
                 </span>
               </h1>
               <h1>
                 Email:{" "}
-                <span className="underline underline-offset-4">
+                <span className="underline underline-offset-4 font-semibold">
                   {userInfo?.email}
                 </span>
               </h1>
             </div>
             <h1>
               Date:{" "}
-              <span className="underline underline-offset-4">
+              <span className="underline underline-offset-4 font-semibold">
                 {new Date().toLocaleDateString()}
               </span>
             </h1>
           </div>
-          <div className="px-6 mt-2 rounded-lg  py-10 bg-slate-50 ">
-            <ReactMarkdown className="flex flex-col gap-3 text-xs lg:text-sm text-justify ">
+          <div className="px-10 mt-2 rounded-lg  py-10 z-50">
+            <ReactMarkdown className="flex flex-col gap-3 text-xs lg:text-sm text-justify  ">
               {report}
             </ReactMarkdown>
           </div>
           <div className=" border-b-2 border-black py-2">{/* Footer */}</div>
-          <div style={{ marginTop: "10px" }}>
+          <div className="flex gap-2 p-10" style={{ marginTop: "10px" }}>
             <button
               onClick={() => {
                 if (uploading) {
@@ -206,7 +213,7 @@ const ReportModal = ({ report, open }) => {
                   downloadReport();
                 }
               }}
-              className={`px-4 py-2 text-white bg-green-700 rounded-lg ${
+              className={`px-4 py-2 text-white bg-green-700 rounded-lg  text-xs lg:text-lg${
                 uploading ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
@@ -215,13 +222,18 @@ const ReportModal = ({ report, open }) => {
             {counsellorType === "career counselor" && (
               <button
                 onClick={handleRoadmapCreation}
-                className="bg-gray-400 py-2 rounded-lg px-2 text-white"
+                className="bg-gray-400 py-2 rounded-lg px-2 text-white text-xs lg:text-lg"
                 disabled={loading}
               >
                 {!loading ? "Create Roadmap 🚀" : "Generating Roadmap ⌛"}
               </button>
             )}
           </div>
+          <img
+            src={ReportBG}
+            alt=""
+            className="absolute bottom-36 opacity-25 "
+          />
         </div>
       </Modal>
     </div>

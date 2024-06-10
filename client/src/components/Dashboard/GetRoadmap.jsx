@@ -1,30 +1,38 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../../redux/mindGuideSlice";
+import Lottie from "lottie-react";
+import animationData from "../../assets/animationData.json";
 
 const GetRoadmap = () => {
   const [roadmapData, setRoadmapData] = useState([]);
   const [showRecommendationsIndex, setShowRecommendationsIndex] =
     useState(null);
   const [loading, setLoading] = useState(true);
-  const [unsavedChanges, setUnsavedChanges] = useState(false); // State to track unsaved changes
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(true);
   const user = useSelector((state) => state.mindGuide.userInfo);
   const dispatch = useDispatch();
+
+  // Fetch roadmap data
+  const fetchRoadmap = async () => {
+    try {
+      const response = await axios.get("/api/v1/user/roadmap");
+      setRoadmapData(response.data.roadmap);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchRoadmap = async () => {
-      try {
-        const response = await axios.get("/api/v1/user/roadmap");
-        setRoadmapData(response.data.roadmap);
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-      }
-    };
     fetchRoadmap();
   }, []);
 
+  // Calculate progress
   const completedTasksCount = roadmapData.filter(
     (item) => item.isCompleted
   ).length;
@@ -34,45 +42,48 @@ const GetRoadmap = () => {
       ? 0
       : Math.round((completedTasksCount / totalTasksCount) * 100);
 
+  // Handle skill extraction and user profile update
   const handleExtractSkill = async () => {
     try {
       await axios.get("/api/v1/user/getSkills");
       const { data } = await axios.get("/api/v1/user/getUserProfile");
-      console.log(data);
       dispatch(addUser(data));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  const handleTaskClick = async (index) => {
-    try {
-      const updatedRoadmapData = [...roadmapData];
-      updatedRoadmapData[index].isCompleted =
-        !updatedRoadmapData[index].isCompleted;
-      setRoadmapData(updatedRoadmapData);
-      setUnsavedChanges(true); // Set unsaved changes flag
-    } catch (err) {
-      console.log(err);
+      setShowOverlay(false);
+      await fetchRoadmap();
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  const handleDropdownClick = async (index) => {
-    try {
-      setShowRecommendationsIndex((prevIndex) =>
-        prevIndex === index ? null : index
-      );
-    } catch (err) {
-      console.log(err);
-    }
+  // Toggle task completion status
+  const handleTaskClick = (index) => {
+    const updatedRoadmapData = [...roadmapData];
+    updatedRoadmapData[index].isCompleted =
+      !updatedRoadmapData[index].isCompleted;
+    setRoadmapData(updatedRoadmapData);
+    setUnsavedChanges(true);
   };
 
+  // Toggle recommendations visibility
+  const handleDropdownClick = (index) => {
+    setShowRecommendationsIndex((prevIndex) =>
+      prevIndex === index ? null : index
+    );
+  };
+
+  // Save roadmap changes
   const handleSave = async () => {
     try {
       await axios.put("/api/v1/chat/roadmap", { roadmap: roadmapData });
-      setUnsavedChanges(false); // Reset unsaved changes flag after successful save
-    } catch (err) {
-      console.log(err);
+      setUnsavedChanges(false);
+    } catch (error) {
+      console.error(error);
     }
+  };
+
+  // Close overlay
+  const handleCloseOverlay = () => {
+    setShowOverlay(false);
   };
 
   if (loading) {
@@ -81,23 +92,23 @@ const GetRoadmap = () => {
 
   if (roadmapData.length === 0) {
     return (
-      <div className="min-h-screen   w-full  flex flex-col items-center text-primaryColor p-4">
-        <div className="text-xl mt-8 ">No roadmap available</div>
+      <div className="min-h-screen w-full  flex flex-col items-center p-4 text-primaryColor">
+        <div className="text-xl mt-8">No roadmap available</div>
         <button
-          className="bg-primaryColor hover:bg-primaryColor text-white font-bold py-2 px-4 rounded mt-4"
+          className="bg-primaryColor hover:brightness-95 text-white font-bold py-2 px-4 rounded mt-4"
           onClick={() => window.history.back()}
         >
-          return
+          Return
         </button>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen w-full border  flex flex-col items-center lg:p-4">
-      <div className="w-full bg-gray-300 rounded-lg  ">
+    <div className="min-h-screen w-full  flex flex-col items-center p-4 relative">
+      <div className="w-full bg-gray-300 rounded-lg">
         <div
-          className="bg-primaryColor text-lg font-bold leading-none  text-center text-white"
+          className="bg-green-500 text-lg font-bold leading-none text-center text-white"
           style={{
             width: `${progress}%`,
             transition: "width 0.5s ease-in-out",
@@ -108,20 +119,22 @@ const GetRoadmap = () => {
         </div>
       </div>
 
-      <div className="mt-8 flex flex-col items-center overflow-y-auto w-full">
-        <div className="flex flex-col items-center w-full ">
+      <div className="mt-8 flex flex-col items-center overflow-y-auto w-full ">
+        <div className="flex flex-col w-full">
           {roadmapData.map((item, index) => (
             <div
               key={index}
-              className={`text-white p-4 m-4 w-full  rounded-xl cursor-pointer ${
-                item.isCompleted ? "bg-green-600" : "bg-red-500 "
+              className={`text-white p-4 m-4 rounded-lg cursor-pointer ${
+                item.isCompleted ? "bg-green-500" : "bg-red-500"
               }`}
               onClick={() => handleTaskClick(index)}
             >
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-xs lg:text-sm ">{item.Goal}</h2>
+                <h2 className="text-xs  lg:text-sm font-semibold">
+                  {item.Goal}
+                </h2>
                 <button
-                  className="underline underline-offset-4 text-xs lg:text-xs hover:bg-gray-700 text-white py-4   px-4 rounded duration-300"
+                  className="underline hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-xs lg:text-sm"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDropdownClick(index);
@@ -161,7 +174,7 @@ const GetRoadmap = () => {
                       ))}
                     </ul>
                   ) : (
-                    <div className="text-xs lg:text-sm">
+                    <div>
                       Sorry, no recommendations. You can search on Google.
                     </div>
                   )}
@@ -172,33 +185,33 @@ const GetRoadmap = () => {
         </div>
       </div>
 
-      {/* Display save button only if there are unsaved changes */}
-
-      {progress === 100 && (
-        <div className="text-white mt-4 text-xs lg:text-sm">
-          Congratulations! You have completed your roadmap.
+      {progress === 100 && showOverlay && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-transparent flex flex-col items-center p-4 rounded-lg">
+            <button
+              className="absolute top-4 right-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              onClick={handleCloseOverlay}
+            >
+              Close
+            </button>
+            <Lottie
+              animationData={animationData}
+              style={{ height: 300, width: 300 }}
+            />
+            <div className="text-white mt-4">
+              Congratulations! You have completed your roadmap.
+            </div>
+            <div className="max-w-2xl w-full flex items-center justify-between gap-4">
+              <button
+                className="bg-blue-500 w-full max-w-lg rounded-lg hover:bg-blue-700 text-white font-bold py-2 px-4 mt-4"
+                onClick={handleExtractSkill}
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
         </div>
       )}
-      <div className="max-w-3xl px-6 w-full flex  items-center justify-center gap-4">
-        {unsavedChanges && (
-          <button
-            className="bg-primaryColor text-xs lg:text-sm w-full max-w-lg rounded-lg hover:brightness-75 text-white font-bold py-2 px-4 mt-4"
-            onClick={handleSave}
-          >
-            Save Changes
-          </button>
-        )}
-        {progress === 100 && (
-          <>
-            <button
-              onClick={handleExtractSkill}
-              className="bg-primaryColor text-xs lg:text-sm w-full max-w-lg rounded-lg hover:brightness-75 text-white font-bold py-2 px-4 mt-4"
-            >
-              Completed
-            </button>
-          </>
-        )}
-      </div>
     </div>
   );
 };

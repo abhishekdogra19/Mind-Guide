@@ -16,7 +16,7 @@ const Home = () => {
       journey.`,
     },
     {
-      title: "Sentiment Analys`is` Tool",
+      title: "Sentiment Analysis Tool",
       img: "https://i.pinimg.com/564x/c1/21/d3/c121d3f414b1bf5214a6b876451d26b9.jpg",
       description:
         "Using cutting-edge AI, our sentiment analysis tools monitor students' well-being, alerting them to potential issues and enhancing overall emotional support by assessing sentiment in feedback and interactions.      ",
