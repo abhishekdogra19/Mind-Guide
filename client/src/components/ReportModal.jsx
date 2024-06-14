@@ -232,7 +232,7 @@ const ReportModal = ({ report, open }) => {
           <img
             src={ReportBG}
             alt=""
-            className="absolute bottom-36 opacity-25 "
+            className="absolute bottom-36 opacity-10 "
           />
         </div>
       </Modal>

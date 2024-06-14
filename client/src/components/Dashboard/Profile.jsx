@@ -64,13 +64,13 @@ const Profile = () => {
             Account Created:{" "}
             <span className="font-semibold">{formattedCreatedAt}</span>
           </h1>
+          <button
+            onClick={handleLogout}
+            className="bg-white py-3 hover:brightness-110 max-w-4xl mt-2 mx-auto w-full text-primaryColor font-bold  rounded-lg text-xs lg:text-sm"
+          >
+            Logout
+          </button>
         </div>
-        <button
-          onClick={handleLogout}
-          className="bg-white py-3 hover:brightness-110 max-w-4xl mt-2 mx-auto w-full text-primaryColor font-bold  rounded-lg text-xs lg:text-sm"
-        >
-          Logout
-        </button>
       </div>
       <div className="flex flex-col gap-6 py-10 px-4">
         <div>

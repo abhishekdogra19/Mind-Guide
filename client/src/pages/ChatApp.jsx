@@ -14,9 +14,7 @@ import ReportModal from "../components/ReportModal";
 import ReactMarkdown from "react-markdown";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import Typewriter from "react-typewriter-effect"; // Import Typewriter
-import { TextField } from "@mui/material";
-
+import TypeWriter from "../components/TypeWriter";
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
@@ -181,11 +179,7 @@ const ChatApp = () => {
                 }}
               >
                 {isNewMessage && !isUserMessage ? (
-                  <Typewriter
-                    text={message.content}
-                    typeSpeed={50}
-                    cursorColor="transparent"
-                  />
+                  <TypeWriter text={message.content} />
                 ) : (
                   <ReactMarkdown>{message.content}</ReactMarkdown>
                 )}
@@ -248,35 +242,26 @@ const ChatApp = () => {
         </div>
         <div className="flex items-center justify-center">
           <div className="bg-[#1d2d25] max-w-4xl mx-auto p-6 lg:rounded-xl lg:mb-2 flex flex-col lg:flex-row items-center w-full z-0 absolute bottom-0">
-            <input
-              type="text"
-              className="w-full lg:w-2/3  bg-cyan-50 px-4 py-2 flex-1 rounded-lg"
-              placeholder="Type hello..."
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              ref={inputElement}
-              disabled={loading}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  generateText();
-                  inputElement.current.focus();
-                }
-              }}
-            />
+            <div className="w-full flex items-center mb-2 lg:mr-2">
+              <input
+                type="text"
+                className="w-full lg:w-2/3  bg-cyan-50 px-4 py-2 flex-1 rounded-lg"
+                placeholder="Type hello..."
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                ref={inputElement}
+                disabled={loading}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    generateText();
+                    inputElement.current.focus();
+                  }
+                }}
+              />
 
-            <span className="flex py-2 w-full lg:w-1/3 gap-1 px-2">
-              <div className="flex px-2 items-center justify-center active:scale-75 duration-300">
-                <motion.div
-                  animate={microphoneAnimationControls}
-                  onClick={startListening}
-                  className="text-xl text-black"
-                >
-                  <FontAwesomeIcon icon={faMicrophone} />
-                </motion.div>
-              </div>
               <button
-                className="text-white py-2 px-4"
+                className="bg-blue-300 rounded-xl mx-2  text-white py-2 px-4"
                 onClick={() => {
                   setInputText(transcript);
                   resetTranscript();
@@ -289,7 +274,7 @@ const ChatApp = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="w-6 h-6 -rotate-45"
                 >
                   <path
                     strokeLinecap="round"
@@ -299,22 +284,28 @@ const ChatApp = () => {
                 </svg>
               </button>
               <button
-                className={`bg-red-500 text-white py-2 px-4 w-full rounded-lg ${
-                  totalMessages < 15 ? "cursor-not-allowed" : ""
-                }`}
-                onClick={() => {
-                  if (totalMessages < 15) {
-                    toast.warning(
-                      "Minimum 15 messages required to end session"
-                    );
-                  } else {
-                    HandleReportGenerate();
-                  }
-                }}
+                onClick={startListening}
+                className="bg-black text-white p-3 rounded-lg "
               >
-                End Session
+                <motion.div animate={microphoneAnimationControls}>
+                  <FontAwesomeIcon icon={faMicrophone} />
+                </motion.div>
               </button>
-            </span>
+            </div>
+            <button
+              className={`bg-red-500 text-white py-2 px-4 w-full lg:w-auto  rounded-lg whitespace-nowrap ${
+                totalMessages < 15 ? "cursor-not-allowed" : ""
+              }`}
+              onClick={() => {
+                if (totalMessages < 15) {
+                  toast.warning("Minimum 15 messages required to end session");
+                } else {
+                  HandleReportGenerate();
+                }
+              }}
+            >
+              Generate Report
+            </button>
           </div>
         </div>
       </div>
