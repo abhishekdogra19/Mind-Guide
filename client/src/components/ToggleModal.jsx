@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import gpt from "../assets/gpt.jpg";
 import llama from "../assets/llama.png";
 const ToggleModal = () => {
