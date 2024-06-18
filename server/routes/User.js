@@ -9,6 +9,7 @@ const {
   handleReportUpload,
   handleGetAllReports,
   handleGetSkills,
+  handleGetAllUserData,
 } = require("../controllers/userControllers");
 const multer = require("multer");
 const { protectCookie } = require("../middleware/authMiddleware");
@@ -24,6 +25,7 @@ router.route("/getUserProfile").get(getUserProfile);
 router.route("/logout").post(handleLogout);
 router.route("/roadmap").get(protectCookie, handleGetRoadmap);
 router.route("/userDashboard").get(protectCookie, handleGetUserData);
+router.route("/getAllUserData").get(protectCookie, handleGetAllUserData);
 router.route("/allReports").get(protectCookie, handleGetAllReports);
 router.post(
   "/uploadpdf/:counsellorType",

@@ -119,6 +119,21 @@ const handleGetUserData = asyncHandler(async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 });
+const handleGetAllUserData = asyncHandler(async (req, res) => {
+  try {
+    console.log("All USer Data");
+    const users = await User.find({}, "-password -pic -skills -roadmap");
+
+    if (users) {
+      return res.status(200).json({ users });
+    } else {
+      return res.status(200).json({ user: null });
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
 const handleReportUpload = asyncHandler(async (req, res) => {
   if (!req.file) {
     return res.status(400).send("No file uploaded.");
@@ -338,4 +353,5 @@ module.exports = {
   handleReportUpload,
   handleGetAllReports,
   handleGetSkills,
+  handleGetAllUserData,
 };
