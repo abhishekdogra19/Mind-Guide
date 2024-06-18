@@ -1,5 +1,5 @@
 const production = {
-  url: "https://mind-guide.onrender.com/",
+  url: import.meta.env.VITE_HOST_URL,
 };
 const development = {
   url: "http://localhost:3001",

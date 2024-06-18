@@ -48,6 +48,11 @@ const Header = () => {
       icon: RiRoadMapFill,
       link: `/account/dashboard/getRoadmap`,
     },
+    {
+      title: "Admin Dashboard",
+      icon: RiRoadMapFill,
+      link: `/account/dashboard/admin`,
+    },
   ];
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

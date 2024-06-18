@@ -6,7 +6,7 @@ const ResponsiveDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navLinks = [
     {
-      title: "Dashboard",
+      title: "My Dashboard",
       icon: "fas fa-tachometer-alt",
       link: "",
     },
@@ -24,6 +24,11 @@ const ResponsiveDrawer = () => {
       title: "Profile",
       icon: "fas fa-user-circle",
       link: "./profile",
+    },
+    {
+      title: "Admin Dashboard",
+      icon: "fas fa-user-circle",
+      link: "./admin",
     },
   ];
   const location = useLocation();

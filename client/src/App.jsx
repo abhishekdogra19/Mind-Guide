@@ -17,6 +17,7 @@ import HeroDashBoard from "./components/Dashboard/HeroDashBoard.jsx";
 import { useEffect } from "react";
 import { addUser } from "./redux/mindGuideSlice.js";
 import { config } from "./config/index.js";
+import AdminDashboard from "./components/Dashboard/AdminDashboard.jsx";
 axios.defaults.baseURL = config.url;
 axios.defaults.withCredentials = true;
 function App() {
@@ -47,6 +48,7 @@ function App() {
                 <Route path="reports" element={<GetAllReports />} />
                 <Route path="getRoadmap" element={<GetRoadmap />} />
                 <Route path="profile" element={<Profile />} />
+                <Route path="admin" element={<AdminDashboard />} />
               </Route>
             </Route>
             <Route path="login" element={<LoginPage />} />

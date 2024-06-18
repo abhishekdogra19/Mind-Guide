@@ -237,7 +237,7 @@ const ChatApp = () => {
       )}
       <div className="h-screen flex flex-col relative">
         {report && <ReportModal report={report} open={isReportModalOpen} />}
-        <div className="bg-gray-300 h-full overflow-y-scroll flex flex-col px-2 py-2 lg:p-20 pt-16">
+        <div className="bg-gray-300 h-full overflow-y-scroll flex flex-col pb-56 lg:pb-32  pt-16">
           <ScrollableFeed>{renderContent}</ScrollableFeed>
         </div>
         <div className="flex items-center justify-center">
