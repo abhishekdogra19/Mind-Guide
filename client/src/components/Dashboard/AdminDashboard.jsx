@@ -149,7 +149,7 @@ const AdminDashboard = () => {
   return (
     <div className="p-4">
       <h1 className="font-bold">Admin Dashboard</h1>
-      <div className="w-full grid grid-cols-2  gap-10 p-10 justify-between">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2  gap-10 p-10 justify-between">
         <div
           style={{
             boxShadow: "0 6px 10px rgba(0,0,0,0.3)",

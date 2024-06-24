@@ -47,7 +47,7 @@ const ToggleModal = () => {
             Llama
           </h1>
         </div>
-        <div className="h-44 bg-white overflow-hidden">
+        <div className="h-28 lg:h-44 bg-white overflow-hidden mt-10">
           <img
             src={isLlama ? llama : gpt}
             alt={isLlama ? "Llama Model" : "GPT Model"}
