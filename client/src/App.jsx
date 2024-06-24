@@ -22,7 +22,6 @@ axios.defaults.baseURL = config.url;
 axios.defaults.withCredentials = true;
 function App() {
   const userInfo = useSelector((state) => state.mindGuide.userInfo);
-  console.log("userInfo ", userInfo);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchUserProfile = async () => {

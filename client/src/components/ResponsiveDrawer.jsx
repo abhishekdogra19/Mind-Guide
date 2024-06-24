@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import { FaChevronRight } from "react-icons/fa";
 
 const ResponsiveDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const userInfo = useSelector((state) => state.mindGuide.userInfo);
+  console.log(userInfo?.role);
   const navLinks = [
     {
       title: "My Dashboard",
@@ -25,11 +27,15 @@ const ResponsiveDrawer = () => {
       icon: "fas fa-user-circle",
       link: "./profile",
     },
-    {
-      title: "Admin Dashboard",
-      icon: "fas fa-user-circle",
-      link: "./admin",
-    },
+    ...(userInfo && userInfo.role == "admin"
+      ? [
+          {
+            title: "Admin Dashboard",
+            icon: "fas fa-user-circle",
+            link: "./admin",
+          },
+        ]
+      : []),
   ];
   const location = useLocation();
   const currentTab = location.pathname.split("/")[3];

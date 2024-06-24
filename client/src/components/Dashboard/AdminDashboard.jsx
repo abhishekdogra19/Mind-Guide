@@ -2,9 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import ReportsCarousel from "../ReportsCarousel";
 import ToggleModal from "../ToggleModal";
-
 const AdminDashboard = () => {
   const [barChartData, setBarChartData] = useState({
     chart: {
@@ -74,7 +72,7 @@ const AdminDashboard = () => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get("/api/v1/user/getAllUserData");
-        console.table(data.users);
+
         updateCharts(data.users);
       } catch (error) {
         console.error("Error fetching data: ", error);
@@ -149,7 +147,7 @@ const AdminDashboard = () => {
   return (
     <div className="p-4">
       <h1 className="font-bold">Admin Dashboard</h1>
-      <div className="w-full grid grid-cols-1 lg:grid-cols-2  gap-10 p-10 justify-between">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2  gap-10 py-4 lg:p-10 justify-between">
         <div
           style={{
             boxShadow: "0 6px 10px rgba(0,0,0,0.3)",

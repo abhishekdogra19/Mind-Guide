@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
-const TypeWriter = ({ text, speed = 50 }) => {
+const TypeWriter = ({ text, speed = 50, scrollRef }) => {
   const [displayedText, setDisplayedText] = useState("");
+
   useEffect(() => {
     let index = 0;
     const intervalId = setInterval(() => {
@@ -11,10 +12,11 @@ const TypeWriter = ({ text, speed = 50 }) => {
       if (index === text.length) {
         clearInterval(intervalId);
       }
+      // Scroll to the bottom whenever displayedText changes
+      scrollRef.current?.scrollIntoView({ behavior: "smooth" });
     }, speed);
-
     return () => clearInterval(intervalId);
-  }, [text, speed]);
+  }, [text, speed, scrollRef]);
 
   return <ReactMarkdown>{displayedText}</ReactMarkdown>;
 };

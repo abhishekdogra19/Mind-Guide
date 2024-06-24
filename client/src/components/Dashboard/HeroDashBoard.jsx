@@ -69,6 +69,8 @@ const HeroDashBoard = () => {
     ],
   });
 
+  const [reports, setReports] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get("/api/v1/user/userDashboard");
@@ -76,8 +78,6 @@ const HeroDashBoard = () => {
     };
     fetchData();
   }, []);
-
-  const [reports, setReports] = useState([]);
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -167,15 +167,19 @@ const HeroDashBoard = () => {
 
   return (
     <>
-      <div className="w-full grid grid-cols-1  gap-10 p-10 justify-between">
+      <div className="w-full grid grid-cols-1  gap-10 p-2 lg:p-10 justify-between">
         <div
           style={{
             boxShadow: "0 6px 10px rgba(0,0,0,0.3)",
             borderRadius: "15px",
           }}
-          className="border border-black py-6 px-2 rounded-3xl  "
+          className="border border-black py-6 px-2 rounded-3xl"
         >
-          <HighchartsReact highcharts={Highcharts} options={barChartData} />
+          {barChartData.series[0].data.length === 0 ? (
+            <div className="text-center text-lg">No sessions attended</div>
+          ) : (
+            <HighchartsReact highcharts={Highcharts} options={barChartData} />
+          )}
         </div>
         <div className="w-full grid grid-cols-1 lg:grid-cols-2  gap-10  justify-between">
           <div
@@ -185,7 +189,11 @@ const HeroDashBoard = () => {
             }}
             className="border border-black py-6 px-2 rounded-3xl"
           >
-            <HighchartsReact highcharts={Highcharts} options={pieChartData} />
+            {pieChartData.series[0].data.length === 0 ? (
+              <div className="text-center text-lg">No reports created</div>
+            ) : (
+              <HighchartsReact highcharts={Highcharts} options={pieChartData} />
+            )}
           </div>
           <div
             style={{
@@ -194,7 +202,17 @@ const HeroDashBoard = () => {
             }}
             className="border border-black py-6 px-2 rounded-3xl"
           >
-            <HighchartsReact highcharts={Highcharts} options={lineChartData} />
+            {lineChartData.series[0].data.length === 0 &&
+            lineChartData.series[1].data.length === 0 ? (
+              <div className="text-center text-lg">
+                No sessions or reports data available
+              </div>
+            ) : (
+              <HighchartsReact
+                highcharts={Highcharts}
+                options={lineChartData}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -203,11 +221,15 @@ const HeroDashBoard = () => {
           boxShadow: "0 6px 10px rgba(0,0,0,0.3)",
           borderRadius: "15px",
         }}
-        className="border border-black py-6 px-2 rounded-3xl flex flex-col items-center justify-center overflow-hidden mb-10 mx-10 gap-6"
+        className="border border-black py-6 px-2 rounded-3xl flex flex-col items-center justify-center overflow-hidden mx-4 my-10  gap-6"
       >
         <h1 className="ml-8 text-sm lg:text-xl font-bold">Latest Reports</h1>
         <div className="flex-grow flex-1 h-full flex items-center justify-center">
-          <ReportsCarousel reports={reports} />
+          {reports.length === 0 ? (
+            <div className="text-center text-lg">No reports available</div>
+          ) : (
+            <ReportsCarousel reports={reports} />
+          )}
         </div>
       </div>
     </>

@@ -9,12 +9,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import { motion, useAnimation } from "framer-motion";
 import AssistantAvatar from "../components/AssistantAvatar";
-import ScrollableFeed from "react-scrollable-feed";
 import ReportModal from "../components/ReportModal";
 import ReactMarkdown from "react-markdown";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import TypeWriter from "../components/TypeWriter";
+
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
@@ -28,6 +28,7 @@ const ChatApp = () => {
   const { type: counsellorType } = useParams();
   const [isReportModalOpen, setReportModalOpen] = useState(false);
   const [totalMessages, setTotalMessages] = useState(0);
+  const messagesEndRef = useRef(null); // Reference for the end of the messages container
 
   const startListening = () => {
     if (!listening) {
@@ -179,7 +180,10 @@ const ChatApp = () => {
                 }}
               >
                 {isNewMessage && !isUserMessage ? (
-                  <TypeWriter text={message.content} />
+                  <TypeWriter
+                    text={message.content}
+                    scrollRef={messagesEndRef}
+                  />
                 ) : (
                   <ReactMarkdown>{message.content}</ReactMarkdown>
                 )}
@@ -189,6 +193,11 @@ const ChatApp = () => {
         );
       })
     );
+  }, [messages]);
+
+  // Scroll to the bottom whenever messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   useEffect(() => {
@@ -237,8 +246,9 @@ const ChatApp = () => {
       )}
       <div className="h-screen flex flex-col relative">
         {report && <ReportModal report={report} open={isReportModalOpen} />}
-        <div className="bg-gray-300 h-full overflow-y-scroll flex flex-col pb-56 lg:pb-32  pt-16">
-          <ScrollableFeed>{renderContent}</ScrollableFeed>
+        <div className="bg-gray-300 h-full overflow-y-scroll flex flex-col px-2 py-2 pb-52 pt-16">
+          <span className="mb-50">{renderContent}</span>
+          <div ref={messagesEndRef} /> {/* Reference for the end of messages */}
         </div>
         <div className="flex items-center justify-center">
           <div className="bg-[#1d2d25] max-w-4xl mx-auto p-6 lg:rounded-xl lg:mb-2 flex flex-col lg:flex-row items-center w-full z-0 absolute bottom-0">
