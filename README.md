@@ -69,6 +69,7 @@ Here are some snapshots of the project:
 ![Register](https://res.cloudinary.com/abhicode/image/upload/v1721812239/Screenshot_10_vs7qbx.png)
 
 ![ChatHome](https://res.cloudinary.com/abhicode/image/upload/v1721812266/Screenshot_19_qdrojg.png)
+
 ![Report](https://res.cloudinary.com/abhicode/image/upload/v1721812497/Screenshot_20_r6fkvw.png)
 
 ![Dashboard](https://res.cloudinary.com/abhicode/image/upload/v1721812249/Screenshot_12_rntzuu.png)
@@ -76,7 +77,8 @@ Here are some snapshots of the project:
 ![Roadmap](https://res.cloudinary.com/abhicode/image/upload/v1721812258/Screenshot_16_tzhqiu.png)
 ![Completed-Roadmap](https://res.cloudinary.com/abhicode/image/upload/v1721812264/Screenshot_17_n0jrdo.png)
 
-![Profile](https://res.cloudinary.com/abhicode/image/upload/v1721812273/Screenshot_11_x76fx7.png)
+![Profile](https://res.cloudinary.com/abhicode/image/upload/v1721813152/Screenshot_24_myebpe.png)
+![Admin Dashboard](https://res.cloudinary.com/abhicode/image/upload/v1721813144/Screenshot_25_a8ttz1.png)
 
 
 ## Contributing
